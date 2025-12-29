@@ -1,0 +1,67 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 40px;
+  background: #0f172a;
+  color: white;
+}
+
+.navbar a {
+  color: white;
+  margin-left: 15px;
+  text-decoration: none;
+}
+
+.btn {
+  background: #22c55e;
+  padding: 6px 12px;
+  border-radius: 5px;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px;
+}
+
+.hero-right {
+  display: flex;
+  gap: 15px;
+}
+
+.stat-card {
+  background: #f1f5f9;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.search-box {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+  background: #e2e8f0;
+}
+
+.feed {
+  padding: 30px;
+}
+
+.property-card {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.property-img img {
+  width: 250px;
+}
+
+.property-info {
+  padding: 15px;
+}

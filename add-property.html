@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register Property | MyProperty</title>
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.form-box{
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+.form-box h2{
+  margin-bottom: 15px;
+  border-bottom: 2px solid #22c55e;
+  padding-bottom: 5px;
+}
+.form-group{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea{
+  padding: 10px;
+  width: 100%;
+}
+textarea{
+  grid-column: span 2;
+  resize: vertical;
+}
+.submit-btn{
+  width: 100%;
+  padding: 12px;
+  background:#22c55e;
+  color:#fff;
+  border:none;
+  font-size:18px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <div class="logo">MyProperty</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="profile.html">Profile</a>
+  </nav>
+</header>
+
+<div class="form-box">
+<h1>Register Your Property</h1>
+
+<!-- BASIC DETAILS -->
+<h2>Property Details</h2>
+<div class="form-group">
+  <select>
+    <option>Property Type</option>
+    <option>Home</option>
+    <option>Flat</option>
+    <option>Rented House</option>
+    <option>Room / Hostel</option>
+    <option>Agricultural Land</option>
+    <option>Plot</option>
+    <option>Bungalow</option>
+    <option>Commercial Space</option>
+    <option>Shop</option>
+    <option>Office</option>
+    <option>Warehouse</option>
+    <option>Industrial Land</option>
+  </select>
+
+  <select>
+    <option>Condition</option>
+    <option>New</option>
+    <option>Old</option>
+    <option>Under Construction</option>
+  </select>
+
+  <input type="text" placeholder="Size / Area (sq.ft / acres / BHK)">
+  <input type="number" placeholder="Offer Price (₹)">
+</div>
+
+<!-- LOCATION -->
+<h2>Location Details</h2>
+<div class="form-group">
+  <input type="text" placeholder="Country">
+  <input type="text" placeholder="State">
+  <input type="text" placeholder="District">
+  <input type="text" placeholder="Taluka">
+  <input type="text" placeholder="Village / City / Town">
+  <input type="number" placeholder="Pin Code">
+  <input type="text" placeholder="Nearby Landmark">
+</div>
+
+<!-- OWNERSHIP -->
+<h2>Ownership & Legal</h2>
+<div class="form-group">
+  <select>
+    <option>Ownership Type</option>
+    <option>Clear Title</option>
+    <option>Resale</option>
+    <option>New Construction</option>
+  </select>
+
+  <select>
+    <option>Legal Documents</option>
+    <option>Registered</option>
+    <option>Tax Paid</option>
+    <option>NOC Available</option>
+  </select>
+</div>
+
+<!-- FACILITIES -->
+<h2>Facilities / Amenities</h2>
+<div class="form-group">
+  <select>
+    <option>Parking</option>
+    <option>Available</option>
+    <option>Not Available</option>
+  </select>
+  <select>
+    <option>Furnishing</option>
+    <option>Furnished</option>
+    <option>Semi-Furnished</option>
+    <option>Unfurnished</option>
+  </select>
+  <select>
+    <option>Water Supply</option>
+    <option>24x7</option>
+    <option>Limited</option>
+  </select>
+  <select>
+    <option>Electricity</option>
+    <option>Available</option>
+    <option>Not Available</option>
+  </select>
+</div>
+
+<!-- MEDIA -->
+<h2>Upload Media</h2>
+<div class="form-group">
+  <input type="file" accept="image/*" multiple>
+  <input type="file" accept="video/*">
+  <input type="file" accept="audio/*">
+</div>
+
+<!-- DESCRIPTION -->
+<h2>Additional Information</h2>
+<div class="form-group">
+  <textarea rows="5" placeholder="Write property description in your own words (optional)"></textarea>
+</div>
+
+<!-- CONTACT -->
+<h2>Contact Details</h2>
+<div class="form-group">
+  <input type="text" placeholder="Contact Person Name">
+  <input type="text" placeholder="Phone Number">
+  <input type="email" placeholder="Email (Optional)">
+</div>
+
+<button class="submit-btn">Register Property</button>
+
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title>MyProperty</title>
+</head>
+<body>
+  <h1>Page Under Construction</h1>
+  <a href="index.html">Go Back</a>
+</body>
+</html> -->

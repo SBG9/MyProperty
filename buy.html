@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Buy Property | MyProperty</title>
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+/* SEARCH FILTER BAR */
+.filter-box{
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 15px;
+  border-radius: 12px;
+  background: #f8fafc;
+  box-shadow: 0 0 10px rgba(0,0,0,0.08);
+}
+.filter-row{
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 10px;
+}
+.filter-row input, .filter-row select{
+  padding: 8px;
+}
+.filter-btn{
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  background:#22c55e;
+  border:none;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+/* PROPERTY FEED */
+.buy-feed{
+  max-width: 1100px;
+  margin: 30px auto;
+}
+.buy-card{
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+.buy-card img{
+  width: 260px;
+  border-radius: 10px;
+}
+.buy-info{
+  flex: 1;
+}
+.buy-info h3{
+  margin: 0;
+}
+.price{
+  color: #16a34a;
+  font-size: 20px;
+  font-weight: bold;
+}
+.tags span{
+  background: #e2e8f0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-right: 5px;
+}
+.buy-actions{
+  margin-top: 10px;
+}
+.buy-actions button{
+  padding: 6px 12px;
+  margin-right: 10px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <div class="logo">MyProperty</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="add-property.html">Register Property</a>
+    <a href="login.html">Login</a>
+  </nav>
+</header>
+
+<!-- FILTER FORM -->
+<div class="filter-box">
+  <h3>Find Property</h3>
+
+  <div class="filter-row">
+    <select>
+      <option>Property Type</option>
+      <option>Home</option>
+      <option>Flat</option>
+      <option>Plot</option>
+      <option>Agricultural Land</option>
+      <option>Shop</option>
+      <option>Office</option>
+      <option>Commercial Space</option>
+    </select>
+
+    <input type="text" placeholder="Keyword (optional)">
+    <input type="number" placeholder="Min Price">
+    <input type="number" placeholder="Max Price">
+
+    <input type="text" placeholder="City / Locality">
+    <select>
+      <option>Purpose</option>
+      <option>Residential</option>
+      <option>Commercial</option>
+      <option>Agricultural</option>
+      <option>Industrial</option>
+    </select>
+
+    <select>
+      <option>Condition</option>
+      <option>Ready to Move</option>
+      <option>Under Construction</option>
+    </select>
+
+    <select>
+      <option>Ownership</option>
+      <option>Resale</option>
+      <option>New Construction</option>
+      <option>Builder Project</option>
+    </select>
+  </div>
+
+  <button class="filter-btn">Search</button>
+</div>
+
+<!-- PROPERTY LIST (AUTO SHOW EVEN WITHOUT SEARCH) -->
+<div class="buy-feed">
+
+  <!-- PROPERTY CARD -->
+  <div class="buy-card">
+    <img src="images/sample.jpg">
+    <div class="buy-info">
+      <h3>Luxury Bungalow</h3>
+      <p>Pune – Baner</p>
+      <div class="price">₹1,20,00,000</div>
+
+      <div class="tags">
+        <span>4 BHK</span>
+        <span>Ready</span>
+        <span>Parking</span>
+        <span>Clear Title</span>
+      </div>
+
+      <p>
+        Premium residential bungalow with modern amenities, nearby school,
+        hospital & market.
+      </p>
+
+      <div class="buy-actions">
+        <button>View Details</button>
+        <button>Contact Seller</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROPERTY CARD -->
+  <div class="buy-card">
+    <img src="images/sample.jpg">
+    <div class="buy-info">
+      <h3>Agricultural Land – 3 Acres</h3>
+      <p>Nashik – Trimbak</p>
+      <div class="price">₹45,00,000</div>
+
+      <div class="tags">
+        <span>3 Acres</span>
+        <span>Water Available</span>
+        <span>Road Touch</span>
+      </div>
+
+      <p>
+        Fertile agricultural land suitable for farming & investment.
+      </p>
+
+      <div class="buy-actions">
+        <button>View Details</button>
+        <button>Send Interest</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title>MyProperty</title>
+</head>
+<body>
+  <h1>Page Under Construction</h1>
+  <a href="index.html">Go Back</a>
+</body>
+</html> -->

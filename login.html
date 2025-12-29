@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MyProperty | Login</title>
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.auth-box {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.auth-box h2 {
+  text-align: center;
+}
+
+.auth-box input, .auth-box select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.auth-box button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  background: #22c55e;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.switch {
+  text-align: center;
+  margin-top: 15px;
+  cursor: pointer;
+  color: #2563eb;
+}
+.hidden {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <div class="logo">MyProperty</div>
+  <nav>
+    <a href="index.html">Home</a>
+  </nav>
+</header>
+
+<!-- LOGIN -->
+<div class="auth-box" id="loginBox">
+  <h2>Login</h2>
+  <input type="text" id="loginId" placeholder="Mobile / Email">
+  <input type="password" id="loginPass" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <div class="switch" onclick="showSignup()">New user? Create account</div>
+</div>
+
+<!-- SIGNUP -->
+<div class="auth-box hidden" id="signupBox">
+  <h2>Create Profile</h2>
+
+  <input type="text" id="name" placeholder="Full Name">
+  <input type="text" id="mobile" placeholder="Mobile Number">
+  <input type="email" id="email" placeholder="Email (Optional)">
+  <input type="password" id="password" placeholder="Password">
+
+  <select id="userType">
+    <option value="">I am</option>
+    <option>Buyer</option>
+    <option>Seller</option>
+    <option>Both</option>
+  </select>
+
+  <button onclick="signup()">Create Profile</button>
+  <div class="switch" onclick="showLogin()">Already registered? Login</div>
+</div>
+
+<!-- PROFILE -->
+<div class="auth-box hidden" id="profileBox">
+  <h2>Your Profile</h2>
+
+  <input type="text" id="pname">
+  <input type="text" id="pmobile">
+  <input type="email" id="pemail">
+  <input type="text" id="ptype">
+
+  <button onclick="updateProfile()">Update Profile</button>
+  <button onclick="logout()" style="background:#ef4444">Logout</button>
+</div>
+
+<script>
+function showSignup(){
+  loginBox.classList.add("hidden");
+  signupBox.classList.remove("hidden");
+}
+
+function showLogin(){
+  signupBox.classList.add("hidden");
+  loginBox.classList.remove("hidden");
+}
+
+function signup(){
+  let user = {
+    name: name.value,
+    mobile: mobile.value,
+    email: email.value,
+    password: password.value,
+    type: userType.value
+  };
+  localStorage.setItem("user", JSON.stringify(user));
+  alert("Profile created successfully");
+  loadProfile();
+}
+
+function login(){
+  let user = JSON.parse(localStorage.getItem("user"));
+  if(!user){
+    alert("No account found");
+    return;
+  }
+  if(loginPass.value === user.password){
+    loadProfile();
+  } else {
+    alert("Wrong password");
+  }
+}
+
+function loadProfile(){
+  let user = JSON.parse(localStorage.getItem("user"));
+  loginBox.classList.add("hidden");
+  signupBox.classList.add("hidden");
+  profileBox.classList.remove("hidden");
+
+  pname.value = user.name;
+  pmobile.value = user.mobile;
+  pemail.value = user.email;
+  ptype.value = user.type;
+}
+
+function updateProfile(){
+  let user = {
+    name: pname.value,
+    mobile: pmobile.value,
+    email: pemail.value,
+    password: JSON.parse(localStorage.getItem("user")).password,
+    type: ptype.value
+  };
+  localStorage.setItem("user", JSON.stringify(user));
+  alert("Profile updated");
+}
+
+function logout(){
+  location.reload();
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title>MyProperty</title>
+</head>
+<body>
+  <h1>Page Under Construction</h1>
+  <a href="index.html">Go Back</a>
+</body>
+</html> -->
