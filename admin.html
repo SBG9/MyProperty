@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel | MyProperty</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#f5f7fb}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 40px;background:#0f172a;color:#fff}
+.navbar a{color:#00ffd9;text-decoration:none;margin-left:18px}
+.container{max-width:1200px;margin:30px auto;padding:0 20px}
+.card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,.1);margin-bottom:20px}
+button,input{padding:8px;width:100%;margin-top:8px}
+button{background:#22c55e;border:none;color:#fff;border-radius:6px;cursor:pointer}
+.tabs button{background:#2563eb;margin-right:10px;width:auto}
+.tab{display:none}
+.tab.active{display:block}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{border:1px solid #ccc;padding:8px;text-align:left}
+footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:40px}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <div><b>MyProperty Admin Panel</b></div>
+  <nav>
+    <a href="#" onclick="adminLogout()">Logout</a>
+  </nav>
+</header>
+
+<div class="container">
+
+<!-- ADMIN LOGIN -->
+<div class="card" id="loginBox">
+  <h2>Admin Login</h2>
+  <input id="adminUser" placeholder="Username">
+  <input id="adminPass" type="password" placeholder="Password">
+  <button onclick="adminLogin()">Login</button>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="panel" style="display:none">
+
+<div class="tabs card">
+  <button onclick="openTab('dash')">Dashboard</button>
+  <button onclick="openTab('users')">Users</button>
+  <button onclick="openTab('properties')">Properties</button>
+  <button onclick="openTab('enquiries')">Enquiries</button>
+  <button onclick="openTab('settings')">Settings</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dash" class="tab active card">
+  <h2>Summary</h2>
+  <p>Total Users: <b id="uCount">0</b></p>
+  <p>Total Properties: <b id="pCount">0</b></p>
+  <p>Unverified Users: <b id="vCount">0</b></p>
+  <p>Total Enquiries: <b id="eCount">0</b></p>
+</div>
+
+<!-- USERS -->
+<div id="users" class="tab card">
+  <h2>Users</h2>
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Email</th><th>Verified</th><th>Action</th></tr>
+    </thead>
+    <tbody id="userTable"></tbody>
+  </table>
+</div>
+
+<!-- PROPERTIES -->
+<div id="properties" class="tab card">
+  <h2>Properties</h2>
+  <table>
+    <thead>
+      <tr><th>Title</th><th>Owner</th><th>Status</th><th>Action</th></tr>
+    </thead>
+    <tbody id="propTable"></tbody>
+  </table>
+</div>
+
+<!-- ENQUIRIES -->
+<div id="enquiries" class="tab card">
+  <h2>Enquiries</h2>
+  <table>
+    <thead>
+      <tr><th>User</th><th>Message</th><th>Status</th><th>Action</th></tr>
+    </thead>
+    <tbody id="enqTable"></tbody>
+  </table>
+</div>
+
+<!-- SETTINGS -->
+<div id="settings" class="tab card">
+  <h2>Admin Settings</h2>
+  <input type="password" id="newAdminPass" placeholder="New Admin Password">
+  <button onclick="changeAdminPass()">Change Password</button>
+</div>
+
+</div>
+</div>
+
+<footer>© 2025 MyProperty Admin</footer>
+
+<script>
+// ================= ADMIN AUTH =================
+let ADMIN = {user:"admin", pass:"shreenivas"};
+
+function adminLogin(){
+  if(adminUser.value===ADMIN.user && adminPass.value===ADMIN.pass){
+    loginBox.style.display="none";
+    panel.style.display="block";
+    loadAll();
+  }else alert("Wrong admin credentials");
+}
+
+function adminLogout(){
+  location.reload();
+}
+
+// ================= TABS =================
+function openTab(id){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+// ================= INIT DATA =================
+if(!localStorage.users)
+  localStorage.users=JSON.stringify([]);
+
+if(!localStorage.properties)
+  localStorage.properties=JSON.stringify([]);
+
+if(!localStorage.enquiries)
+  localStorage.enquiries=JSON.stringify([]);
+
+// ================= LOAD =================
+function loadAll(){
+  let u=JSON.parse(localStorage.users);
+  let p=JSON.parse(localStorage.properties);
+  let e=JSON.parse(localStorage.enquiries);
+
+  uCount.innerText=u.length;
+  pCount.innerText=p.length;
+  vCount.innerText=u.filter(x=>!x.verified).length;
+  eCount.innerText=e.length;
+
+  userTable.innerHTML=u.map((x,i)=>`
+    <tr>
+      <td>${x.name||"-"}</td>
+      <td>${x.email||"-"}</td>
+      <td>${x.verified?"Yes":"No"}</td>
+      <td>
+        <button onclick="verifyUser(${i})">Verify</button>
+        <button onclick="deleteUser(${i})">Delete</button>
+      </td>
+    </tr>`).join("");
+
+  propTable.innerHTML=p.map((x,i)=>`
+    <tr>
+      <td>${x.title}</td>
+      <td>${x.owner}</td>
+      <td>${x.status}</td>
+      <td>
+        <button onclick="toggleProp(${i})">Toggle</button>
+        <button onclick="deleteProp(${i})">Delete</button>
+      </td>
+    </tr>`).join("");
+
+  enqTable.innerHTML=e.map((x,i)=>`
+    <tr>
+      <td>${x.user}</td>
+      <td>${x.msg}</td>
+      <td>${x.status}</td>
+      <td><button onclick="resolveEnq(${i})">Resolve</button></td>
+    </tr>`).join("");
+}
+
+// ================= ACTIONS =================
+function verifyUser(i){
+  let u=JSON.parse(localStorage.users);
+  u[i].verified=true;
+  localStorage.users=JSON.stringify(u);
+  loadAll();
+}
+
+function deleteUser(i){
+  let u=JSON.parse(localStorage.users);
+  if(confirm("Delete user?")){u.splice(i,1);localStorage.users=JSON.stringify(u);loadAll();}
+}
+
+function toggleProp(i){
+  let p=JSON.parse(localStorage.properties);
+  p[i].status=p[i].status==="Available"?"Sold":"Available";
+  localStorage.properties=JSON.stringify(p);
+  loadAll();
+}
+
+function deleteProp(i){
+  let p=JSON.parse(localStorage.properties);
+  if(confirm("Delete property?")){p.splice(i,1);localStorage.properties=JSON.stringify(p);loadAll();}
+}
+
+function resolveEnq(i){
+  let e=JSON.parse(localStorage.enquiries);
+  e[i].status="Resolved";
+  localStorage.enquiries=JSON.stringify(e);
+  loadAll();
+}
+
+function changeAdminPass(){
+  if(newAdminPass.value){
+    ADMIN.pass=newAdminPass.value;
+    alert("Admin password changed");
+    newAdminPass.value="";
+  }
+}
+</script>
+
+</body>
+</html>

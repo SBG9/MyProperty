@@ -3,45 +3,72 @@
 <head>
 <meta charset="UTF-8">
 <title>Register Property | MyProperty</title>
-<link rel="stylesheet" href="css/style.css">
 
 <style>
-.form-box{
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fb}
+
+/* NAVBAR */
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 40px;
+  background:#0f172a;
+  color:#fff
 }
+.navbar a{
+  color:#00ffd9;
+  text-decoration:none;
+  margin-left:18px;
+  font-weight:600
+}
+
+/* FORM */
+.form-box{
+  max-width:900px;
+  margin:40px auto;
+  background:#fff;
+  padding:30px;
+  border-radius:14px;
+  box-shadow:0 0 20px rgba(0,0,0,0.1)
+}
+.form-box h1{margin-top:0}
 .form-box h2{
-  margin-bottom: 15px;
-  border-bottom: 2px solid #22c55e;
-  padding-bottom: 5px;
+  margin:25px 0 15px;
+  border-bottom:2px solid #22c55e;
+  padding-bottom:6px
 }
 .form-group{
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 15px;
-  margin-bottom: 20px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+  margin-bottom:15px
 }
 .form-group input,
 .form-group select,
 .form-group textarea{
-  padding: 10px;
-  width: 100%;
+  padding:10px;
+  width:100%;
+  border-radius:6px;
+  border:1px solid #ccc
 }
-textarea{
-  grid-column: span 2;
-  resize: vertical;
-}
+textarea{grid-column:span 2;resize:vertical}
 .submit-btn{
-  width: 100%;
-  padding: 12px;
+  width:100%;
+  padding:14px;
   background:#22c55e;
   color:#fff;
   border:none;
   font-size:18px;
   cursor:pointer;
+  border-radius:8px;
+  margin-top:20px
+}
+.submit-btn:hover{opacity:.9}
+.preview img,video,audio{
+  width:100%;
+  margin-top:8px;
+  border-radius:8px
 }
 </style>
 </head>
@@ -49,146 +76,152 @@ textarea{
 <body>
 
 <header class="navbar">
-  <div class="logo">MyProperty</div>
+  <div><b>MyProperty</b></div>
   <nav>
-    <a href="index.html">Home</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="my-properties.html">My Properties</a>
     <a href="profile.html">Profile</a>
+    <a href="logout.html">Logout</a>
   </nav>
 </header>
 
 <div class="form-box">
 <h1>Register Your Property</h1>
 
+<form onsubmit="saveProperty(event)">
+
 <!-- BASIC DETAILS -->
 <h2>Property Details</h2>
 <div class="form-group">
-  <select>
-    <option>Property Type</option>
+  <select id="type" required>
+    <option value="">Property Type</option>
     <option>Home</option>
     <option>Flat</option>
-    <option>Rented House</option>
-    <option>Room / Hostel</option>
-    <option>Agricultural Land</option>
     <option>Plot</option>
     <option>Bungalow</option>
-    <option>Commercial Space</option>
+    <option>Commercial</option>
     <option>Shop</option>
-    <option>Office</option>
-    <option>Warehouse</option>
-    <option>Industrial Land</option>
+    <option>Agricultural Land</option>
   </select>
 
-  <select>
-    <option>Condition</option>
+  <select id="condition">
     <option>New</option>
     <option>Old</option>
     <option>Under Construction</option>
   </select>
 
-  <input type="text" placeholder="Size / Area (sq.ft / acres / BHK)">
-  <input type="number" placeholder="Offer Price (₹)">
+  <input id="size" placeholder="Size / Area (sq.ft / BHK / acres)" required>
+  <input id="price" type="number" placeholder="Offer Price (₹)" required>
 </div>
 
 <!-- LOCATION -->
 <h2>Location Details</h2>
 <div class="form-group">
-  <input type="text" placeholder="Country">
-  <input type="text" placeholder="State">
-  <input type="text" placeholder="District">
-  <input type="text" placeholder="Taluka">
-  <input type="text" placeholder="Village / City / Town">
-  <input type="number" placeholder="Pin Code">
-  <input type="text" placeholder="Nearby Landmark">
-</div>
-
-<!-- OWNERSHIP -->
-<h2>Ownership & Legal</h2>
-<div class="form-group">
-  <select>
-    <option>Ownership Type</option>
-    <option>Clear Title</option>
-    <option>Resale</option>
-    <option>New Construction</option>
-  </select>
-
-  <select>
-    <option>Legal Documents</option>
-    <option>Registered</option>
-    <option>Tax Paid</option>
-    <option>NOC Available</option>
-  </select>
+  <input id="country" placeholder="Country">
+  <input id="state" placeholder="State">
+  <input id="district" placeholder="District">
+  <input id="city" placeholder="City / Village" required>
+  <input id="pincode" placeholder="Pin Code">
+  <input id="landmark" placeholder="Nearby Landmark">
 </div>
 
 <!-- FACILITIES -->
-<h2>Facilities / Amenities</h2>
+<h2>Facilities</h2>
 <div class="form-group">
-  <select>
-    <option>Parking</option>
-    <option>Available</option>
-    <option>Not Available</option>
-  </select>
-  <select>
-    <option>Furnishing</option>
-    <option>Furnished</option>
-    <option>Semi-Furnished</option>
-    <option>Unfurnished</option>
-  </select>
-  <select>
-    <option>Water Supply</option>
-    <option>24x7</option>
-    <option>Limited</option>
-  </select>
-  <select>
-    <option>Electricity</option>
-    <option>Available</option>
-    <option>Not Available</option>
-  </select>
+  <select id="parking"><option>Parking</option><option>Available</option><option>No</option></select>
+  <select id="furnish"><option>Furnishing</option><option>Furnished</option><option>Semi</option><option>Unfurnished</option></select>
+  <select id="water"><option>Water</option><option>24x7</option><option>Limited</option></select>
+  <select id="electricity"><option>Electricity</option><option>Available</option><option>No</option></select>
 </div>
 
 <!-- MEDIA -->
 <h2>Upload Media</h2>
 <div class="form-group">
-  <input type="file" accept="image/*" multiple>
-  <input type="file" accept="video/*">
-  <input type="file" accept="audio/*">
+  <input type="file" id="images" accept="image/*" multiple>
+  <input type="file" id="video" accept="video/*">
+  <input type="file" id="audio" accept="audio/*">
 </div>
 
 <!-- DESCRIPTION -->
-<h2>Additional Information</h2>
+<h2>Description</h2>
 <div class="form-group">
-  <textarea rows="5" placeholder="Write property description in your own words (optional)"></textarea>
+  <textarea id="desc" rows="4" placeholder="Property description"></textarea>
 </div>
 
 <!-- CONTACT -->
 <h2>Contact Details</h2>
 <div class="form-group">
-  <input type="text" placeholder="Contact Person Name">
-  <input type="text" placeholder="Phone Number">
-  <input type="email" placeholder="Email (Optional)">
+  <input id="contactName" placeholder="Contact Person Name">
+  <input id="contactPhone" placeholder="Phone Number">
 </div>
 
 <button class="submit-btn">Register Property</button>
+</form>
 
 </div>
 
+<script>
+let user = JSON.parse(localStorage.getItem('user'));
+if(!user) location.href='login.html';
+if(!user.properties) user.properties = [];
+
+function fileToBase64(file){
+  return new Promise((resolve)=>{
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(file);
+  });
+}
+
+async function saveProperty(e){
+  e.preventDefault();
+
+  let imgs = [];
+  for(let f of images.files){
+    imgs.push(await fileToBase64(f));
+  }
+
+  let vid = video.files[0] ? await fileToBase64(video.files[0]) : "";
+  let aud = audio.files[0] ? await fileToBase64(audio.files[0]) : "";
+
+  let property = {
+    type:type.value,
+    condition:condition.value,
+    size:size.value,
+    price:price.value,
+    location:city.value+", "+district.value,
+    state:state.value,
+    country:country.value,
+    pincode:pincode.value,
+    landmark:landmark.value,
+    facilities:{
+      parking:parking.value,
+      furnish:furnish.value,
+      water:water.value,
+      electricity:electricity.value
+    },
+    images:imgs,
+    video:vid,
+    audio:aud,
+    description:desc.value,
+    contactName:contactName.value,
+    contactPhone:contactPhone.value,
+    status:"Available",
+    created:new Date().toLocaleDateString()
+  };
+
+  user.properties.push(property);
+  user.totalProperties = user.properties.length;
+
+  user.activity = user.activity || [];
+  user.activity.unshift("Added property: "+property.type);
+
+  localStorage.setItem("user",JSON.stringify(user));
+
+  alert("Property Registered Successfully!");
+  location.href="my-properties.html";
+}
+</script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-<!-- <!DOCTYPE html>
-<html>
-<head>
-  <title>MyProperty</title>
-</head>
-<body>
-  <h1>Page Under Construction</h1>
-  <a href="index.html">Go Back</a>
-</body>
-</html> -->

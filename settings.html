@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Settings | MyProperty</title>
+
+<style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fb}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 40px;background:#0f172a;color:#fff}
+.navbar a{color:#00ffd9;text-decoration:none;margin-left:18px}
+.container{max-width:1100px;margin:40px auto}
+.card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,.1);margin-bottom:20px}
+.card h3{margin-top:0;color:#2563eb}
+input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:6px;border:1px solid #ccc}
+button{background:#22c55e;border:none;color:#fff;cursor:pointer}
+.toggle-label{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding:10px;background:#f1f5f9;border-radius:8px}
+footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:40px}
+.readonly{background:#e5e7eb}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <b>MyProperty</b>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="profile.html">Profile</a>
+    <a href="my-properties.html">My Properties</a>
+    <a href="settings.html">Settings</a>
+    <a href="logout.html">Logout</a>
+  </nav>
+</header>
+
+<div class="container">
+
+<!-- ACCOUNT INFO -->
+<div class="card">
+  <h3>Account Information</h3>
+  <input id="uname" class="readonly" readonly>
+  <input id="uemail" class="readonly" readonly>
+  <input id="umobile" class="readonly" readonly>
+</div>
+
+<!-- CHANGE PASSWORD -->
+<div class="card">
+  <h3>Change Password</h3>
+  <input type="password" id="oldPass" placeholder="Current Password">
+  <input type="password" id="newPass" placeholder="New Password">
+  <input type="password" id="confirmPass" placeholder="Confirm New Password">
+  <button onclick="changePassword()">Update Password</button>
+</div>
+
+<!-- SECURITY QUESTION -->
+<div class="card">
+  <h3>Security Question</h3>
+  <select id="secQ">
+    <option value="">Select question</option>
+    <option>Your first school?</option>
+    <option>Your pet’s name?</option>
+    <option>Your favorite city?</option>
+  </select>
+  <input id="secA" placeholder="Answer">
+  <button onclick="saveSecurity()">Save Security</button>
+</div>
+
+<!-- NOTIFICATIONS -->
+<div class="card">
+  <h3>Notifications</h3>
+  <label class="toggle-label">Email Notifications
+    <input type="checkbox" id="emailNot">
+  </label>
+  <label class="toggle-label">SMS Notifications
+    <input type="checkbox" id="smsNot">
+  </label>
+  <button onclick="saveNotifications()">Save Preferences</button>
+</div>
+
+<!-- LANGUAGE -->
+<div class="card">
+  <h3>Language</h3>
+  <select id="lang">
+    <option>English</option>
+    <option>Marathi</option>
+  </select>
+  <button onclick="saveLang()">Save Language</button>
+</div>
+
+</div>
+
+<footer>
+© 2025 MyProperty
+</footer>
+
+<script>
+/* LOGIN CHECK */
+let user = JSON.parse(localStorage.getItem('user'));
+if(!user){
+  location.href = "login.html";
+}
+
+/* LOAD USER DATA */
+uname.value  = user.name || "";
+uemail.value = user.email || "";
+umobile.value = user.mobile || "";
+
+secQ.value = user.secQ || "";
+secA.value = user.secA || "";
+emailNot.checked = user.emailNot || false;
+smsNot.checked = user.smsNot || false;
+lang.value = user.lang || "English";
+
+/* CHANGE PASSWORD */
+function changePassword(){
+  if(oldPass.value !== user.password){
+    alert("Current password incorrect");
+    return;
+  }
+  if(newPass.value.length < 6){
+    alert("Password must be at least 6 characters");
+    return;
+  }
+  if(newPass.value !== confirmPass.value){
+    alert("Passwords do not match");
+    return;
+  }
+  user.password = newPass.value;
+  localStorage.setItem("user", JSON.stringify(user));
+  alert("Password updated successfully");
+  oldPass.value = newPass.value = confirmPass.value = "";
+}
+
+/* SECURITY */
+function saveSecurity(){
+  if(!secQ.value || !secA.value){
+    alert("Please select question and answer");
+    return;
+  }
+  user.secQ = secQ.value;
+  user.secA = secA.value;
+  localStorage.setItem("user", JSON.stringify(user));
+  alert("Security settings saved");
+}
+
+/* NOTIFICATIONS */
+function saveNotifications(){
+  user.emailNot = emailNot.checked;
+  user.smsNot = smsNot.checked;
+  localStorage.setItem("user", JSON.stringify(user));
+  alert("Notification preferences saved");
+}
+
+/* LANGUAGE */
+function saveLang(){
+  user.lang = lang.value;
+  localStorage.setItem("user", JSON.stringify(user));
+  alert("Language updated");
+}
+</script>
+
+</body>
+</html>

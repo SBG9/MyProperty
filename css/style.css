@@ -1,14 +1,15 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  background-color: rgb(207, 240, 240);
 }
 
 .navbar {
   display: flex;
   justify-content: space-between;
   padding: 15px 40px;
-  background: #0f172a;
-  color: white;
+  background: #170b42;
+  color: rgb(255, 172, 39);
 }
 
 .navbar a {
@@ -18,7 +19,7 @@ body {
 }
 
 .btn {
-  background: #22c55e;
+  background: #c57422;
   padding: 6px 12px;
   border-radius: 5px;
 }

@@ -6,89 +6,28 @@
 <link rel="stylesheet" href="css/style.css">
 
 <style>
-/* FILTER BAR */
-.filter-box{
-  max-width: 1100px;
-  margin: 20px auto;
-  padding: 15px;
-  border-radius: 12px;
-  background: #f8fafc;
-  box-shadow: 0 0 10px rgba(0,0,0,0.08);
-}
-.filter-row{
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: 10px;
-}
-.filter-row input, .filter-row select{
-  padding: 8px;
-}
-.filter-btn{
-  margin-top: 12px;
-  width: 100%;
-  padding: 10px;
-  background:#22c55e;
-  border:none;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-}
+body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 20px;background:#0f172a}
+.navbar nav a{margin-left:18px;text-decoration:none;color:#00ffd9;font-weight:600}
+.navbar .btn{border:1px solid #00ffd9;padding:6px 12px;border-radius:6px}
+
+/* FILTER */
+.filter-box{max-width:1100px;margin:20px auto;padding:15px;border-radius:12px;background:#f8fafc;box-shadow:0 0 10px rgba(0,0,0,0.08)}
+.filter-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.filter-row input,.filter-row select{padding:8px}
+.filter-btn{margin-top:12px;width:100%;padding:10px;background:#22c55e;border:none;color:#fff;font-size:16px}
 
 /* RENT FEED */
-.rent-feed{
-  max-width: 1100px;
-  margin: 30px auto;
-}
-.rent-card{
-  display: flex;
-  gap: 15px;
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  margin-bottom: 20px;
-}
-.rent-card img{
-  width: 260px;
-  border-radius: 10px;
-}
-.rent-info{
-  flex: 1;
-}
-.rent-info h3{
-  margin: 0;
-}
-.rent-price{
-  color: #2563eb;
-  font-size: 20px;
-  font-weight: bold;
-}
-.tags span{
-  background: #e2e8f0;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  margin-right: 5px;
-}
-.rent-actions{
-  margin-top: 10px;
-}
-.rent-actions button{
-  padding: 6px 12px;
-  margin-right: 10px;
-  cursor:pointer;
-}
-.contact-btn{
-  background:#16a34a;
-  color:white;
-  border:none;
-}
-.lease-badge{
-  background:#15803d;
-  color:white;
-  padding:4px 8px;
-  border-radius:6px;
-  font-size:12px;
-}
+.rent-feed{max-width:1100px;margin:30px auto}
+.rent-card{display:flex;gap:15px;padding:15px;border-radius:12px;border:1px solid #ddd;background:#fff;margin-bottom:20px}
+.rent-card img{width:260px;border-radius:10px;object-fit:cover}
+.rent-info{flex:1}
+.rent-price{color:#2563eb;font-size:20px;font-weight:bold}
+.tags span{background:#e2e8f0;padding:4px 8px;border-radius:6px;font-size:12px;margin-right:5px}
+.rent-actions{margin-top:10px}
+.rent-actions button{padding:6px 12px;margin-right:8px;cursor:pointer}
+.contact-btn{background:#16a34a;color:#fff;border:none}
+.lease-badge{background:#15803d;color:#fff}
 </style>
 </head>
 
@@ -96,103 +35,60 @@
 
 <header class="navbar">
   <div class="logo">MyProperty</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="add-property.html">Register Property</a>
-    <a href="login.html">Login</a>
-  </nav>
+  <nav id="mainNav"></nav>
 </header>
 
-<!-- FILTER FORM -->
+<!-- FILTER -->
 <div class="filter-box">
   <h3>Find Rental / Lease Property</h3>
-
   <div class="filter-row">
-    <select>
-      <option>Property Type</option>
-      <option>Flat</option>
-      <option>Room / Hostel</option>
-      <option>Rented House</option>
-      <option>Commercial Space</option>
-      <option>Shop</option>
-      <option>Office</option>
-      <option>Agricultural Land (ShetJamin)</option>
-    </select>
-
-    <select>
-      <option>Rent Type</option>
-      <option>Monthly Rent</option>
-      <option>Yearly Lease</option>
-    </select>
-
-    <input type="number" placeholder="Min Rent / Lease">
-    <input type="number" placeholder="Max Rent / Lease">
-
-    <input type="text" placeholder="City / Village / Taluka">
-
-    <select>
-      <option>Land Area (for ShetJamin)</option>
-      <option>Below 1 Acre</option>
-      <option>1 – 3 Acres</option>
-      <option>3 – 5 Acres</option>
-      <option>5+ Acres</option>
-    </select>
-
-    <select>
-      <option>Water Availability</option>
-      <option>Well</option>
-      <option>Canal</option>
-      <option>Borewell</option>
-      <option>Seasonal</option>
-    </select>
-
-    <select>
-      <option>Lease Duration</option>
-      <option>1 Year</option>
-      <option>3 Years</option>
-      <option>5 Years</option>
-    </select>
+    <select><option>Property Type</option><option>Flat</option><option>Room</option><option>Shop</option></select>
+    <select><option>Rent Type</option><option>Monthly</option><option>Yearly Lease</option></select>
+    <input type="number" placeholder="Min Rent">
+    <input type="number" placeholder="Max Rent">
+    <input type="text" placeholder="City / Village">
+    <select><option>Water</option><option>Well</option><option>Canal</option></select>
+    <select><option>Lease Duration</option><option>1 Year</option><option>3 Years</option></select>
   </div>
-
   <button class="filter-btn">Search</button>
 </div>
 
-<!-- RENT / LEASE PROPERTY LIST -->
+<!-- RENT LIST -->
 <div class="rent-feed">
 
-  <!-- HOUSE RENT -->
+  <!-- RENT CARD -->
   <div class="rent-card">
     <img src="images/sample.jpg">
     <div class="rent-info">
       <h3>2 BHK Flat for Rent</h3>
-      <p>Pune – Wakad</p>
+      <p><b>Location:</b> Pune – Wakad, 411057 (Near Metro)</p>
       <div class="rent-price">₹18,000 / month</div>
 
       <div class="tags">
         <span>2 BHK</span>
         <span>Furnished</span>
         <span>Parking</span>
+        <span>24x7 Water</span>
       </div>
 
-      <p>
-        Well-maintained flat near school, hospital and metro.
-      </p>
+      <p><b>Description:</b> Well-maintained flat near school & hospital.</p>
+
+      <p><b>Owner:</b> Rajesh Patil | 📞 9876543210</p>
 
       <div class="rent-actions">
-        <button>View Details</button>
-        <a href="tel:9876543210">
-          <button class="contact-btn">Call Owner</button>
-        </a>
+        <button class="callBtn" data-phone="9876543210">Call Owner</button>
+        <button class="saveBtn">Save</button>
+        <button class="likeBtn">Like</button>
       </div>
     </div>
   </div>
 
-  <!-- SHETJAMIN LEASE -->
+  <!-- LEASE CARD -->
   <div class="rent-card">
     <img src="images/sample.jpg">
     <div class="rent-info">
       <h3>Agricultural Land on Lease</h3>
-      <p>Nashik – Trimbakeshwar</p>
+      <p><b>Location:</b> Nashik – Trimbakeshwar</p>
       <div class="rent-price">₹60,000 / year</div>
 
       <div class="tags">
@@ -202,41 +98,56 @@
         <span>Road Touch</span>
       </div>
 
-      <p>
-        Fertile shetjamin suitable for seasonal & commercial farming.
-      </p>
+      <p><b>Description:</b> Fertile land for seasonal farming.</p>
+
+      <p><b>Owner:</b> Mahadev Shinde | 📞 9123456789</p>
 
       <div class="rent-actions">
-        <button>View Details</button>
-        <a href="tel:9123456789">
-          <button class="contact-btn">Call Owner</button>
-        </a>
+        <button class="callBtn" data-phone="9123456789">Call Owner</button>
+        <button class="saveBtn">Save</button>
+        <button class="likeBtn">Like</button>
       </div>
     </div>
   </div>
 
 </div>
 
+<script>
+let user = JSON.parse(localStorage.getItem("user"));
+const nav = document.getElementById("mainNav");
+
+if(user){
+  nav.innerHTML = `
+    <a href="index.html">Home</a>
+    <a href="buy.html">Buy</a>
+    <a href="rent.html">Rent</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="logout.html">Logout</a>
+  `;
+}else{
+  nav.innerHTML = `
+    <a href="index.html">Home</a>
+    <a href="buy.html">Buy</a>
+    <a href="rent.html">Rent</a>
+    <a href="login.html" class="btn">Register Property</a>
+    <a href="login.html">Login</a>
+  `;
+}
+
+document.querySelectorAll(".callBtn").forEach(btn=>{
+  btn.onclick = ()=>{
+    if(user){
+      location.href = "tel:"+btn.dataset.phone;
+    }else{
+      location.href="login.html";
+    }
+  }
+});
+
+document.querySelectorAll(".saveBtn,.likeBtn").forEach(btn=>{
+  btn.onclick = ()=> user ? alert("Action saved") : location.href="login.html";
+});
+</script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-<!-- <!DOCTYPE html>
-<html>
-<head>
-  <title>MyProperty</title>
-</head>
-<body>
-  <h1>Page Under Construction</h1>
-  <a href="index.html">Go Back</a>
-</body>
-</html> -->

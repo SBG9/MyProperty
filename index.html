@@ -4,218 +4,51 @@
 <meta charset="UTF-8">
 <title>MyProperty | Buy, Sell & Rent</title>
 <link rel="stylesheet" href="css/style.css">
-
 <style>
+/* --- SAME STYLES AS BEFORE --- */
 body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0}
-
-/* NAVBAR */
-.navbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:15px 40px;
-  background:#ffffff;
-  box-shadow:0 2px 8px rgba(0,0,0,0.08);
-}
-.navbar nav a{
-  margin-left:18px;
-  text-decoration:none;
-  color:#333;
-}
-.navbar .btn{
-  background:#2563eb;
-  color:#fff;
-  padding:8px 14px;
-  border-radius:6px;
-}
-
-/* HERO */
-.hero{
-  display:flex;
-  justify-content:space-between;
-  max-width:1200px;
-  margin:40px auto;
-  gap:20px;
-}
-.hero-left{flex:1}
-.hero-right{
-  width:420px;
-  position:relative;
-}
-
-/* HERO TEXT */
-.hero-left p.desc{
-  margin-top:12px;
-  color:#444;
-  line-height:1.6;
-  max-width:520px;
-}
-
-/* HERO ACTIONS */
-.hero-actions{
-  margin-top:22px;
-  display:flex;
-  gap:15px;
-  align-items:center;
-}
-.list-btn{
-  padding:12px 18px;
-  background:#22c55e;
-  border:none;
-  color:white;
-  font-size:15px;
-  border-radius:8px;
-  cursor:pointer;
-}
-.search-mini{
-  display:flex;
-  background:#fff;
-  border-radius:8px;
-  overflow:hidden;
-  box-shadow:0 0 8px rgba(0,0,0,0.15);
-}
-.search-mini input{
-  padding:10px;
-  border:none;
-  outline:none;
-  width:220px;
-}
-.search-btn{
-  background:#2563eb;
-  border:none;
-  color:white;
-  padding:0 16px;
-  cursor:pointer;
-}
-
-/* MERGED STATS + TRUST CARD */
-.main-card{
-  background:#fff;
-  border-radius:16px;
-  box-shadow:0 0 14px rgba(0,0,0,0.12);
-  padding:28px 22px 22px;
-  position:relative;
-}
-
-/* MyProperty Badge */
-.main-card .badge{
-  position:absolute;
-  top:-12px;
-  left:-12px;
-  background:#2563eb;
-  color:#fff;
-  padding:8px 14px;
-  border-radius:10px;
-  font-weight:bold;
-  box-shadow:0 4px 10px rgba(0,0,0,0.2);
-}
-
-/* Stats Grid */
-.stats-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
-  text-align:center;
-  margin-bottom:20px;
-}
-.stats-grid div{
-  background:#f1f5f9;
-  padding:16px;
-  border-radius:12px;
-}
-.stats-grid b{
-  display:block;
-  font-size:22px;
-  color:#2563eb;
-}
-
-/* Trust Section */
-.trust-inner{
-  background:linear-gradient(135deg,#0f172a,#1e293b);
-  color:#fff;
-  padding:16px;
-  border-radius:12px;
-}
-.trust-inner h4{
-  margin:0 0 10px;
-  color:#22c55e;
-}
-.trust-inner ul{
-  padding-left:18px;
-  margin:0;
-}
-.trust-inner li{
-  margin-bottom:6px;
-  font-size:14px;
-}
-
-/* SEARCH */
-.search-box{
-  max-width:1200px;
-  margin:30px auto;
-  background:#fff;
-  padding:20px;
-  border-radius:14px;
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:10px;
-  box-shadow:0 0 10px rgba(0,0,0,0.08);
-}
-.search-box select,.search-box input{
-  padding:8px;
-}
-.search-box button{
-  grid-column:span 6;
-  padding:12px;
-  background:#22c55e;
-  color:white;
-  border:none;
-  font-size:16px;
-  cursor:pointer;
-}
-
-/* FEED */
-.feed{
-  max-width:1200px;
-  margin:40px auto;
-}
-.property-card{
-  display:flex;
-  gap:15px;
-  background:#fff;
-  padding:15px;
-  border-radius:14px;
-  margin-bottom:20px;
-  box-shadow:0 0 10px rgba(0,0,0,0.08);
-}
-.property-card img{
-  width:260px;
-  border-radius:12px;
-}
-.property-info{flex:1}
-.price{
-  font-size:20px;
-  color:#2563eb;
-  font-weight:bold;
-}
-.actions button{
-  padding:8px 14px;
-  margin-right:10px;
-  cursor:pointer;
-}
+.navbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:15px 20px;background:#0f172a;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.navbar nav a{margin-left:18px;text-decoration:none;color:#00ffd9;font-weight:600;}
+.navbar .btn{background:#0f172a;color:#00ffd9;padding:8px 14px;border-radius:6px;text-decoration:none;}
+.hero{display:flex;flex-wrap:wrap;justify-content:space-between;max-width:1200px;margin:40px auto;gap:20px;background:#cfd7e9;padding:20px;border-radius:14px;}
+.hero-left{flex:1; min-width:280px;}
+.hero-right{width:420px; min-width:280px; position:relative;}
+.hero-left p.desc{margin-top:12px;color:#444;line-height:1.6;max-width:520px;}
+.hero-actions{margin-top:22px;display:flex;flex-wrap:wrap;gap:15px;align-items:center;}
+.list-btn{padding:12px 18px;background:#22c55e;border:none;color:white;font-size:15px;border-radius:8px;cursor:pointer;}
+.search-mini{display:flex;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 0 8px rgba(0,0,0,0.15);}
+.search-mini input{padding:10px;border:none;outline:none;width:220px;}
+.search-btn{background:#2563eb;border:none;color:white;padding:0 16px;cursor:pointer;}
+.main-card{background:#ffffff;border-radius:16px;box-shadow:0 0 14px rgba(0,0,0,0.12);padding:28px 22px 22px;position:relative;}
+.main-card .badge{position:absolute;top:-12px;left:-12px;background:#2563eb;color:#fff;padding:8px 14px;border-radius:10px;font-weight:bold;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;text-align:center;margin-bottom:20px;}
+.stats-grid div{background:#f1f5f9;padding:16px;border-radius:12px;}
+.stats-grid b{display:block;font-size:22px;color:#2563eb;}
+.trust-inner{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:16px;border-radius:12px;}
+.trust-inner h4{margin:0 0 10px;color:#22c55e;}
+.trust-inner ul{padding-left:18px;margin:0;}
+.trust-inner li{margin-bottom:6px;font-size:14px;}
+.search-box{max-width:1200px;margin:30px auto;background:#fff;padding:20px;border-radius:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;box-shadow:0 0 10px rgba(0,0,0,0.08);}
+.search-box select,.search-box input{padding:8px;}
+.search-box button{grid-column:span 6;padding:12px;background:#22c55e;color:white;border:none;font-size:16px;cursor:pointer;}
+.feed{max-width:1200px;margin:40px auto;}
+.property-card{display:flex;flex-wrap:wrap;gap:15px;background:#fff;padding:15px;border-radius:14px;margin-bottom:20px;box-shadow:0 0 10px rgba(0,0,0,0.08);}
+.property-card img{width:260px;border-radius:12px;min-width:200px;object-fit:cover;}
+.property-info{flex:1; min-width:200px;}
+.price{font-size:20px;color:#2563eb;font-weight:bold;}
+.actions button{padding:8px 14px;margin-right:10px;cursor:pointer;}
+.recommended {max-width:1200px;margin:40px auto 20px;background:#ffffff;padding:25px;border-radius:14px;box-shadow:0 0 10px rgba(0,0,0,0.08);}
+.recommended h2 {margin:0 0 8px;color:#0f172a;}
+.recommended p {margin:0;color:#555;font-size:15px;}
+footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:20px;}
 </style>
 </head>
-
 <body>
 
 <header class="navbar">
   <div class="logo"><b>MyProperty</b></div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="buy.html">Buy</a>
-    <a href="rent.html">Rent</a>
-    <a href="add-property.html" class="btn">Register Property</a>
-    <a href="login.html">Login</a>
+  <nav id="mainNav">
+    <!-- Navbar will be populated by JS -->
   </nav>
 </header>
 
@@ -224,39 +57,30 @@ body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0}
   <div class="hero-left">
     <h1>Buy, Sell & Rent Properties</h1>
     <p>Trusted platform for Agricultural & Urban Properties</p>
-
     <p class="desc">
       MyProperty connects genuine buyers, sellers and renters on one trusted platform.<br>
       Discover verified agricultural and urban properties with transparent pricing.<br>
       Contact property owners directly without brokers or hidden charges.<br>
       Simple search, secure communication and real opportunities in one place.
     </p>
-
     <div class="hero-actions">
-      <a href="add-property.html">
-        <button class="list-btn">List Your Property – Free</button>
-      </a>
-
+      <button class="list-btn" id="listPropertyBtn">List Your Property – Free</button>
       <div class="search-mini">
-        <input type="text" placeholder="Search by city, area or keyword">
-        <button class="search-btn">Search</button>
+        <input type="text" placeholder="Search by city, area or keyword" id="searchInput">
+        <button class="search-btn" id="searchBtn">Search</button>
       </div>
     </div>
   </div>
 
   <div class="hero-right">
-
-    <!-- MAIN MERGED CARD -->
     <div class="main-card">
       <div class="badge">MyProperty</div>
-
       <div class="stats-grid">
         <div>Registered<b>1200+</b></div>
         <div>Sold<b>450+</b></div>
         <div>Available<b>750+</b></div>
         <div>Locations<b>180+</b></div>
       </div>
-
       <div class="trust-inner">
         <h4>Why Choose MyProperty?</h4>
         <ul>
@@ -267,13 +91,12 @@ body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0}
         </ul>
       </div>
     </div>
-
   </div>
 </section>
 
 <!-- SEARCH -->
 <section class="search-box">
-  <select>
+  <select id="propType">
     <option>Property Type</option>
     <option>Home</option>
     <option>Flat</option>
@@ -281,160 +104,95 @@ body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0}
     <option>Plot</option>
     <option>Commercial Space</option>
   </select>
-
-  <select>
+  <select id="purpose">
     <option>Purpose</option>
     <option>Buy</option>
     <option>Rent</option>
   </select>
-
-  <input type="number" placeholder="Min Price">
-  <input type="number" placeholder="Max Price">
-  <input type="text" placeholder="City / Location">
-  <input type="text" placeholder="Keyword (optional)">
-
-  <button>Search Properties</button>
+  <input type="number" placeholder="Min Price" id="minPrice">
+  <input type="number" placeholder="Max Price" id="maxPrice">
+  <input type="text" placeholder="City / Location" id="location">
+  <input type="text" placeholder="Keyword (optional)" id="keyword">
+  <button id="searchProperties">Search Properties</button>
 </section>
 
-<!-- FEED  -->
-<section class="feed">
-
-  <div class="property-card">
-    <img src="images/sample.jpg">
-    <div class="property-info">
-      <h3>5 Acre Agricultural Land</h3>
-      <p>Pune, Maharashtra</p>
-      <div class="price">₹80,00,000</div>
-      <p>Clear title, road touch, water available.</p>
-      <div class="actions">
-        <button>Message</button>
-        <button>Contact</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="property-card">
-    <img src="images/sample.jpg">
-    <div class="property-info">
-      <h3>2 BHK Flat</h3>
-      <p>Nashik City</p>
-      <div class="price">₹42,00,000</div>
-      <p>Ready to move, parking, lift available.</p>
-      <div class="actions">
-        <button>Message</button>
-        <button>Contact</button>
-      </div>
-    </div>
-  </div>
-
+<!-- RECOMMENDED -->
+<section class="recommended">
+  <h2>Recommended Properties</h2>
+  <p>Based on user interest and trending listings, we recommend these properties for better deals and locations.</p>
 </section>
 
-</body>
-</html>
+<!-- FEED -->
+<section class="feed" id="propertyFeed"></section>
 
+<footer>
+Support: support@myproperty.com | +91 98765 43210 <br>
+© 2025 MyProperty
+</footer>
 
+<script>
+// USER CHECK
+let user = JSON.parse(localStorage.getItem('user'));
+const nav = document.getElementById('mainNav');
+const listBtn = document.getElementById('listPropertyBtn');
+const feed = document.getElementById('propertyFeed');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>MyProperty</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-
-<header class="navbar">
-  <div class="logo">MyProperty</div>
-  <nav>
+if(user){
+  // Navbar for logged-in
+  nav.innerHTML = `
     <a href="index.html">Home</a>
     <a href="buy.html">Buy</a>
     <a href="rent.html">Rent</a>
-    <a href="add-property.html" class="btn">Register Property</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="my-properties.html">My Properties</a>
+    <a href="saved-properties.html">Saved</a>
+    <a href="logout.html">Logout</a>
+  `;
+  listBtn.onclick = () => location.href='add-property.html';
+
+  // Sample property feed
+  let properties = user.properties || [
+    {title:"5 Acre Land", location:"Pune", price:"₹80,00,000", desc:"Clear title, road touch, water available.", img:"images/sample.jpg"},
+    {title:"2 BHK Flat", location:"Nashik", price:"₹42,00,000", desc:"Ready to move, parking, lift available.", img:"images/sample.jpg"}
+  ];
+
+  feed.innerHTML = "";
+  properties.forEach((p)=>{
+    let card = document.createElement("div");
+    card.className = "property-card";
+    card.innerHTML = `
+      <img src="${p.img}">
+      <div class="property-info">
+        <h3>${p.title}</h3>
+        <p>${p.location}</p>
+        <div class="price">${p.price}</div>
+        <p>${p.desc}</p>
+        <div class="actions">
+          <button onclick="alert('Liked ${p.title}')">❤️ Like</button>
+          <button onclick="alert('Saved ${p.title}')">💾 Save</button>
+          <button onclick="alert('Contacting owner')">Contact</button>
+        </div>
+      </div>
+    `;
+    feed.appendChild(card);
+  });
+
+}else{
+  // Navbar for public
+  nav.innerHTML = `
+    <a href="index.html">Home</a>
+    <a href="buy.html">Buy</a>
+    <a href="rent.html">Rent</a>
+    <a href="login.html" class="btn">Register Property</a>
     <a href="login.html">Login</a>
-  </nav>
-</header>
+  `;
+  listBtn.onclick = () => location.href='login.html';
 
-<section class="hero">
-  <div class="hero-left">
-    <h1>Buy, Sell & Rent Properties</h1>
-    <p>A trusted platform for ShetJamin & Urban Properties</p>
-  </div>
-  <div class="hero-right">
-    <div class="stat-card">Registered<br><b>1200</b></div>
-    <div class="stat-card">Sold<br><b>450</b></div>
-    <div class="stat-card">Available<br><b>750</b></div>
-  </div>
-</section>
+  feed.querySelectorAll(".actions button").forEach(b => {
+    b.onclick = ()=>alert("Please login to perform this action");
+  });
+}
+</script>
 
-<section class="search-box">
-  <select>
-    <option>Property Type</option>
-    <option>Home</option>
-    <option>Plot</option>
-    <option>ShetJamin</option>
-  </select>
-  <input type="number" placeholder="Min Price">
-  <input type="number" placeholder="Max Price">
-  <select>
-    <option>Country</option>
-    <option>India</option>
-  </select>
-  <select>
-    <option>State</option>
-    <option>Maharashtra</option>
-  </select>
-  <button>Search</button>
-</section>
-
-<section class="feed">
-  <div class="property-card">
-    <div class="property-img">
-      <img src="images/sample.jpg" alt="Property">
-    </div>
-    <div class="property-info">
-      <h3>2 Acre ShetJamin</h3>
-      <p>Pune, Maharashtra</p>
-      <p>₹25,00,000</p>
-      <button>Message</button>
-      <button>Contact</button>
-    </div>
-  </div>
-</section>
-
-<script src="js/main.js"></script>
 </body>
-</html> -->
+</html>

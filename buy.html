@@ -6,77 +6,23 @@
 <link rel="stylesheet" href="css/style.css">
 
 <style>
-/* SEARCH FILTER BAR */
-.filter-box{
-  max-width: 1100px;
-  margin: 20px auto;
-  padding: 15px;
-  border-radius: 12px;
-  background: #f8fafc;
-  box-shadow: 0 0 10px rgba(0,0,0,0.08);
-}
-.filter-row{
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: 10px;
-}
-.filter-row input, .filter-row select{
-  padding: 8px;
-}
-.filter-btn{
-  margin-top: 12px;
-  width: 100%;
-  padding: 10px;
-  background:#22c55e;
-  border:none;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-}
-
-/* PROPERTY FEED */
-.buy-feed{
-  max-width: 1100px;
-  margin: 30px auto;
-}
-.buy-card{
-  display: flex;
-  gap: 15px;
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  margin-bottom: 20px;
-}
-.buy-card img{
-  width: 260px;
-  border-radius: 10px;
-}
-.buy-info{
-  flex: 1;
-}
-.buy-info h3{
-  margin: 0;
-}
-.price{
-  color: #16a34a;
-  font-size: 20px;
-  font-weight: bold;
-}
-.tags span{
-  background: #e2e8f0;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  margin-right: 5px;
-}
-.buy-actions{
-  margin-top: 10px;
-}
-.buy-actions button{
-  padding: 6px 12px;
-  margin-right: 10px;
-  cursor:pointer;
-}
+body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0}
+.navbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:15px 20px;background:#0f172a;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.navbar nav a{margin-left:18px;text-decoration:none;color:#00ffd9;font-weight:600;}
+.navbar .btn{background:#0f172a;color:#00ffd9;padding:8px 14px;border-radius:6px;text-decoration:none;}
+.filter-box{max-width:1100px;margin:20px auto;padding:15px;border-radius:12px;background:#f8fafc;box-shadow:0 0 10px rgba(0,0,0,0.08);}
+.filter-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.filter-row input,.filter-row select{padding:8px;}
+.filter-btn{margin-top:12px;width:100%;padding:10px;background:#22c55e;border:none;color:white;font-size:16px;cursor:pointer;}
+.buy-feed{max-width:1100px;margin:30px auto;}
+.buy-card{display:flex;flex-wrap:wrap;gap:15px;padding:15px;border-radius:12px;border:1px solid #ddd;margin-bottom:20px;background:#fff;box-shadow:0 0 10px rgba(0,0,0,0.08);}
+.buy-card img{width:260px;border-radius:10px;min-width:200px;object-fit:cover;}
+.buy-info{flex:1;min-width:200px;}
+.buy-info h3{margin:0;}
+.price{color:#16a34a;font-size:20px;font-weight:bold;}
+.tags span{background:#e2e8f0;padding:4px 8px;border-radius:6px;font-size:12px;margin-right:5px;}
+.buy-actions{margin-top:10px;}
+.buy-actions button{padding:6px 12px;margin-right:10px;cursor:pointer;}
 </style>
 </head>
 
@@ -84,17 +30,12 @@
 
 <header class="navbar">
   <div class="logo">MyProperty</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="add-property.html">Register Property</a>
-    <a href="login.html">Login</a>
-  </nav>
+  <nav id="mainNav"></nav>
 </header>
 
 <!-- FILTER FORM -->
 <div class="filter-box">
   <h3>Find Property</h3>
-
   <div class="filter-row">
     <select>
       <option>Property Type</option>
@@ -137,10 +78,10 @@
   <button class="filter-btn">Search</button>
 </div>
 
-<!-- PROPERTY LIST (AUTO SHOW EVEN WITHOUT SEARCH) -->
-<div class="buy-feed">
+<!-- PROPERTY LIST -->
+<div class="buy-feed" id="propertyFeed">
 
-  <!-- PROPERTY CARD -->
+  <!-- Example Property Card -->
   <div class="buy-card">
     <img src="images/sample.jpg">
     <div class="buy-info">
@@ -155,19 +96,24 @@
         <span>Clear Title</span>
       </div>
 
-      <p>
-        Premium residential bungalow with modern amenities, nearby school,
-        hospital & market.
-      </p>
+      <p>Premium residential bungalow with modern amenities, nearby school, hospital & market.</p>
+
+      <!-- Always visible property details -->
+      <div>
+        <b>Property Details:</b> Bungalow, 4 BHK, 2500 sq.ft<br>
+        <b>Location:</b> Pune, Baner, Maharashtra, 411045<br>
+        <b>Facilities:</b> Parking, Furnishing, Water, Electricity<br>
+        <b>Contact:</b> Mr. Sharma – 9876543210
+      </div>
 
       <div class="buy-actions">
-        <button>View Details</button>
-        <button>Contact Seller</button>
+        <button class="contactBtn">Contact Seller</button>
+        <button class="saveBtn">Save</button>
+        <button class="likeBtn">Like</button>
       </div>
     </div>
   </div>
 
-  <!-- PROPERTY CARD -->
   <div class="buy-card">
     <img src="images/sample.jpg">
     <div class="buy-info">
@@ -181,38 +127,57 @@
         <span>Road Touch</span>
       </div>
 
-      <p>
-        Fertile agricultural land suitable for farming & investment.
-      </p>
+      <p>Fertile agricultural land suitable for farming & investment.</p>
+
+      <!-- Always visible property details -->
+      <div>
+        <b>Property Details:</b> 3 Acres, Fertile, Road Touch<br>
+        <b>Location:</b> Nashik, Trimbak, Maharashtra, 422212<br>
+        <b>Facilities:</b> Water, Electricity<br>
+        <b>Contact:</b> Mr. Patil – 9876543211
+      </div>
 
       <div class="buy-actions">
-        <button>View Details</button>
-        <button>Send Interest</button>
+        <button class="contactBtn">Send Interest</button>
+        <button class="saveBtn">Save</button>
+        <button class="likeBtn">Like</button>
       </div>
     </div>
   </div>
 
 </div>
 
+<script>
+// Login check
+let user = JSON.parse(localStorage.getItem('user'));
+const nav = document.getElementById('mainNav');
+
+if(user){
+  nav.innerHTML = `
+    <a href="index.html">Home</a>
+    <a href="buy.html">Buy</a>
+    <a href="rent.html">Rent</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="logout.html">Logout</a>
+  `;
+
+  document.querySelectorAll('.contactBtn').forEach(b => b.onclick = () => alert('Contacting seller as ' + user.name));
+  document.querySelectorAll('.saveBtn').forEach(b => b.onclick = () => alert('Property saved for ' + user.name));
+  document.querySelectorAll('.likeBtn').forEach(b => b.onclick = () => alert('You liked this property'));
+}else{
+  nav.innerHTML = `
+    <a href="index.html">Home</a>
+    <a href="buy.html">Buy</a>
+    <a href="rent.html">Rent</a>
+    <a href="login.html" class="btn">Register Property</a>
+    <a href="login.html">Login</a>
+  `;
+
+  document.querySelectorAll('.contactBtn').forEach(b => b.onclick = () => location.href='login.html');
+  document.querySelectorAll('.saveBtn').forEach(b => b.onclick = () => location.href='login.html');
+  document.querySelectorAll('.likeBtn').forEach(b => b.onclick = () => location.href='login.html');
+}
+</script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-<!-- <!DOCTYPE html>
-<html>
-<head>
-  <title>MyProperty</title>
-</head>
-<body>
-  <h1>Page Under Construction</h1>
-  <a href="index.html">Go Back</a>
-</body>
-</html> -->

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Saved Properties | MyProperty</title>
+
+<style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fb}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 40px;background:#0f172a;color:#fff}
+.navbar a{color:#00ffd9;text-decoration:none;margin-left:18px}
+.container{max-width:1100px;margin:40px auto}
+.card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,.1);margin-bottom:20px}
+.property{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#f9fafb;border-radius:10px;margin-bottom:15px}
+button{padding:8px 14px;border:none;border-radius:6px;cursor:pointer}
+.remove{background:#ef4444;color:#fff}
+footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:40px}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <div><b>MyProperty</b></div>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="profile.html">Profile</a>
+    <a href="my-properties.html">My Properties</a>
+    <a href="saved-properties.html">Saved</a>
+    <a href="settings.html">Settings</a>
+    <a href="logout.html">Logout</a>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="card">
+    <h2>Saved Properties</h2>
+    <div id="savedList"></div>
+  </div>
+</div>
+
+<footer>© 2025 MyProperty</footer>
+
+<script>
+// ================= LOAD USER =================
+let user = JSON.parse(localStorage.getItem("user"));
+if(!user) location.href = "login.html";
+
+if(!user.savedProperties) user.savedProperties = [];
+
+// ================= LOAD ALL PROPERTIES =================
+let allProps = JSON.parse(localStorage.getItem("properties")) || [];
+let list = document.getElementById("savedList");
+
+// ================= RENDER =================
+function renderSaved(){
+  list.innerHTML = "";
+
+  if(user.savedProperties.length === 0){
+    list.innerHTML = "<p>No saved properties</p>";
+    return;
+  }
+
+  user.savedProperties.forEach(id=>{
+    let p = allProps.find(x => x.id === id);
+    if(!p) return;
+
+    let div = document.createElement("div");
+    div.className = "property";
+    div.innerHTML = `
+      <div>
+        <b>${p.title}</b><br>
+        ${p.location || ""}<br>
+        ₹${p.price}
+      </div>
+      <button class="remove" onclick="removeSaved(${id})">Remove</button>
+    `;
+    list.appendChild(div);
+  });
+}
+
+// ================= REMOVE =================
+function removeSaved(id){
+  user.savedProperties = user.savedProperties.filter(x=>x!==id);
+  localStorage.setItem("user", JSON.stringify(user));
+  renderSaved();
+}
+
+renderSaved();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Properties | MyProperty</title>
+
+<style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fb}
+
+/* NAVBAR */
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 40px;
+  background:#0f172a;
+  color:#fff
+}
+.navbar a{
+  color:#00ffd9;
+  text-decoration:none;
+  margin-left:18px;
+  font-weight:600
+}
+
+/* LAYOUT */
+.container{max-width:1200px;margin:40px auto}
+.card{
+  background:#fff;
+  padding:22px;
+  border-radius:14px;
+  box-shadow:0 0 12px rgba(0,0,0,.1)
+}
+
+/* PROPERTY CARD */
+.property-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#f9fafb;
+  padding:18px;
+  border-radius:12px;
+  margin-top:15px
+}
+.property-info{
+  flex:1
+}
+.property-info b{
+  font-size:18px
+}
+.property-info span{
+  display:block;
+  color:#555;
+  margin-top:4px
+}
+.badge{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:12px;
+  margin-top:6px
+}
+.available{background:#dcfce7;color:#166534}
+.sold{background:#fee2e2;color:#991b1b}
+
+/* ACTIONS */
+.property-actions button{
+  padding:8px 12px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  margin-left:8px;
+  color:#fff
+}
+.edit{background:#2563eb}
+.delete{background:#dc2626}
+.toggle{background:#16a34a}
+
+.add-btn{
+  background:#22c55e;
+  border:none;
+  color:#fff;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold
+}
+
+footer{
+  text-align:center;
+  padding:15px;
+  background:#0f172a;
+  color:#fff;
+  margin-top:50px
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div><b>MyProperty</b></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="add-property.html">Add Property</a>
+    <a href="my-properties.html">My Properties</a>
+    <a href="saved-properties.html">Saved</a>
+    <a href="logout.html">Logout</a>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="card">
+    <h2>My Properties</h2>
+    <button class="add-btn" onclick="location.href='add-property.html'">➕ Add New Property</button>
+
+    <div id="propList"></div>
+  </div>
+</div>
+
+<footer>
+© 2025 MyProperty
+</footer>
+
+<script>
+let user = JSON.parse(localStorage.getItem('user'));
+if(!user) location.href='login.html';
+
+if(!user.properties) user.properties = [];
+render();
+
+/* RENDER PROPERTIES */
+function render(){
+  const list = document.getElementById("propList");
+  list.innerHTML = "";
+
+  if(user.properties.length === 0){
+    list.innerHTML = "<p style='margin-top:15px'>No properties added yet.</p>";
+    return;
+  }
+
+  user.properties.forEach((p,i)=>{
+    const div = document.createElement("div");
+    div.className = "property-card";
+    div.innerHTML = `
+      <div class="property-info">
+        <b>${p.title}</b>
+        <span>${p.location}</span>
+        <span>₹ ${p.price}</span>
+        <span class="badge ${p.status==='Available'?'available':'sold'}">
+          ${p.status}
+        </span>
+      </div>
+
+      <div class="property-actions">
+        <button class="edit" onclick="editProperty(${i})">Edit</button>
+        <button class="toggle" onclick="toggleStatus(${i})">Toggle</button>
+        <button class="delete" onclick="deleteProperty(${i})">Delete</button>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+
+  updateDashboardStats();
+}
+
+/* EDIT */
+function editProperty(i){
+  let p = user.properties[i];
+  let title = prompt("Property title", p.title);
+  if(!title) return;
+  let location = prompt("Location", p.location);
+  if(!location) return;
+  let price = prompt("Price", p.price);
+  if(!price) return;
+
+  p.title = title;
+  p.location = location;
+  p.price = price;
+
+  save();
+}
+
+/* DELETE */
+function deleteProperty(i){
+  if(confirm("Delete this property?")){
+    user.properties.splice(i,1);
+    save();
+  }
+}
+
+/* TOGGLE STATUS */
+function toggleStatus(i){
+  let p = user.properties[i];
+  p.status = p.status === "Available" ? "Sold" : "Available";
+  save();
+}
+
+/* SAVE */
+function save(){
+  localStorage.setItem("user", JSON.stringify(user));
+  render();
+}
+
+/* DASHBOARD STATS UPDATE */
+function updateDashboardStats(){
+  user.totalProperties = user.properties.length;
+  user.sold = user.properties.filter(p=>p.status==="Sold").length;
+  saveSilent();
+}
+
+/* SAVE WITHOUT RE-RENDER */
+function saveSilent(){
+  localStorage.setItem("user", JSON.stringify(user));
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard - MyProperty</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fb}
+
+/* NAVBAR */
+.navbar{
+  display:flex;justify-content:space-between;align-items:center;padding:15px 40px;background:#0f172a;box-shadow:0 2px 8px rgba(0,0,0,.08);
+  flex-wrap:wrap;
+}
+.navbar a{color:#00ffd9;text-decoration:none;margin-left:18px;font-weight:600;}
+.navbar .btn{background:#0f172a;color:#00ffd9;padding:8px 14px;border-radius:6px;text-decoration:none;}
+
+/* CONTAINER */
+.container{max-width:1200px;margin:40px auto;padding:0 15px}
+
+/* PROFILE CARD */
+.card{background:#fff;padding:22px;border-radius:14px;box-shadow:0 0 12px rgba(0,0,0,.1);margin-bottom:25px}
+.profile-summary{display:flex;align-items:center;gap:18px;margin-top:15px}
+.avatar{width:70px;height:70px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:bold;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+
+/* QUICK ACTIONS */
+.quick-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-bottom:25px}
+.quick-card{background:#22c55e;color:#fff;padding:22px;text-align:center;border-radius:14px;cursor:pointer;font-size:18px;font-weight:bold;transition:.25s}
+.quick-card:hover{transform:translateY(-4px);background:#16a34a}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-bottom:25px}
+.stat-card{background:#2563eb;color:#fff;padding:20px;border-radius:14px;text-align:center}
+.stat-card h3{margin:0;font-size:30px}
+.stat-card p{margin-top:6px;opacity:.9}
+
+/* ACTIVITY */
+.activity ul{padding-left:18px;margin:10px 0 0}
+.activity li{margin-bottom:6px;color:#444}
+
+/* HOME FEATURES */
+.hero{display:flex;flex-wrap:wrap;justify-content:space-between;max-width:1200px;margin:40px auto;gap:20px;background:#cfd7e9;padding:20px;border-radius:14px}
+.hero-left{flex:1;min-width:280px}
+.hero-right{width:420px;min-width:280px;position:relative}
+.hero-left p.desc{margin-top:12px;color:#444;line-height:1.6;max-width:520px}
+.hero-actions{margin-top:22px;display:flex;flex-wrap:wrap;gap:15px;align-items:center}
+.list-btn{padding:12px 18px;background:#22c55e;border:none;color:white;font-size:15px;border-radius:8px;cursor:pointer}
+.search-mini{display:flex;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 0 8px rgba(0,0,0,0.15)}
+.search-mini input{padding:10px;border:none;outline:none;width:220px}
+.search-btn{background:#2563eb;border:none;color:white;padding:0 16px;cursor:pointer}
+.main-card{background:#ffffff;border-radius:16px;box-shadow:0 0 14px rgba(0,0,0,0.12);padding:28px 22px 22px;position:relative;margin-top:15px}
+.main-card .badge{position:absolute;top:-12px;left:-12px;background:#2563eb;color:#fff;padding:8px 14px;border-radius:10px;font-weight:bold;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;text-align:center;margin-bottom:20px}
+.stats-grid div{background:#f1f5f9;padding:16px;border-radius:12px}
+.stats-grid b{display:block;font-size:22px;color:#2563eb}
+.trust-inner{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:16px;border-radius:12px}
+.trust-inner h4{margin:0 0 10px;color:#22c55e}
+.trust-inner ul{padding-left:18px;margin:0}
+.trust-inner li{margin-bottom:6px;font-size:14px}
+
+/* SEARCH */
+.search-box{max-width:1200px;margin:30px auto;background:#fff;padding:20px;border-radius:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;box-shadow:0 0 10px rgba(0,0,0,0.08)}
+.search-box select,.search-box input{padding:8px}
+.search-box button{grid-column:span 6;padding:12px;background:#22c55e;color:white;border:none;font-size:16px;cursor:pointer}
+
+/* FEED */
+.feed{max-width:1200px;margin:40px auto}
+.property-card{display:flex;flex-wrap:wrap;gap:15px;background:#fff;padding:15px;border-radius:14px;margin-bottom:20px;box-shadow:0 0 10px rgba(0,0,0,0.08)}
+.property-card img{width:260px;border-radius:12px;min-width:200px;object-fit:cover}
+.property-info{flex:1;min-width:200px}
+.price{font-size:20px;color:#2563eb;font-weight:bold}
+.actions button{padding:8px 14px;margin-right:10px;cursor:pointer}
+
+/* RECOMMENDED */
+.recommended{max-width:1200px;margin:40px auto 20px;background:#ffffff;padding:25px;border-radius:14px;box-shadow:0 0 10px rgba(0,0,0,0.08)}
+.recommended h2{margin:0 0 8px;color:#0f172a}
+.recommended p{margin:0;color:#555;font-size:15px}
+
+footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:20px;font-size:14px}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div><b>MyProperty</b></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="profile.html">Profile</a>
+    <a href="my-properties.html">My Properties</a>
+    <a href="saved-properties.html">Saved</a>
+    <a href="settings.html">Settings</a>
+    <a href="logout.html">Logout</a>
+  </nav>
+</header>
+
+<div class="container">
+
+<!-- DASHBOARD WELCOME -->
+<div class="card">
+  <h2>Welcome, <span id="nm"></span> 👋</h2>
+  <div class="profile-summary">
+    <div class="avatar" id="avatarBox"><span id="avatarText">U</span></div>
+    <div>
+      <p id="email"></p>
+      <p id="mobile"></p>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK ACTIONS -->
+<div class="quick-cards">
+  <div class="quick-card" onclick="location.href='add-property.html'">➕ Add Property</div>
+  <div class="quick-card" onclick="location.href='my-properties.html'">🏠 My Properties</div>
+  <div class="quick-card" onclick="location.href='saved-properties.html'">❤️ Saved Properties</div>
+  <div class="quick-card" onclick="location.href='enquiries.html'">💬 Enquiries</div>
+</div>
+
+<!-- DASHBOARD STATS -->
+<div class="stats">
+  <div class="stat-card">
+    <h3 id="totalProps">0</h3>
+    <p>Total Properties</p>
+  </div>
+  <div class="stat-card">
+    <h3 id="soldProps">0</h3>
+    <p>Sold / Rented</p>
+  </div>
+  <div class="stat-card">
+    <h3 id="savedProps">0</h3>
+    <p>Saved</p>
+  </div>
+  <div class="stat-card">
+    <h3 id="newEnq">0</h3>
+    <p>New Enquiries</p>
+  </div>
+</div>
+
+<!-- HERO + MAIN CARD -->
+<section class="hero">
+  <div class="hero-left">
+    <h1>Buy, Sell & Rent Properties</h1>
+    <p>Trusted platform for Agricultural & Urban Properties</p>
+    <p class="desc">
+      MyProperty connects genuine buyers, sellers and renters on one trusted platform.<br>
+      Discover verified agricultural and urban properties with transparent pricing.<br>
+      Contact property owners directly without brokers or hidden charges.<br>
+      Simple search, secure communication and real opportunities in one place.
+    </p>
+    <div class="hero-actions">
+      <button class="list-btn" onclick="location.href='add-property.html'">List Your Property – Free</button>
+      <div class="search-mini">
+        <input type="text" placeholder="Search by city, area or keyword" id="searchInput">
+        <button class="search-btn" id="searchBtn">Search</button>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="main-card">
+      <div class="badge">MyProperty</div>
+      <div class="stats-grid">
+        <div>Registered<b>1200+</b></div>
+        <div>Sold<b>450+</b></div>
+        <div>Available<b>750+</b></div>
+        <div>Locations<b>180+</b></div>
+      </div>
+      <div class="trust-inner">
+        <h4>Why Choose MyProperty?</h4>
+        <ul>
+          <li>✔ Verified & genuine property listings</li>
+          <li>✔ Direct owner contact – no middlemen</li>
+          <li>✔ Support for buy, sell & rent properties</li>
+          <li>✔ Transparent pricing & secure communication</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH -->
+<section class="search-box">
+  <select id="propType">
+    <option>Property Type</option>
+    <option>Home</option>
+    <option>Flat</option>
+    <option>Agricultural Land</option>
+    <option>Plot</option>
+    <option>Commercial Space</option>
+  </select>
+  <select id="purpose">
+    <option>Purpose</option>
+    <option>Buy</option>
+    <option>Rent</option>
+  </select>
+  <input type="number" placeholder="Min Price" id="minPrice">
+  <input type="number" placeholder="Max Price" id="maxPrice">
+  <input type="text" placeholder="City / Location" id="location">
+  <input type="text" placeholder="Keyword (optional)" id="keyword">
+  <button id="searchProperties">Search Properties</button>
+</section>
+
+<!-- RECOMMENDED -->
+<section class="recommended">
+  <h2>Recommended Properties</h2>
+  <p>Based on user interest and trending listings, we recommend these properties for better deals and locations.</p>
+</section>
+
+<!-- FEED -->
+<section class="feed" id="propertyFeed"></section>
+
+<!-- ACTIVITY -->
+<div class="card activity">
+  <h3>Recent Activity</h3>
+  <ul id="recentActivity"></ul>
+</div>
+
+</div>
+
+<footer>
+Support: support@myproperty.com | +91 98765 43210 <br>
+© 2025 MyProperty
+</footer>
+
+<script>
+// Login check
+let u = JSON.parse(localStorage.getItem('user'));
+if(!u) location.href='login.html';
+
+/* BASIC INFO */
+nm.innerText = u.name || "User";
+email.innerText = "Email: " + (u.email || "N/A");
+mobile.innerText = "Mobile: " + (u.mobile || "N/A");
+
+/* AVATAR */
+if(u.avatar){
+  avatarBox.innerHTML = `<img src="${u.avatar}">`;
+}else{
+  avatarText.innerText = (u.name || "U").charAt(0).toUpperCase();
+}
+
+/* STATS */
+totalProps.innerText = u.totalProperties || 0;
+soldProps.innerText = u.sold || 0;
+savedProps.innerText = u.saved || 0;
+newEnq.innerText = u.enquiries || 0;
+
+/* ACTIVITY */
+let activity = u.activity || [
+  "Welcome to MyProperty Dashboard",
+  "Complete your profile for better reach"
+];
+recentActivity.innerHTML = "";
+activity.forEach(a=>{
+  let li=document.createElement("li");
+  li.innerText=a;
+  recentActivity.appendChild(li);
+});
+
+/* PROPERTY FEED */
+let feed = document.getElementById('propertyFeed');
+let properties = u.properties || [
+  {title:"5 Acre Land", location:"Pune", price:"₹80,00,000", desc:"Clear title, road touch, water available.", img:"images/sample.jpg"},
+  {title:"2 BHK Flat", location:"Nashik", price:"₹42,00,000", desc:"Ready to move, parking, lift available.", img:"images/sample.jpg"}
+];
+feed.innerHTML = "";
+properties.forEach((p,i)=>{
+  let card=document.createElement("div");
+  card.className="property-card";
+  card.innerHTML = `
+    <img src="${p.img}">
+    <div class="property-info">
+      <h3>${p.title}</h3>
+      <p>${p.location}</p>
+      <div class="price">${p.price}</div>
+      <p>${p.desc}</p>
+      <div class="actions">
+        <button onclick="alert('Liked ${p.title}')">❤️ Like</button>
+        <button onclick="alert('Saved ${p.title}')">💾 Save</button>
+        <button onclick="alert('Contacting owner')">Contact</button>
+      </div>
+    </div>
+  `;
+  feed.appendChild(card);
+});
+</script>
+
+</body>
+</html>

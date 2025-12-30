@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Logout | MyProperty</title>
+<script>
+  // Remove logged-in user
+  localStorage.removeItem("user");
+
+  // Optional: clear temp session data
+  // localStorage.removeItem("tempProperty");
+
+  // Redirect to login
+  window.location.href = "login.html";
+</script>
+</head>
+<body>
+</body>
+</html>
+
+
+
+<!-- let user = JSON.parse(localStorage.getItem("user"));
+if(!user) location.href="login.html";  he sagalya files madhe asane garajeche ahe -->
