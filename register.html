@@ -28,13 +28,29 @@ button{background:#22c55e;color:#fff;border:none;cursor:pointer}
     <h2>Register</h2>
     <input id="n" placeholder="Name">
     <input id="e" placeholder="Email">
-    <input id="m" placeholder="Mobile">
+    <!-- <input id="m" placeholder="Mobile"> //  2nd modification -->
+    <input id="m" placeholder="Mobile Number" maxlength="10">
     <input id="p" type="password" placeholder="Password">
     <input id="cp" type="password" placeholder="Confirm Password">
-    <select id="q">
-      <option>Your first school?</option>
+    <!-- <select id="q">
+      <option>Your first school?</option>   // 3rd modification
       <option>Your pet’s name?</option>
+    </select> -->
+
+    <select id="q">
+    <option value="">Select security question</option>
+    <option>Your first school?</option>
+    <option>Your pet’s name?</option>
+    <option>Your favourite teacher’s name?</option>
+    <option>Your birthplace?</option>
+    <option>Your favourite food?</option>
+    <option>Your childhood nickname?</option>
+    <option>Your best friend’s name?</option>
+    <option>Your favourite movie?</option>
+    <option>Your favourite sports player?</option>
+    <option>Your mother’s maiden name?</option>
     </select>
+
     <input id="a" placeholder="Answer">
     <button onclick="reg()">Register</button>
   </div>
@@ -42,6 +58,23 @@ button{background:#22c55e;color:#fff;border:none;cursor:pointer}
 
 <script>
 function reg(){
+
+//   if(localStorage.getItem('user')){ // this four lines is added for login management
+//   alert('Account already exists. Please login.');  ////2nd modification 
+//   location.href = 'login.html';
+//   return;
+// }
+
+// if(localStorage.getItem('user')){  // it is make problam and auth. for singl user 3rd modify
+//   alert('Account already exists. Please login.');
+//   window.location.replace('login.html');
+//   return;
+// }
+
+let users = JSON.parse(localStorage.getItem('users')) || [];
+
+
+
   let name=document.getElementById('n').value.trim();
   let email=document.getElementById('e').value.trim();
   let mobile=document.getElementById('m').value.trim();
@@ -58,19 +91,71 @@ function reg(){
     alert('Password mismatch');
     return;
   }
+
+  if(!/^\S+@\S+\.\S+$/.test(email)){  // 3rd modify for validation
+  alert("Enter valid email address");
+  return;
+}
+
+
   if(!name || !email || !mobile || !answer){
     alert('Please fill all required fields');
     return;
   }
+  if(!/^[6-9]\d{9}$/.test(mobile)){   // 3nd modification extra validation add 
+  alert('Enter valid 10 digit mobile number');
+  return;
+}
+if(!question){  // for security question selection.
+  alert("Please select a security question");
+  return;
+}
 
-  localStorage.setItem('user', JSON.stringify({
-    name: name,
-    email: email,
-    mobile: mobile,
-    password: password,
-    sq: question,
-    sa: answer
-  }));
+let exists = users.find(u => u.email === email || u.mobile === mobile);   // 3rd modify
+if(exists){
+  alert("Email or mobile already registered");
+  return;
+}
+
+
+
+  // localStorage.setItem('user', JSON.stringify({   // 3rd modify for save user in array
+  //   name: name,
+  //   email: email,
+  //   mobile: mobile,
+  //   password: password,
+  //   sq: question,
+  //   sa: answer
+  // }));
+
+//   users.push({  //add user in array for save multipal users with diffrerent ceditials
+//   name,
+//   email,
+//   mobile,
+//   password,
+//   sq: question,
+//   sa: answer
+// });
+
+users.push({  // user object for better login.
+  id: Date.now(),          // ✅ unique id (future use)
+  name: name,
+  email: email,
+  mobile: mobile,
+  password: password,
+  security: {
+    question: question,
+    answer: answer
+  },
+  createdAt: new Date().toISOString()
+});
+
+
+localStorage.setItem('users', JSON.stringify(users));
+
+// localStorage.setItem('loggedIn','yes');   // this code is only for testing perpose (auto login code )
+// localStorage.setItem('currentUser', email);
+
 
   alert('Registration successful! Please login.');
   location.href='login.html';

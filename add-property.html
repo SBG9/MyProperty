@@ -71,6 +71,46 @@ textarea{grid-column:span 2;resize:vertical}
   border-radius:8px
 }
 </style>
+
+<!-- he 2 script lines privatization sathi add kelele aahe -->
+<!-- <script>
+  let user = JSON.parse(localStorage.getItem('user'));
+  if(!user) location.href='login.html';
+</script> -->
+<!-- <script> //// last modification 3rd modify
+let user = JSON.parse(localStorage.getItem('user'));
+if(!user){
+  window.location.replace("login.html");
+}
+</script> -->
+
+<!-- <script>-------------------------------------------
+let users = JSON.parse(localStorage.getItem("users")) || [];
+let currentUserEmail = localStorage.getItem("currentUser");
+let isLoggedIn = localStorage.getItem("loggedIn") === "yes";
+
+let user = users.find(u => u.email === currentUserEmail);
+
+if(!isLoggedIn || !user){
+  window.location.replace("login.html");
+}
+</script> -->
+<script>
+// ================= LOGIN CHECK =================
+
+const isLoggedIn = localStorage.getItem("isLoggedIn") === "yes";
+let user = JSON.parse(localStorage.getItem("loggedInUser"));
+let users = JSON.parse(localStorage.getItem("users")) || [];
+
+if(!isLoggedIn || !user){
+  window.location.replace("login.html");
+}
+
+// ensure properties array exists
+user.properties = user.properties || [];
+
+</script>
+
 </head>
 
 <body>
@@ -81,7 +121,9 @@ textarea{grid-column:span 2;resize:vertical}
     <a href="dashboard.html">Dashboard</a>
     <a href="my-properties.html">My Properties</a>
     <a href="profile.html">Profile</a>
-    <a href="logout.html">Logout</a>
+    <!-- <a href="logout.html">Logout</a> -->
+     <a href="#" onclick="logout()">Logout</a>
+
   </nav>
 </header>
 
@@ -128,18 +170,46 @@ textarea{grid-column:span 2;resize:vertical}
 <!-- FACILITIES -->
 <h2>Facilities</h2>
 <div class="form-group">
+  <select id="parking">
+    <option value="">Parking</option> <!-- placeholder -->
+    <option value="Available">Available</option>
+    <option value="No">No</option>
+  </select>
+
+  <select id="furnish">
+    <option value="">Furnishing</option> <!-- placeholder -->
+    <option value="Furnished">Furnished</option>
+    <option value="Semi">Semi</option>
+    <option value="Unfurnished">Unfurnished</option>
+  </select>
+
+  <select id="water">
+    <option value="">Water</option> <!-- placeholder -->
+    <option value="24x7">24x7</option>
+    <option value="Limited">Limited</option>
+  </select>
+
+  <select id="electricity">
+    <option value="">Electricity</option> <!-- placeholder -->
+    <option value="Available">Available</option>
+    <option value="No">No</option>
+  </select>
+</div>
+
+<!-- <h2>Facilities</h2>
+<div class="form-group">
   <select id="parking"><option>Parking</option><option>Available</option><option>No</option></select>
   <select id="furnish"><option>Furnishing</option><option>Furnished</option><option>Semi</option><option>Unfurnished</option></select>
   <select id="water"><option>Water</option><option>24x7</option><option>Limited</option></select>
   <select id="electricity"><option>Electricity</option><option>Available</option><option>No</option></select>
-</div>
+</div> -->
 
 <!-- MEDIA -->
 <h2>Upload Media</h2>
 <div class="form-group">
-  <input type="file" id="images" accept="image/*" multiple>
-  <input type="file" id="video" accept="video/*">
-  <input type="file" id="audio" accept="audio/*">
+  <input type="file" id="images" accept="image/*" multiple placeholder="imeages or photos">
+  <input type="file" id="video" accept="video/*" placeholder="video">
+  <input type="file" id="audio" accept="audio/*" placeholder="audio">
 </div>
 
 <!-- DESCRIPTION -->
@@ -161,10 +231,6 @@ textarea{grid-column:span 2;resize:vertical}
 </div>
 
 <script>
-let user = JSON.parse(localStorage.getItem('user'));
-if(!user) location.href='login.html';
-if(!user.properties) user.properties = [];
-
 function fileToBase64(file){
   return new Promise((resolve)=>{
     const reader = new FileReader();
@@ -176,50 +242,83 @@ function fileToBase64(file){
 async function saveProperty(e){
   e.preventDefault();
 
-  let imgs = [];
+  let imagesArr = [];
   for(let f of images.files){
-    imgs.push(await fileToBase64(f));
+    imagesArr.push(await fileToBase64(f));
   }
 
   let vid = video.files[0] ? await fileToBase64(video.files[0]) : "";
   let aud = audio.files[0] ? await fileToBase64(audio.files[0]) : "";
 
   let property = {
-    type:type.value,
-    condition:condition.value,
-    size:size.value,
-    price:price.value,
-    location:city.value+", "+district.value,
-    state:state.value,
-    country:country.value,
-    pincode:pincode.value,
-    landmark:landmark.value,
-    facilities:{
-      parking:parking.value,
-      furnish:furnish.value,
-      water:water.value,
-      electricity:electricity.value
+    id: Date.now(),
+    ownerId: user.id,
+    ownerEmail: user.email,
+    ownerName: user.name,
+
+    type: type.value,
+    condition: condition.value,
+    size: size.value,
+    price: Number(price.value),
+
+    location: {
+      country: country.value,
+      state: state.value,
+      district: district.value,
+      city: city.value,
+      pincode: pincode.value,
+      landmark: landmark.value
     },
-    images:imgs,
-    video:vid,
-    audio:aud,
-    description:desc.value,
-    contactName:contactName.value,
-    contactPhone:contactPhone.value,
-    status:"Available",
-    created:new Date().toLocaleDateString()
+
+    facilities:{
+      parking: parking.value,
+      furnish: furnish.value,
+      water: water.value,
+      electricity: electricity.value
+    },
+
+    images: imagesArr,
+    video: vid,
+    audio: aud,
+
+    description: desc.value,
+    contactName: contactName.value,
+    contactPhone: contactPhone.value,
+
+    status: "Available",
+    createdAt: new Date().toISOString()
   };
 
-  user.properties.push(property);
+  // ================= SAVE TO GLOBAL PROPERTIES =================
+  let properties = JSON.parse(localStorage.getItem("properties")) || [];
+  properties.unshift(property);
+  localStorage.setItem("properties", JSON.stringify(properties));
+
+  // ================= SAVE TO USER =================
+  user.properties.push(property.id);
   user.totalProperties = user.properties.length;
 
   user.activity = user.activity || [];
-  user.activity.unshift("Added property: "+property.type);
+  user.activity.unshift("Added property: " + property.type);
 
-  localStorage.setItem("user",JSON.stringify(user));
+  localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+  let index = users.findIndex(u => u.id === user.id);
+  if(index !== -1){
+    users[index] = user;
+    localStorage.setItem("users", JSON.stringify(users));
+  }
 
   alert("Property Registered Successfully!");
-  location.href="my-properties.html";
+  location.href = "my-properties.html";
+}
+</script>
+
+<script>
+function logout(){
+  localStorage.removeItem("loggedInUser");
+  localStorage.removeItem("isLoggedIn");
+  window.location.replace("login.html");
 }
 </script>
 

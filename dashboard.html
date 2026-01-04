@@ -79,6 +79,15 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fb}
 
 footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:20px;font-size:14px}
 </style>
+
+<!-- <script>
+let user = JSON.parse(localStorage.getItem('user')); //// multipal dublication of code 
+if(!user){
+  window.location.replace("login.html");
+}
+</script> -->
+
+
 </head>
 <body>
 
@@ -92,7 +101,11 @@ footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:2
     <a href="my-properties.html">My Properties</a>
     <a href="saved-properties.html">Saved</a>
     <a href="settings.html">Settings</a>
-    <a href="logout.html">Logout</a>
+    <a href="contact.html">Contact</a>
+
+    <!-- <a href="logout.html">Logout</a> -->
+    <a href="#" onclick="logout()">Logout</a>
+
   </nav>
 </header>
 
@@ -224,14 +237,32 @@ Support: support@myproperty.com | +91 98765 43210 <br>
 </footer>
 
 <script>
-// Login check
-let u = JSON.parse(localStorage.getItem('user'));
-if(!u) location.href='login.html';
+
+const isLoggedIn = localStorage.getItem("isLoggedIn") === "yes";
+const u = JSON.parse(localStorage.getItem("loggedInUser"));
+
+if(!isLoggedIn || !u){
+  window.location.replace("login.html");
+}
+
+const allProperties = JSON.parse(localStorage.getItem("properties")) || [];
+const userProperties = allProperties.filter(p => p.ownerMobile === u.mobile);
+
+
+
+// user data for dashboard
+// let u = JSON.parse(localStorage.getItem('user'));    //// change 4 for dublication 
+
 
 /* BASIC INFO */
+// nm.innerText = u.name || "User";-----------
+// email.innerText = "Email: " + (u.email || "N/A");
+// mobile.innerText = "Mobile: " + (u.mobile || "N/A");
 nm.innerText = u.name || "User";
 email.innerText = "Email: " + (u.email || "N/A");
 mobile.innerText = "Mobile: " + (u.mobile || "N/A");
+
+
 
 /* AVATAR */
 if(u.avatar){
@@ -241,10 +272,10 @@ if(u.avatar){
 }
 
 /* STATS */
-totalProps.innerText = u.totalProperties || 0;
-soldProps.innerText = u.sold || 0;
-savedProps.innerText = u.saved || 0;
-newEnq.innerText = u.enquiries || 0;
+totalProps.innerText = userProperties.length;
+soldProps.innerText = userProperties.filter(p => p.status === "sold" || p.status === "rented").length;
+savedProps.innerText = u.savedProperties?.length || 0;
+newEnq.innerText = u.enquiries?.length || 0;
 
 /* ACTIVITY */
 let activity = u.activity || [
@@ -260,30 +291,72 @@ activity.forEach(a=>{
 
 /* PROPERTY FEED */
 let feed = document.getElementById('propertyFeed');
-let properties = u.properties || [
-  {title:"5 Acre Land", location:"Pune", price:"₹80,00,000", desc:"Clear title, road touch, water available.", img:"images/sample.jpg"},
-  {title:"2 BHK Flat", location:"Nashik", price:"₹42,00,000", desc:"Ready to move, parking, lift available.", img:"images/sample.jpg"}
-];
+
+// let allProps = JSON.parse(localStorage.getItem("properties")) || [];
+// let properties = allProps.filter(p => p.ownerMobile === u.mobile);
+
+// feed.innerHTML = "";
+// properties.forEach((p,i)=>{
+//   let card=document.createElement("div");
+//   card.className="property-card";
+//   card.innerHTML = `
+//     <img src="${p.img}">
+//     <div class="property-info">
+//       <h3>${p.title}</h3>
+//       <p>${p.location}</p>
+//       <div class="price">${p.price}</div>
+//       <p>${p.desc}</p>
+//       <div class="actions">
+//         <button onclick="alert('Liked ${p.title}')">❤️ Like</button>
+//         <button onclick="alert('Saved ${p.title}')">💾 Save</button>
+//         <button onclick="alert('Contacting owner')">Contact</button>
+//       </div>
+//     </div>
+//   `;
+//   feed.appendChild(card);
+// });
+
+// function logout(){    //// change 3
+//   localStorage.removeItem('loggedIn');
+//   location.href = 'login.html';
+// }
+
 feed.innerHTML = "";
-properties.forEach((p,i)=>{
-  let card=document.createElement("div");
-  card.className="property-card";
+
+if(userProperties.length === 0){
+  feed.innerHTML = `<p style="text-align:center">You have not added any properties yet.</p>`;
+}
+
+userProperties.forEach(p=>{
+  let card = document.createElement("div");
+  card.className = "property-card";
   card.innerHTML = `
-    <img src="${p.img}">
+    <img src="${p.images?.[0] || 'images/sample.jpg'}">
     <div class="property-info">
-      <h3>${p.title}</h3>
-      <p>${p.location}</p>
-      <div class="price">${p.price}</div>
-      <p>${p.desc}</p>
+      <h3>${p.type}</h3>
+      <p>📍 ${p.location}</p>
+      <div class="price">₹${p.price}</div>
+      <p>${p.description || ""}</p>
       <div class="actions">
-        <button onclick="alert('Liked ${p.title}')">❤️ Like</button>
-        <button onclick="alert('Saved ${p.title}')">💾 Save</button>
-        <button onclick="alert('Contacting owner')">Contact</button>
+        <button onclick="alert('Edit coming soon')">✏️ Edit</button>
+        <button onclick="alert('Delete coming soon')">🗑️ Delete</button>
       </div>
     </div>
   `;
   feed.appendChild(card);
 });
+
+
+function logout(){
+  localStorage.removeItem("loggedInUser");
+  localStorage.removeItem("isLoggedIn");
+  sessionStorage.clear();
+  window.location.replace("login.html");
+}
+
+
+
+
 </script>
 
 </body>

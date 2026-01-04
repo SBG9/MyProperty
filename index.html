@@ -3,16 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <title>MyProperty | Buy, Sell & Rent</title>
-<link rel="stylesheet" href="css/style.css">
 <style>
-/* --- SAME STYLES AS BEFORE --- */
 body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0}
 .navbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:15px 20px;background:#0f172a;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
 .navbar nav a{margin-left:18px;text-decoration:none;color:#00ffd9;font-weight:600;}
 .navbar .btn{background:#0f172a;color:#00ffd9;padding:8px 14px;border-radius:6px;text-decoration:none;}
 .hero{display:flex;flex-wrap:wrap;justify-content:space-between;max-width:1200px;margin:40px auto;gap:20px;background:#cfd7e9;padding:20px;border-radius:14px;}
-.hero-left{flex:1; min-width:280px;}
-.hero-right{width:420px; min-width:280px; position:relative;}
+.hero-left{flex:1;min-width:280px;}
+.hero-right{width:420px;min-width:280px;position:relative;}
 .hero-left p.desc{margin-top:12px;color:#444;line-height:1.6;max-width:520px;}
 .hero-actions{margin-top:22px;display:flex;flex-wrap:wrap;gap:15px;align-items:center;}
 .list-btn{padding:12px 18px;background:#22c55e;border:none;color:white;font-size:15px;border-radius:8px;cursor:pointer;}
@@ -34,41 +32,74 @@ body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0}
 .feed{max-width:1200px;margin:40px auto;}
 .property-card{display:flex;flex-wrap:wrap;gap:15px;background:#fff;padding:15px;border-radius:14px;margin-bottom:20px;box-shadow:0 0 10px rgba(0,0,0,0.08);}
 .property-card img{width:260px;border-radius:12px;min-width:200px;object-fit:cover;}
-.property-info{flex:1; min-width:200px;}
+.property-info{flex:1;min-width:200px;}
 .price{font-size:20px;color:#2563eb;font-weight:bold;}
 .actions button{padding:8px 14px;margin-right:10px;cursor:pointer;}
 .recommended {max-width:1200px;margin:40px auto 20px;background:#ffffff;padding:25px;border-radius:14px;box-shadow:0 0 10px rgba(0,0,0,0.08);}
 .recommended h2 {margin:0 0 8px;color:#0f172a;}
 .recommended p {margin:0;color:#555;font-size:15px;}
 footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:20px;}
+
+.live-mini-card{
+  background:#fff;
+  border-radius:12px;
+  padding:14px 18px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  cursor:pointer;
+  width:220px;          /* 🔑 SMALL WIDTH */
+  margin:12px 0;
+}
+
+.mini-title{
+  font-size:14px;
+  color:#555;
+}
+
+.mini-count{
+  font-size:26px;
+  font-weight:700;
+  color:#ef4444;
+  margin-top:4px;
+}
+
+
+
 </style>
 </head>
 <body>
 
 <header class="navbar">
   <div class="logo"><b>MyProperty</b></div>
-  <nav id="mainNav">
-    <!-- Navbar will be populated by JS -->
-  </nav>
+  <nav id="mainNav"></nav>
 </header>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-left">
     <h1>Buy, Sell & Rent Properties</h1>
     <p>Trusted platform for Agricultural & Urban Properties</p>
-    <p class="desc">
-      MyProperty connects genuine buyers, sellers and renters on one trusted platform.<br>
-      Discover verified agricultural and urban properties with transparent pricing.<br>
-      Contact property owners directly without brokers or hidden charges.<br>
-      Simple search, secure communication and real opportunities in one place.
-    </p>
+    <p class="desc">MyProperty connects genuine buyers, sellers and renters on one trusted platform. Discover verified agricultural and urban properties with transparent pricing. Contact property owners directly without brokers or hidden charges. Simple search, secure communication and real opportunities in one place.</p>
     <div class="hero-actions">
       <button class="list-btn" id="listPropertyBtn">List Your Property – Free</button>
       <div class="search-mini">
         <input type="text" placeholder="Search by city, area or keyword" id="searchInput">
         <button class="search-btn" id="searchBtn">Search</button>
       </div>
+
+      <!-- <div class="live-req-long" onclick="location.href='userrequirement.html'">
+  <div class="live-req-left">
+    🔥 Live Requirements
+  </div>
+
+  <div class="live-req-right">
+    <span id="reqCount">0</span>
+    <small>users waiting</small>
+  </div>
+</div> -->
+<div class="live-mini-card" onclick="location.href='userrequirement.html'">
+  <div class="mini-title">🔥 Live Requirements</div>
+  <div class="mini-count" id="reqCount">0</div>
+</div>
+
     </div>
   </div>
 
@@ -94,7 +125,6 @@ footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:2
   </div>
 </section>
 
-<!-- SEARCH -->
 <section class="search-box">
   <select id="propType">
     <option>Property Type</option>
@@ -116,83 +146,201 @@ footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:2
   <button id="searchProperties">Search Properties</button>
 </section>
 
-<!-- RECOMMENDED -->
 <section class="recommended">
   <h2>Recommended Properties</h2>
   <p>Based on user interest and trending listings, we recommend these properties for better deals and locations.</p>
 </section>
 
-<!-- FEED -->
 <section class="feed" id="propertyFeed"></section>
 
 <footer>
-Support: support@myproperty.com | +91 98765 43210 <br>
-© 2025 MyProperty
+Support: support@myproperty.xcom | +91 98765 xxxxx <br>
+© 2025 MyProperty        <a href="contact.html">Contact here</a>
+
 </footer>
 
 <script>
-// USER CHECK
-let user = JSON.parse(localStorage.getItem('user'));
-const nav = document.getElementById('mainNav');
-const listBtn = document.getElementById('listPropertyBtn');
-const feed = document.getElementById('propertyFeed');
+document.addEventListener("DOMContentLoaded", ()=>{
 
-if(user){
-  // Navbar for logged-in
-  nav.innerHTML = `
-    <a href="index.html">Home</a>
-    <a href="buy.html">Buy</a>
-    <a href="rent.html">Rent</a>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="my-properties.html">My Properties</a>
-    <a href="saved-properties.html">Saved</a>
-    <a href="logout.html">Logout</a>
-  `;
-  listBtn.onclick = () => location.href='add-property.html';
+  const nav = document.getElementById("mainNav");
+  const listBtn = document.getElementById("listPropertyBtn");
+  const feed = document.getElementById("propertyFeed");
 
-  // Sample property feed
-  let properties = user.properties || [
-    {title:"5 Acre Land", location:"Pune", price:"₹80,00,000", desc:"Clear title, road touch, water available.", img:"images/sample.jpg"},
-    {title:"2 BHK Flat", location:"Nashik", price:"₹42,00,000", desc:"Ready to move, parking, lift available.", img:"images/sample.jpg"}
-  ];
+  // const isLoggedIn = localStorage.getItem("loggedIn") === "yes";------------
+  // const user = JSON.parse(localStorage.getItem("user"));
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "yes";
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
+
+  /* ---------- NAVBAR ---------- */
+  if(!isLoggedIn){
+    nav.innerHTML = `
+      <a href="index.html">Home</a>
+      <a href="buy.html">Buy</a>
+      <a href="rent.html">Rent</a>
+      <a href="login.html" class="btn">Register Property</a>
+      <a href="login.html">Login</a>
+    `;
+    listBtn.onclick = ()=>location.href="login.html";
+  }else{
+    nav.innerHTML = `
+      <a href="index.html">Home</a>
+      <a href="buy.html">Buy</a>
+      <a href="rent.html">Rent</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="my-properties.html">My Properties</a>
+      <a href="add-property.html">Add Property</a>
+      <a href="#" onclick="logout()">Logout</a>
+    `;
+    listBtn.onclick = ()=>location.href="add-property.html";
+  }
+
+  /* ---------- PROPERTY FEED (PUBLIC) ---------- */
+  const properties = JSON.parse(localStorage.getItem("properties")) || [];
   feed.innerHTML = "";
-  properties.forEach((p)=>{
-    let card = document.createElement("div");
+
+  if(properties.length === 0){
+    feed.innerHTML = `<p style="text-align:center">No properties listed yet.</p>`;
+    return;
+  }
+
+  properties.forEach(p=>{
+    const card = document.createElement("div");
     card.className = "property-card";
+
     card.innerHTML = `
-      <img src="${p.img}">
+      <img src="${p.images?.[0] || 'images/sample.jpg'}">
       <div class="property-info">
-        <h3>${p.title}</h3>
-        <p>${p.location}</p>
-        <div class="price">${p.price}</div>
-        <p>${p.desc}</p>
+        <h3>${p.type}</h3>
+        <p>📍 ${p.location}</p>
+        <div class="price">₹${p.price}</div>
+        <p>${p.description || ""}</p>
+
         <div class="actions">
-          <button onclick="alert('Liked ${p.title}')">❤️ Like</button>
-          <button onclick="alert('Saved ${p.title}')">💾 Save</button>
-          <button onclick="alert('Contacting owner')">Contact</button>
+          <button onclick="viewContact('${p.contactPhone || ''}')">📞 View Contact</button>
+          <button onclick="likeProperty()">❤️ Like</button>
+          <button onclick="saveProperty()">💾 Save</button>
         </div>
       </div>
     `;
     feed.appendChild(card);
   });
 
-}else{
-  // Navbar for public
-  nav.innerHTML = `
-    <a href="index.html">Home</a>
-    <a href="buy.html">Buy</a>
-    <a href="rent.html">Rent</a>
-    <a href="login.html" class="btn">Register Property</a>
-    <a href="login.html">Login</a>
-  `;
-  listBtn.onclick = () => location.href='login.html';
+  /* ---------- SEARCH PROPERTIES ---------- */
+document.getElementById("searchProperties").onclick = () => {
 
-  feed.querySelectorAll(".actions button").forEach(b => {
-    b.onclick = ()=>alert("Please login to perform this action");
+  const type = document.getElementById("propType").value;
+  const purpose = document.getElementById("purpose").value;
+  const min = document.getElementById("minPrice").value;
+  const max = document.getElementById("maxPrice").value;
+  const location = document.getElementById("location").value.toLowerCase();
+  const keyword = document.getElementById("keyword").value.toLowerCase();
+
+  let results = properties.filter(p => {
+
+    if(type !== "Property Type" && p.type !== type) return false;
+    if(purpose !== "Purpose" && p.purpose !== purpose) return false;
+    if(min && p.price < min) return false;
+    if(max && p.price > max) return false;
+    if(location && !p.location.toLowerCase().includes(location)) return false;
+    if(keyword && !JSON.stringify(p).toLowerCase().includes(keyword)) return false;
+
+    return true;
   });
+
+  feed.innerHTML = "";
+
+  if(results.length === 0){
+    feed.innerHTML = `
+      <div class="property-card">
+        <div class="property-info">
+          <h3>No matching properties found 😕</h3>
+          <p>You can post your requirement and property owners will contact you.</p>
+          <button class="list-btn" onclick="location.href='userrequirement.html'">
+            Post Your Requirement
+          </button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  results.forEach(p => renderHomeCard(p));
+};
+function renderHomeCard(p){
+  const card = document.createElement("div");
+  card.className = "property-card";
+
+  card.innerHTML = `
+    <img src="${p.images?.[0] || 'images/sample.jpg'}">
+    <div class="property-info">
+      <h3>${p.type}</h3>
+      <p>📍 ${p.location}</p>
+      <div class="price">₹${p.price}</div>
+      <p>${p.description || ""}</p>
+    </div>
+  `;
+  document.getElementById("propertyFeed").appendChild(card);
 }
+
+/* ===== LIVE REQUIREMENTS COUNT ===== */
+const requirements =
+  JSON.parse(localStorage.getItem("requirements")) || [];
+
+const reqCountEl = document.getElementById("reqCount");
+if(reqCountEl){
+  reqCountEl.innerText = requirements.length;
+}
+
+
+
+});
+//-----------------------------------------------------------------
+
+/* ---------- ACTIONS ---------- */
+function likeProperty(){
+  // if(localStorage.getItem("loggedIn") !== "yes")--------
+  if(localStorage.getItem("isLoggedIn") !== "yes")
+{
+    alert("Please login first");
+    location.href="login.html";
+    return;
+  }
+  alert("❤️ Property liked");
+}
+
+function saveProperty(){
+  // if(localStorage.getItem("loggedIn") !== "yes")----------
+  if(localStorage.getItem("isLoggedIn") !== "yes")
+{
+    alert("Please login first");
+    location.href="login.html";
+    return;
+  }
+  alert("💾 Property saved");
+}
+
+function viewContact(phone){
+  if(!phone){
+    alert("Contact not available");
+    return;
+  }
+  alert("Contact: " + phone);
+}
+
+// function logout(){---------------
+//   localStorage.removeItem("user");
+//   localStorage.removeItem("loggedIn");
+//   location.href="login.html";
+// }
+function logout(){
+  localStorage.removeItem("loggedInUser");
+  localStorage.removeItem("isLoggedIn");
+  location.href="login.html";
+}
+
 </script>
+
 
 </body>
 </html>

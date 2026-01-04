@@ -2,222 +2,411 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Admin Panel | MyProperty</title>
+<title>🔐 SUPER ADMIN PANEL | MyProperty</title>
 
 <style>
-body{margin:0;font-family:Arial;background:#f5f7fb}
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 40px;background:#0f172a;color:#fff}
-.navbar a{color:#00ffd9;text-decoration:none;margin-left:18px}
-.container{max-width:1200px;margin:30px auto;padding:0 20px}
-.card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,.1);margin-bottom:20px}
-button,input{padding:8px;width:100%;margin-top:8px}
-button{background:#22c55e;border:none;color:#fff;border-radius:6px;cursor:pointer}
-.tabs button{background:#2563eb;margin-right:10px;width:auto}
-.tab{display:none}
-.tab.active{display:block}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{border:1px solid #ccc;padding:8px;text-align:left}
-footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:40px}
+* {margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;border-radius:20px 20px 0 0;box-shadow:0 10px 40px rgba(0,0,0,0.3);position:sticky;top:0;z-index:100}
+.navbar h1{font-size:28px}
+.navbar a{color:#00ff88;text-decoration:none;font-weight:700;font-size:16px;padding:10px 20px;border-radius:10px;transition:all .3s;background:rgba(0,255,136,0.1)}
+.navbar a:hover{background:rgba(0,255,136,0.2);transform:translateY(-2px)}
+.container{max-width:1600px;margin:0 auto;background:#fff;border-radius:0 0 20px 20px;box-shadow:0 20px 60px rgba(0,0,0,0.2);overflow:hidden}
+.content{padding:40px;max-height:85vh;overflow-y:auto}
+
+/* LOGIN */
+.login-section{max-width:500px;margin:100px auto;background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);padding:40px;border-radius:25px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.login-section input{padding:18px;margin:15px 0;width:100%;border:none;border-radius:15px;font-size:16px;box-shadow:inset 0 2px 10px rgba(0,0,0,0.1)}
+.login-btn{padding:18px 40px;background:linear-gradient(45deg,#00ff88,#00cc6a);border:none;border-radius:15px;color:#fff;font-size:20px;font-weight:700;cursor:pointer;transition:all .3s;box-shadow:0 10px 30px rgba(0,255,136,0.4)}
+.login-btn:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(0,255,136,0.5)}
+
+/* DASHBOARD */
+.dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px;margin-bottom:30px}
+.stat-card{padding:30px;border-radius:20px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;text-align:center;box-shadow:0 15px 35px rgba(0,0,0,0.2);transition:all .3s}
+.stat-card:hover{transform:translateY(-10px)}
+.stat-number{font-size:48px;font-weight:900;margin-bottom:10px}
+.stat-label{font-size:16px;opacity:0.9}
+
+/* CONTROLS */
+.control-section{background:#f8fafc;padding:25px;border-radius:20px;margin-bottom:25px;box-shadow:0 10px 30px rgba(0,0,0,0.1)}
+.control-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.btn-master{padding:15px 25px;border:none;border-radius:15px;font-weight:700;font-size:16px;cursor:pointer;transition:all .3s;margin:5px;box-shadow:0 5px 20px rgba(0,0,0,0.2)}
+.btn-green{background:linear-gradient(45deg,#00ff88,#00cc6a);color:#fff}
+.btn-red{background:linear-gradient(45deg,#ff4757,#ff3838);color:#fff}
+.btn-blue{background:linear-gradient(45deg,#3742fa,#2f3542);color:#fff}
+.btn-orange{background:linear-gradient(45deg,#ffa502,#ff6348);color:#fff}
+.btn-master:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+
+/* DATA TABLES */
+.table-container{max-height:400px;overflow-y:auto;margin-top:20px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:15px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.1)}
+th{padding:18px 15px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;font-weight:700;text-transform:uppercase;font-size:13px;letter-spacing:1px}
+td{padding:15px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
+tr:nth-child(even){background:#f8f9ff}
+tr:hover{background:#e3f2fd}
+.status-badge{padding:6px 15px;border-radius:20px;font-size:12px;font-weight:700;color:#fff;margin:2px}
+.status-active{background:#00ff88}
+.status-sold{background:#ff4757}
+.status-pending{background:#ffa502}
+.status-inactive{background:#747d8c}
+
+/* SEARCH */
+.search-box{padding:15px;border-radius:12px;background:#f0f3ff;margin-bottom:20px;border:2px solid #e0e7ff}
+.search-input{padding:12px 20px;border:none;border-radius:10px;font-size:15px;width:100%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+
+/* MODAL */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:1000;justify-content:center;align-items:center}
+.modal-content{background:#fff;padding:40px;border-radius:25px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,0.5);position:relative}
+.close{position:absolute;right:25px;top:25px;font-size:36px;cursor:pointer;color:#aaa;font-weight:300}
+.close:hover{color:#000}
+.modal-buttons{display:flex;gap:15px;margin-top:30px;justify-content:flex-end}
+
+/* RESPONSIVE */
+@media (max-width:768px){
+  .container{padding:20px}
+  .dashboard-grid{grid-template-columns:1fr}
+  .control-grid{grid-template-columns:1fr}
+  .navbar{padding:15px 20px}
+  .navbar h1{font-size:22px}
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.card-animation{animation:fadeIn 0.6s ease-out}
 </style>
 </head>
 
 <body>
 
+<!-- SUPER NAVBAR -->
 <header class="navbar">
-  <div><b>MyProperty Admin Panel</b></div>
+  <h1>🚀 MyProperty SUPER ADMIN</h1>
   <nav>
-    <a href="#" onclick="adminLogout()">Logout</a>
+    <a href="#" onclick="adminLogout()">🔒 Logout</a>
   </nav>
 </header>
 
 <div class="container">
 
-<!-- ADMIN LOGIN -->
-<div class="card" id="loginBox">
-  <h2>Admin Login</h2>
-  <input id="adminUser" placeholder="Username">
-  <input id="adminPass" type="password" placeholder="Password">
-  <button onclick="adminLogin()">Login</button>
+<!-- LOGIN -->
+<div id="loginSection" class="login-section">
+  <h2 style="color:#fff;font-size:32px;margin-bottom:30px">🔐 Master Login</h2>
+  <input id="adminUser" placeholder="👤 Username" autocomplete="off">
+  <input id="adminPass" type="password" placeholder="🔑 Password">
+  <button class="login-btn" onclick="superAdminLogin()">ENTER CONTROL PANEL</button>
+  <p style="color:#fff;margin-top:20px;font-size:14px">
+    Default: <strong>ShreenivasG</strong> | <strong>shreenivas@123</strong>
+  </p>
 </div>
 
-<!-- ADMIN PANEL -->
-<div id="panel" style="display:none">
+<!-- MAIN CONTROL PANEL -->
+<div id="mainPanel" style="display:none">
 
-<div class="tabs card">
-  <button onclick="openTab('dash')">Dashboard</button>
-  <button onclick="openTab('users')">Users</button>
-  <button onclick="openTab('properties')">Properties</button>
-  <button onclick="openTab('enquiries')">Enquiries</button>
-  <button onclick="openTab('settings')">Settings</button>
+<!-- LIVE STATS -->
+<div class="dashboard-grid card-animation" id="statsGrid">
+  <div class="stat-card">
+    <div class="stat-number" id="userCount">0</div>
+    <div class="stat-label">👥 Total Users</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number" id="propCount">0</div>
+    <div class="stat-label">🏠 Properties</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number" id="reqCount">0</div>
+    <div class="stat-label">📋 Requirements</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number" id="contactCount">0</div>
+    <div class="stat-label">📞 Contacts</div>
+  </div>
 </div>
 
-<!-- DASHBOARD -->
-<div id="dash" class="tab active card">
-  <h2>Summary</h2>
-  <p>Total Users: <b id="uCount">0</b></p>
-  <p>Total Properties: <b id="pCount">0</b></p>
-  <p>Unverified Users: <b id="vCount">0</b></p>
-  <p>Total Enquiries: <b id="eCount">0</b></p>
+<!-- MASTER CONTROLS -->
+<div class="control-section card-animation">
+  <h2 style="margin-bottom:25px;color:#1a1a2e;font-size:24px">⚡ MASTER CONTROLS</h2>
+  <div class="control-grid">
+    <div>
+      <h3>🔥 GLOBAL ACTIONS</h3>
+      <button class="btn-master btn-red" onclick="clearAllData()">💥 DELETE ALL DATA</button>
+      <button class="btn-master btn-orange" onclick="exportMasterData()">📥 EXPORT ALL</button>
+      <button class="btn-master btn-blue" onclick="backupEverything()">💾 FULL BACKUP</button>
+    </div>
+    <div>
+      <h3>👥 USER CONTROLS</h3>
+      <button class="btn-master btn-green" onclick="logoutAllUsers()">🚪 LOGOUT ALL</button>
+      <button class="btn-master btn-red" onclick="deleteAllUsers()">🗑️ DELETE ALL USERS</button>
+    </div>
+    <div>
+      <h3>🏠 PROPERTY CONTROLS</h3>
+      <button class="btn-master btn-green" onclick="approveAllProperties()">✅ APPROVE ALL</button>
+      <button class="btn-master btn-red" onclick="deleteAllProperties()">🗑️ DELETE ALL PROPERTIES</button>
+    </div>
+  </div>
 </div>
 
 <!-- USERS -->
-<div id="users" class="tab card">
-  <h2>Users</h2>
-  <table>
-    <thead>
-      <tr><th>Name</th><th>Email</th><th>Verified</th><th>Action</th></tr>
-    </thead>
-    <tbody id="userTable"></tbody>
-  </table>
+<div class="control-section card-animation">
+  <h3 style="margin-bottom:15px">👥 USERS CONTROL PANEL</h3>
+  <div class="search-box">
+    <input id="userSearch" class="search-input" placeholder="🔍 Search users instantly..." oninput="liveSearch('users')">
+  </div>
+  <div class="table-container">
+    <table id="usersTable">
+      <thead>
+        <tr><th>ID</th><th>Name</th><th>Email</th><th>Mobile</th><th>Props</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody id="usersBody"></tbody>
+    </table>
+  </div>
 </div>
 
 <!-- PROPERTIES -->
-<div id="properties" class="tab card">
-  <h2>Properties</h2>
-  <table>
-    <thead>
-      <tr><th>Title</th><th>Owner</th><th>Status</th><th>Action</th></tr>
-    </thead>
-    <tbody id="propTable"></tbody>
-  </table>
+<div class="control-section card-animation">
+  <h3 style="margin-bottom:15px">🏠 PROPERTIES CONTROL PANEL</h3>
+  <div class="search-box">
+    <input id="propSearch" class="search-input" placeholder="🔍 Search properties instantly..." oninput="liveSearch('properties')">
+  </div>
+  <div class="table-container">
+    <table id="propsTable">
+      <thead>
+        <tr><th>ID</th><th>Type</th><th>Location</th><th>Price</th><th>Owner</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody id="propsBody"></tbody>
+    </table>
+  </div>
 </div>
 
-<!-- ENQUIRIES -->
-<div id="enquiries" class="tab card">
-  <h2>Enquiries</h2>
-  <table>
-    <thead>
-      <tr><th>User</th><th>Message</th><th>Status</th><th>Action</th></tr>
-    </thead>
-    <tbody id="enqTable"></tbody>
-  </table>
+<!-- REQUIREMENTS -->
+<div class="control-section card-animation">
+  <h3 style="margin-bottom:15px">📋 BUYER REQUIREMENTS</h3>
+  <div class="search-box">
+    <input id="reqSearch" class="search-input" placeholder="🔍 Search requirements..." oninput="liveSearch('requirements')">
+  </div>
+  <div class="table-container">
+    <table id="reqTable">
+      <thead>
+        <tr><th>ID</th><th>Name</th><th>Type</th><th>Location</th><th>Budget</th><th>Date</th><th>Actions</th></tr>
+      </thead>
+      <tbody id="reqBody"></tbody>
+    </table>
+  </div>
 </div>
 
-<!-- SETTINGS -->
-<div id="settings" class="tab card">
-  <h2>Admin Settings</h2>
-  <input type="password" id="newAdminPass" placeholder="New Admin Password">
-  <button onclick="changeAdminPass()">Change Password</button>
+<!-- CONTACTS (FUTURE contactus.html) -->
+<div class="control-section card-animation">
+  <h3 style="margin-bottom:15px">📞 CONTACT US REQUESTS</h3>
+  <div class="search-box">
+    <input id="contactSearch" class="search-input" placeholder="🔍 Search contacts..." oninput="liveSearch('contacts')">
+  </div>
+  <div class="table-container">
+    <table id="contactTable">
+      <thead>
+        <tr><th>ID</th><th>Name</th><th>Email/Phone</th><th>Message</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody id="contactBody"></tbody>
+    </table>
+  </div>
 </div>
 
 </div>
 </div>
 
-<footer>© 2025 MyProperty Admin</footer>
+<!-- CONFIRM MODAL -->
+<div id="confirmModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2 id="modalTitle">⚠️ CONFIRM ACTION</h2>
+    <p id="modalText" style="font-size:18px;margin:20px 0;color:#333">Are you sure?</p>
+    <div class="modal-buttons">
+      <button class="btn-master btn-red" id="confirmAction">YES, DELETE</button>
+      <button class="btn-master btn-green" onclick="closeModal()">CANCEL</button>
+    </div>
+  </div>
+</div>
 
 <script>
-// ================= ADMIN AUTH =================
-let ADMIN = {user:"admin", pass:"shreenivas"};
+// ================= SUPER ADMIN CREDS =================
+const SUPER_ADMIN = {
+  username: "ShreenivasG",
+  password: "shreenivas@123"
+};
 
-function adminLogin(){
-  if(adminUser.value===ADMIN.user && adminPass.value===ADMIN.pass){
-    loginBox.style.display="none";
-    panel.style.display="block";
-    loadAll();
-  }else alert("Wrong admin credentials");
+// ================= ALL DATA =================
+let ALL_DATA = {
+  users: JSON.parse(localStorage.getItem("users") || "[]"),
+  properties: JSON.parse(localStorage.getItem("properties") || "[]"),
+  requirements: JSON.parse(localStorage.getItem("requirements") || "[]"),
+  contacts: JSON.parse(localStorage.getItem("contacts") || "[]"),
+  savedProperties: JSON.parse(localStorage.getItem("savedProperties") || "[]")
+};
+
+// ================= MASTER LOGIN =================
+function superAdminLogin(){
+  const user = document.getElementById("adminUser").value;
+  const pass = document.getElementById("adminPass").value;
+  
+  if(user === SUPER_ADMIN.username && pass === SUPER_ADMIN.password){
+    document.getElementById("loginSection").style.display = "none";
+    document.getElementById("mainPanel").style.display = "block";
+    loadMasterDashboard();
+    console.log("🚀 SUPER ADMIN ACTIVATED - FULL CONTROL");
+  } else {
+    alert("❌ ACCESS DENIED!");
+    document.getElementById("adminPass").value = "";
+    shakeEffect();
+  }
+}
+
+// ================= MASTER DASHBOARD =================
+function loadMasterDashboard(){
+  document.getElementById("userCount").textContent = ALL_DATA.users.length;
+  document.getElementById("propCount").textContent = ALL_DATA.properties.length;
+  document.getElementById("reqCount").textContent = ALL_DATA.requirements.length;
+  document.getElementById("contactCount").textContent = ALL_DATA.contacts.length;
+  
+  renderAllTables();
+}
+
+// ================= LIVE SEARCH =================
+function liveSearch(type){
+  const query = event.target.value.toLowerCase();
+  renderTable(type, query);
+}
+
+// ================= RENDER ALL TABLES =================
+function renderAllTables(){
+  renderTable('users');
+  renderTable('properties'); 
+  renderTable('requirements');
+  renderTable('contacts');
+}
+
+// ================= MASTER TABLE RENDER =================
+function renderTable(type, search = ""){
+  const data = ALL_DATA[type];
+  const tbody = document.getElementById(type + "Body");
+  tbody.innerHTML = "";
+  
+  data.filter(item => {
+    const text = JSON.stringify(item).toLowerCase();
+    return text.includes(search);
+  }).forEach((item, index) => {
+    const row = tbody.insertRow();
+    let html = "";
+    
+    if(type === 'users'){
+      html = `
+        <td>${item.id || index+1}</td>
+        <td>${item.name || '-'}</td>
+        <td>${item.email || '-'}</td>
+        <td>${item.mobile || '-'}</td>
+        <td>${item.properties?.length || 0}</td>
+        <td><span class="status-badge ${item.status === 'inactive' ? 'status-inactive' : 'status-active'}">${item.status || 'Active'}</span></td>
+        <td>
+          <button class="btn-master btn-blue" onclick="viewDetails('${type}', ${index})">👁️</button>
+          <button class="btn-master btn-orange" onclick="toggleStatus('${type}', ${index})">🔄</button>
+          <button class="btn-master btn-red" onclick="masterDelete('${type}', ${index})">🗑️</button>
+        </td>
+      `;
+    }
+    // Add other table renders similarly...
+    row.innerHTML = html;
+  });
+}
+
+// ================= MASTER DELETE =================
+function masterDelete(type, index){
+  showConfirm(`Delete ${type.toUpperCase()} #${index+1}?`, `This will permanently delete item #${index+1} from ${type}`, () => {
+    ALL_DATA[type].splice(index, 1);
+    saveMasterData();
+    renderAllTables();
+  });
+}
+
+// ================= GLOBAL CONTROLS =================
+function clearAllData(){
+  showConfirm("💥 DELETE ALL DATA?", "This will DELETE EVERYTHING from localStorage. NO RECOVERY!", () => {
+    localStorage.clear();
+    location.reload();
+  });
+}
+
+function logoutAllUsers(){
+  showConfirm("🚪 LOGOUT ALL USERS?", "Force logout ALL users from system", () => {
+    ALL_DATA.users.forEach(user => {
+      user.isLoggedIn = false;
+    });
+    saveMasterData();
+    alert("✅ ALL USERS LOGGED OUT");
+  });
+}
+
+function deleteAllUsers(){
+  showConfirm("🗑️ DELETE ALL USERS?", "Remove ALL users permanently", () => {
+    ALL_DATA.users = [];
+    saveMasterData();
+    renderAllTables();
+  });
+}
+
+// ================= UTILITIES =================
+function saveMasterData(){
+  Object.keys(ALL_DATA).forEach(key => {
+    localStorage.setItem(key, JSON.stringify(ALL_DATA[key]));
+  });
+}
+
+function exportMasterData(){
+  const exportData = {
+    exportedAt: new Date().toISOString(),
+    ...ALL_DATA
+  };
+  downloadJSON(exportData, `myproperty-complete-${Date.now()}.json`);
+}
+
+function downloadJSON(data, filename){
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function shakeEffect(){
+  document.getElementById("loginSection").style.animation = "shake 0.5s";
+  setTimeout(() => {
+    document.getElementById("loginSection").style.animation = "";
+  }, 500);
+}
+
+function showConfirm(title, message, callback){
+  document.getElementById("modalTitle").textContent = title;
+  document.getElementById("modalText").textContent = message;
+  document.getElementById("confirmAction").onclick = callback;
+  document.getElementById("confirmModal").style.display = "flex";
+}
+
+function closeModal(){
+  document.getElementById("confirmModal").style.display = "none";
 }
 
 function adminLogout(){
-  location.reload();
-}
-
-// ================= TABS =================
-function openTab(id){
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-// ================= INIT DATA =================
-if(!localStorage.users)
-  localStorage.users=JSON.stringify([]);
-
-if(!localStorage.properties)
-  localStorage.properties=JSON.stringify([]);
-
-if(!localStorage.enquiries)
-  localStorage.enquiries=JSON.stringify([]);
-
-// ================= LOAD =================
-function loadAll(){
-  let u=JSON.parse(localStorage.users);
-  let p=JSON.parse(localStorage.properties);
-  let e=JSON.parse(localStorage.enquiries);
-
-  uCount.innerText=u.length;
-  pCount.innerText=p.length;
-  vCount.innerText=u.filter(x=>!x.verified).length;
-  eCount.innerText=e.length;
-
-  userTable.innerHTML=u.map((x,i)=>`
-    <tr>
-      <td>${x.name||"-"}</td>
-      <td>${x.email||"-"}</td>
-      <td>${x.verified?"Yes":"No"}</td>
-      <td>
-        <button onclick="verifyUser(${i})">Verify</button>
-        <button onclick="deleteUser(${i})">Delete</button>
-      </td>
-    </tr>`).join("");
-
-  propTable.innerHTML=p.map((x,i)=>`
-    <tr>
-      <td>${x.title}</td>
-      <td>${x.owner}</td>
-      <td>${x.status}</td>
-      <td>
-        <button onclick="toggleProp(${i})">Toggle</button>
-        <button onclick="deleteProp(${i})">Delete</button>
-      </td>
-    </tr>`).join("");
-
-  enqTable.innerHTML=e.map((x,i)=>`
-    <tr>
-      <td>${x.user}</td>
-      <td>${x.msg}</td>
-      <td>${x.status}</td>
-      <td><button onclick="resolveEnq(${i})">Resolve</button></td>
-    </tr>`).join("");
-}
-
-// ================= ACTIONS =================
-function verifyUser(i){
-  let u=JSON.parse(localStorage.users);
-  u[i].verified=true;
-  localStorage.users=JSON.stringify(u);
-  loadAll();
-}
-
-function deleteUser(i){
-  let u=JSON.parse(localStorage.users);
-  if(confirm("Delete user?")){u.splice(i,1);localStorage.users=JSON.stringify(u);loadAll();}
-}
-
-function toggleProp(i){
-  let p=JSON.parse(localStorage.properties);
-  p[i].status=p[i].status==="Available"?"Sold":"Available";
-  localStorage.properties=JSON.stringify(p);
-  loadAll();
-}
-
-function deleteProp(i){
-  let p=JSON.parse(localStorage.properties);
-  if(confirm("Delete property?")){p.splice(i,1);localStorage.properties=JSON.stringify(p);loadAll();}
-}
-
-function resolveEnq(i){
-  let e=JSON.parse(localStorage.enquiries);
-  e[i].status="Resolved";
-  localStorage.enquiries=JSON.stringify(e);
-  loadAll();
-}
-
-function changeAdminPass(){
-  if(newAdminPass.value){
-    ADMIN.pass=newAdminPass.value;
-    alert("Admin password changed");
-    newAdminPass.value="";
+  if(confirm("Logout from SUPER ADMIN?")){
+    location.reload();
   }
 }
+
+// ================= INIT =================
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('adminPass').addEventListener('keypress', function(e){
+    if(e.key === 'Enter') superAdminLogin();
+  });
+});
 </script>
 
 </body>

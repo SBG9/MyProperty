@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin – User Manager</title>
+<style>
+body{
+  font-family: Arial, Helvetica, sans-serif;
+  background:#f5f7fb;
+  margin:0;
+  padding:20px;
+}
+h1{margin-bottom:10px}
+.card{
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 0 12px rgba(0,0,0,.1);
+  margin-bottom:20px;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
+th,td{
+  padding:10px;
+  border-bottom:1px solid #ddd;
+  text-align:left;
+}
+th{background:#f1f5f9}
+button{
+  padding:6px 10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+.btn-danger{background:#dc2626;color:#fff}
+.btn-warn{background:#f59e0b;color:#fff}
+.btn-info{background:#2563eb;color:#fff}
+.small{font-size:13px;color:#555}
+.badge{
+  padding:4px 8px;
+  border-radius:6px;
+  font-size:12px;
+  color:#fff;
+}
+.badge-login{background:#16a34a}
+.badge-no{background:#64748b}
+.actions button{margin-right:6px}
+footer{
+  text-align:center;
+  margin-top:30px;
+  color:#555;
+}
+</style>
+</head>
+
+<body>
+
+<h1>👤 User Manager (Testing Purpose)</h1>
+<p class="small">
+This page shows all users stored in <b>localStorage</b>.  
+Use only for debugging & testing.
+</p>
+
+<div class="card" id="stats"></div>
+
+<div class="card">
+  <h3>Registered Users</h3>
+  <table id="userTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Mobile</th>
+        <th>Login Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h3>Danger Zone</h3>
+  <button class="btn-danger" onclick="clearAllUsers()">❌ Clear ALL Users</button>
+  <button class="btn-warn" onclick="forceLogout()">🚪 Force Logout</button>
+</div>
+
+<footer>
+MyProperty – Admin Test Panel
+</footer>
+
+<script>
+const users = JSON.parse(localStorage.getItem("users")) || [];
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+const loggedIn = localStorage.getItem("loggedIn") === "yes";
+
+const statsBox = document.getElementById("stats");
+const tbody = document.querySelector("#userTable tbody");
+
+/* ---------- STATS ---------- */
+statsBox.innerHTML = `
+  <b>Total Users:</b> ${users.length}<br>
+  <b>Login Status:</b> ${
+    loggedIn && currentUser
+      ? `<span class="badge badge-login">Logged In</span>`
+      : `<span class="badge badge-no">No Active Login</span>`
+  }
+`;
+
+/* ---------- USER TABLE ---------- */
+if(users.length === 0){
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="6" style="text-align:center;color:#777">
+        No users found in localStorage
+      </td>
+    </tr>
+  `;
+}else{
+  users.forEach((u,i)=>{
+    const isActive =
+      loggedIn &&
+      currentUser &&
+      (u.mobile === currentUser.mobile);
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td>${u.name || "-"}</td>
+      <td>${u.email || "-"}</td>
+      <td>${u.mobile}</td>
+      <td>
+        ${
+          isActive
+          ? `<span class="badge badge-login">Active</span>`
+          : `<span class="badge badge-no">—</span>`
+        }
+      </td>
+      <td class="actions">
+        <button class="btn-danger" onclick="deleteUser(${i})">Delete</button>
+        ${
+          isActive
+          ? `<button class="btn-warn" onclick="logoutUser()">Logout</button>`
+          : ``
+        }
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ---------- FUNCTIONS ---------- */
+
+function deleteUser(index){
+  if(!confirm("Delete this user permanently?")) return;
+
+  users.splice(index,1);
+  localStorage.setItem("users", JSON.stringify(users));
+
+  // if deleted user was logged in
+  if(currentUser && users.every(u => u.mobile !== currentUser.mobile)){
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("loggedIn");
+  }
+
+  location.reload();
+}
+
+function logoutUser(){
+  localStorage.removeItem("currentUser");
+  localStorage.removeItem("loggedIn");
+  alert("User logged out");
+  location.reload();
+}
+
+function forceLogout(){
+  if(!confirm("Force logout current user?")) return;
+  localStorage.removeItem("currentUser");
+  localStorage.removeItem("loggedIn");
+  location.reload();
+}
+
+function clearAllUsers(){
+  if(!confirm("⚠️ This will delete ALL users. Continue?")) return;
+  localStorage.removeItem("users");
+  localStorage.removeItem("currentUser");
+  localStorage.removeItem("loggedIn");
+  location.reload();
+}
+</script>
+
+</body>
+</html>

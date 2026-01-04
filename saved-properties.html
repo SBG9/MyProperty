@@ -6,8 +6,8 @@
 
 <style>
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fb}
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 40px;background:#0f172a;color:#fff}
-.navbar a{color:#00ffd9;text-decoration:none;margin-left:18px}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 40px;background:#0f172a;color:#fff;flex-wrap:wrap}
+.navbar a{color:#00ffd9;text-decoration:none;margin-left:18px;font-weight:600}
 .container{max-width:1100px;margin:40px auto}
 .card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,.1);margin-bottom:20px}
 .property{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#f9fafb;border-radius:10px;margin-bottom:15px}
@@ -27,7 +27,7 @@ footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:4
     <a href="my-properties.html">My Properties</a>
     <a href="saved-properties.html">Saved</a>
     <a href="settings.html">Settings</a>
-    <a href="logout.html">Logout</a>
+    <a href="#" onclick="logout()">Logout</a>
   </nav>
 </header>
 
@@ -41,51 +41,70 @@ footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:4
 <footer>© 2025 MyProperty</footer>
 
 <script>
-// ================= LOAD USER =================
-let user = JSON.parse(localStorage.getItem("user"));
-if(!user) location.href = "login.html";
+  // ================= LOGIN CHECK =================
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "yes";
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
-if(!user.savedProperties) user.savedProperties = [];
-
-// ================= LOAD ALL PROPERTIES =================
-let allProps = JSON.parse(localStorage.getItem("properties")) || [];
-let list = document.getElementById("savedList");
-
-// ================= RENDER =================
-function renderSaved(){
-  list.innerHTML = "";
-
-  if(user.savedProperties.length === 0){
-    list.innerHTML = "<p>No saved properties</p>";
-    return;
+  if(!isLoggedIn || !user){
+    window.location.replace("login.html");
   }
 
-  user.savedProperties.forEach(id=>{
-    let p = allProps.find(x => x.id === id);
-    if(!p) return;
+  // ================= INIT =================
+  user.savedProperties = user.savedProperties || [];
+  const allProperties = JSON.parse(localStorage.getItem("properties")) || [];
+  const list = document.getElementById("savedList");
 
-    let div = document.createElement("div");
-    div.className = "property";
-    div.innerHTML = `
-      <div>
-        <b>${p.title}</b><br>
-        ${p.location || ""}<br>
-        ₹${p.price}
-      </div>
-      <button class="remove" onclick="removeSaved(${id})">Remove</button>
-    `;
-    list.appendChild(div);
-  });
-}
+  // ================= RENDER SAVED PROPERTIES =================
+  function renderSaved(){
+    list.innerHTML = "";
 
-// ================= REMOVE =================
-function removeSaved(id){
-  user.savedProperties = user.savedProperties.filter(x=>x!==id);
-  localStorage.setItem("user", JSON.stringify(user));
+    if(user.savedProperties.length === 0){
+      list.innerHTML = "<p style='text-align:center'>You have no saved properties.</p>";
+      return;
+    }
+
+    user.savedProperties.forEach(id=>{
+      const p = allProperties.find(x => x.id === id);
+      if(!p) return;
+
+      const div = document.createElement("div");
+      div.className = "property";
+      div.innerHTML = `
+        <div>
+          <b>${p.type || p.title || "Property"}</b><br>
+          ${p.location?.city || ""} ${p.location?.district || ""}<br>
+          ₹ ${p.price || "N/A"}
+        </div>
+        <button class="remove" onclick="removeSaved(${id})">Remove</button>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  // ================= REMOVE FROM SAVED =================
+  function removeSaved(id){
+    user.savedProperties = user.savedProperties.filter(x => x !== id);
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+    // Also update in global users array
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    const index = users.findIndex(u => u.id === user.id);
+    if(index !== -1){
+      users[index] = user;
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+
+    renderSaved();
+  }
+
   renderSaved();
-}
 
-renderSaved();
+  // ================= LOGOUT =================
+  function logout(){
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("isLoggedIn");
+    window.location.replace("login.html");
+  }
 </script>
 
 </body>

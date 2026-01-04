@@ -79,104 +79,135 @@ body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0}
 </div>
 
 <!-- PROPERTY LIST -->
-<div class="buy-feed" id="propertyFeed">
 
-  <!-- Example Property Card -->
-  <div class="buy-card">
-    <img src="images/sample.jpg">
-    <div class="buy-info">
-      <h3>Luxury Bungalow</h3>
-      <p>Pune – Baner</p>
-      <div class="price">₹1,20,00,000</div>
-
-      <div class="tags">
-        <span>4 BHK</span>
-        <span>Ready</span>
-        <span>Parking</span>
-        <span>Clear Title</span>
-      </div>
-
-      <p>Premium residential bungalow with modern amenities, nearby school, hospital & market.</p>
-
-      <!-- Always visible property details -->
-      <div>
-        <b>Property Details:</b> Bungalow, 4 BHK, 2500 sq.ft<br>
-        <b>Location:</b> Pune, Baner, Maharashtra, 411045<br>
-        <b>Facilities:</b> Parking, Furnishing, Water, Electricity<br>
-        <b>Contact:</b> Mr. Sharma – 9876543210
-      </div>
-
-      <div class="buy-actions">
-        <button class="contactBtn">Contact Seller</button>
-        <button class="saveBtn">Save</button>
-        <button class="likeBtn">Like</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="buy-card">
-    <img src="images/sample.jpg">
-    <div class="buy-info">
-      <h3>Agricultural Land – 3 Acres</h3>
-      <p>Nashik – Trimbak</p>
-      <div class="price">₹45,00,000</div>
-
-      <div class="tags">
-        <span>3 Acres</span>
-        <span>Water Available</span>
-        <span>Road Touch</span>
-      </div>
-
-      <p>Fertile agricultural land suitable for farming & investment.</p>
-
-      <!-- Always visible property details -->
-      <div>
-        <b>Property Details:</b> 3 Acres, Fertile, Road Touch<br>
-        <b>Location:</b> Nashik, Trimbak, Maharashtra, 422212<br>
-        <b>Facilities:</b> Water, Electricity<br>
-        <b>Contact:</b> Mr. Patil – 9876543211
-      </div>
-
-      <div class="buy-actions">
-        <button class="contactBtn">Send Interest</button>
-        <button class="saveBtn">Save</button>
-        <button class="likeBtn">Like</button>
-      </div>
-    </div>
-  </div>
-
-</div>
+<div class="buy-feed" id="propertyFeed"></div>
 
 <script>
-// Login check
-let user = JSON.parse(localStorage.getItem('user'));
-const nav = document.getElementById('mainNav');
+// ================= GLOBAL =================
+const feed = document.getElementById("propertyFeed");
+const nav  = document.getElementById("mainNav");
 
-if(user){
+const isLoggedIn = localStorage.getItem("isLoggedIn") === "yes";
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
+let properties = JSON.parse(localStorage.getItem("properties")) || [];
+
+// ================= NAVBAR =================
+if(isLoggedIn){
   nav.innerHTML = `
     <a href="index.html">Home</a>
     <a href="buy.html">Buy</a>
     <a href="rent.html">Rent</a>
     <a href="dashboard.html">Dashboard</a>
-    <a href="logout.html">Logout</a>
+    <a href="#" onclick="logout()">Logout</a>
   `;
-
-  document.querySelectorAll('.contactBtn').forEach(b => b.onclick = () => alert('Contacting seller as ' + user.name));
-  document.querySelectorAll('.saveBtn').forEach(b => b.onclick = () => alert('Property saved for ' + user.name));
-  document.querySelectorAll('.likeBtn').forEach(b => b.onclick = () => alert('You liked this property'));
 }else{
   nav.innerHTML = `
     <a href="index.html">Home</a>
     <a href="buy.html">Buy</a>
     <a href="rent.html">Rent</a>
-    <a href="login.html" class="btn">Register Property</a>
     <a href="login.html">Login</a>
   `;
-
-  document.querySelectorAll('.contactBtn').forEach(b => b.onclick = () => location.href='login.html');
-  document.querySelectorAll('.saveBtn').forEach(b => b.onclick = () => location.href='login.html');
-  document.querySelectorAll('.likeBtn').forEach(b => b.onclick = () => location.href='login.html');
 }
+
+// ================= LOAD BUY PROPERTIES =================
+const buyProps = properties.filter(p =>
+  p.status === "Available" && p.purpose === "Buy"
+);
+
+if(buyProps.length === 0){
+  feed.innerHTML = `
+    <p style="text-align:center">
+      No properties available for buying.<br><br>
+      <a href="userrequirement.html" class="btn">Post Your Requirement</a>
+    </p>
+  `;
+}else{
+  renderBuyProperties(buyProps);
+}
+
+// ================= RENDER =================
+function renderBuyProperties(list){
+  feed.innerHTML = "";
+
+  list.forEach(p=>{
+    const card = document.createElement("div");
+    card.className = "buy-card";
+
+    card.innerHTML = `
+      <img src="${p.images?.[0] || 'images/sample.jpg'}">
+
+      <div class="buy-info">
+        <h3>${p.type}</h3>
+        <p>${p.location.city}, ${p.location.district || ""}</p>
+
+        <div class="price">₹ ${p.price}</div>
+
+        <p>${p.description || ""}</p>
+
+        <div>
+          <b>Property Details:</b> ${p.size || ""}<br>
+          <b>Facilities:</b>
+          ${Object.values(p.facilities || {}).join(", ") || "—"}<br>
+          <b>Contact:</b>
+          ${isLoggedIn ? p.contactPhone : "Login to view"}
+        </div>
+
+        <div class="buy-actions">
+          <button onclick="contactSeller('${p.contactPhone || ""}')">
+            Contact Seller
+          </button>
+          <button onclick="saveProperty(${p.id})">Save</button>
+          <button onclick="likeProperty(${p.id})">Like</button>
+        </div>
+      </div>
+    `;
+    feed.appendChild(card);
+  });
+}
+
+// ================= ACTIONS =================
+
+function contactSeller(phone){
+  if(!isLoggedIn){
+    alert("Please login to contact seller");
+    location.href = "login.html";
+    return;
+  }
+  alert("Seller Contact: " + phone);
+}
+
+function saveProperty(id){
+  if(!isLoggedIn){
+    alert("Please login to save property");
+    location.href = "login.html";
+    return;
+  }
+
+  user.saved = user.saved || [];
+  if(!user.saved.includes(id)){
+    user.saved.push(id);
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    alert("Property saved 💾");
+  }else{
+    alert("Already saved");
+  }
+}
+
+function likeProperty(id){
+  if(!isLoggedIn){
+    alert("Please login to like property");
+    location.href = "login.html";
+    return;
+  }
+  alert("Property liked ❤️");
+}
+
+function logout(){
+  localStorage.removeItem("loggedInUser");
+  localStorage.removeItem("isLoggedIn");
+  window.location.replace("login.html");
+}
+
 </script>
 
 </body>

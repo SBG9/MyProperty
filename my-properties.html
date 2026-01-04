@@ -107,7 +107,9 @@ footer{
     <a href="add-property.html">Add Property</a>
     <a href="my-properties.html">My Properties</a>
     <a href="saved-properties.html">Saved</a>
-    <a href="logout.html">Logout</a>
+    <!-- <a href="logout.html">Logout</a> -->
+    <a href="#" onclick="logout()">Logout</a>
+
   </nav>
 </header>
 
@@ -123,41 +125,54 @@ footer{
 <footer>
 © 2025 MyProperty
 </footer>
-
 <script>
-let user = JSON.parse(localStorage.getItem('user'));
-if(!user) location.href='login.html';
+// ================= LOGIN CHECK =================
+const isLoggedIn = localStorage.getItem("isLoggedIn") === "yes";
+let user = JSON.parse(localStorage.getItem("loggedInUser"));
+let users = JSON.parse(localStorage.getItem("users")) || [];
+let properties = JSON.parse(localStorage.getItem("properties")) || [];
 
-if(!user.properties) user.properties = [];
+if(!isLoggedIn || !user){
+  window.location.replace("login.html");
+}
+
+// user related properties only
+function getMyProperties(){
+  return properties.filter(p => p.ownerId === user.id);
+}
+
+// ================= RENDER =================
 render();
 
-/* RENDER PROPERTIES */
 function render(){
   const list = document.getElementById("propList");
   list.innerHTML = "";
 
-  if(user.properties.length === 0){
+  const myProps = getMyProperties();
+
+  if(myProps.length === 0){
     list.innerHTML = "<p style='margin-top:15px'>No properties added yet.</p>";
     return;
   }
 
-  user.properties.forEach((p,i)=>{
+  myProps.forEach((p)=>{
     const div = document.createElement("div");
     div.className = "property-card";
+
     div.innerHTML = `
       <div class="property-info">
-        <b>${p.title}</b>
-        <span>${p.location}</span>
+        <b>${p.type}</b>
+        <span>${p.location.city}, ${p.location.district || ""}</span>
         <span>₹ ${p.price}</span>
-        <span class="badge ${p.status==='Available'?'available':'sold'}">
+        <span class="badge ${p.status === 'Available' ? 'available' : 'sold'}">
           ${p.status}
         </span>
       </div>
 
       <div class="property-actions">
-        <button class="edit" onclick="editProperty(${i})">Edit</button>
-        <button class="toggle" onclick="toggleStatus(${i})">Toggle</button>
-        <button class="delete" onclick="deleteProperty(${i})">Delete</button>
+        <button class="edit" onclick="editProperty(${p.id})">Edit</button>
+        <button class="toggle" onclick="toggleStatus(${p.id})">Toggle</button>
+        <button class="delete" onclick="deleteProperty(${p.id})">Delete</button>
       </div>
     `;
     list.appendChild(div);
@@ -166,54 +181,66 @@ function render(){
   updateDashboardStats();
 }
 
-/* EDIT */
-function editProperty(i){
-  let p = user.properties[i];
-  let title = prompt("Property title", p.title);
-  if(!title) return;
-  let location = prompt("Location", p.location);
-  if(!location) return;
-  let price = prompt("Price", p.price);
-  if(!price) return;
+// ================= EDIT =================
+function editProperty(id){
+  let p = properties.find(x => x.id === id);
+  if(!p) return;
 
-  p.title = title;
-  p.location = location;
-  p.price = price;
+  let price = prompt("Update Price", p.price);
+  if(price === null) return;
 
-  save();
+  p.price = Number(price);
+  saveAll();
 }
 
-/* DELETE */
-function deleteProperty(i){
-  if(confirm("Delete this property?")){
-    user.properties.splice(i,1);
-    save();
-  }
+// ================= DELETE =================
+function deleteProperty(id){
+  if(!confirm("Delete this property?")) return;
+
+  properties = properties.filter(p => p.id !== id);
+  saveAll();
 }
 
-/* TOGGLE STATUS */
-function toggleStatus(i){
-  let p = user.properties[i];
+// ================= TOGGLE STATUS =================
+function toggleStatus(id){
+  let p = properties.find(x => x.id === id);
+  if(!p) return;
+
   p.status = p.status === "Available" ? "Sold" : "Available";
-  save();
+  saveAll();
 }
 
-/* SAVE */
-function save(){
-  localStorage.setItem("user", JSON.stringify(user));
+// ================= SAVE =================
+function saveAll(){
+  localStorage.setItem("properties", JSON.stringify(properties));
+
+  user.totalProperties = getMyProperties().length;
+  user.sold = getMyProperties().filter(p => p.status === "Sold").length;
+
+  localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+  let index = users.findIndex(u => u.id === user.id);
+  if(index !== -1){
+    users[index] = user;
+    localStorage.setItem("users", JSON.stringify(users));
+  }
+
   render();
 }
 
-/* DASHBOARD STATS UPDATE */
+// ================= DASHBOARD STATS =================
 function updateDashboardStats(){
-  user.totalProperties = user.properties.length;
-  user.sold = user.properties.filter(p=>p.status==="Sold").length;
-  saveSilent();
+  user.totalProperties = getMyProperties().length;
+  user.sold = getMyProperties().filter(p => p.status === "Sold").length;
+
+  localStorage.setItem("loggedInUser", JSON.stringify(user));
 }
 
-/* SAVE WITHOUT RE-RENDER */
-function saveSilent(){
-  localStorage.setItem("user", JSON.stringify(user));
+// ================= LOGOUT =================
+function logout(){
+  localStorage.removeItem("loggedInUser");
+  localStorage.removeItem("isLoggedIn");
+  window.location.replace("login.html");
 }
 </script>
 

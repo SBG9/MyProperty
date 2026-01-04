@@ -7,27 +7,22 @@
 
 <style>
 body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0}
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 20px;background:#0f172a}
-.navbar nav a{margin-left:18px;text-decoration:none;color:#00ffd9;font-weight:600}
-.navbar .btn{border:1px solid #00ffd9;padding:6px 12px;border-radius:6px}
-
-/* FILTER */
-.filter-box{max-width:1100px;margin:20px auto;padding:15px;border-radius:12px;background:#f8fafc;box-shadow:0 0 10px rgba(0,0,0,0.08)}
-.filter-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.filter-row input,.filter-row select{padding:8px}
-.filter-btn{margin-top:12px;width:100%;padding:10px;background:#22c55e;border:none;color:#fff;font-size:16px}
-
-/* RENT FEED */
-.rent-feed{max-width:1100px;margin:30px auto}
-.rent-card{display:flex;gap:15px;padding:15px;border-radius:12px;border:1px solid #ddd;background:#fff;margin-bottom:20px}
-.rent-card img{width:260px;border-radius:10px;object-fit:cover}
-.rent-info{flex:1}
-.rent-price{color:#2563eb;font-size:20px;font-weight:bold}
-.tags span{background:#e2e8f0;padding:4px 8px;border-radius:6px;font-size:12px;margin-right:5px}
-.rent-actions{margin-top:10px}
-.rent-actions button{padding:6px 12px;margin-right:8px;cursor:pointer}
-.contact-btn{background:#16a34a;color:#fff;border:none}
-.lease-badge{background:#15803d;color:#fff}
+.navbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:15px 20px;background:#0f172a;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.navbar nav a{margin-left:18px;text-decoration:none;color:#00ffd9;font-weight:600;}
+.navbar .btn{background:#0f172a;color:#00ffd9;padding:8px 14px;border-radius:6px;text-decoration:none;}
+.filter-box{max-width:1100px;margin:20px auto;padding:15px;border-radius:12px;background:#f8fafc;box-shadow:0 0 10px rgba(0,0,0,0.08);}
+.filter-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.filter-row input,.filter-row select{padding:8px;}
+.filter-btn{margin-top:12px;width:100%;padding:10px;background:#22c55e;border:none;color:white;font-size:16px;cursor:pointer;}
+.rent-feed{max-width:1100px;margin:30px auto;}
+.rent-card{display:flex;flex-wrap:wrap;gap:15px;padding:15px;border-radius:12px;border:1px solid #ddd;margin-bottom:20px;background:#fff;box-shadow:0 0 10px rgba(0,0,0,0.08);}
+.rent-card img{width:260px;border-radius:10px;min-width:200px;object-fit:cover;}
+.rent-info{flex:1;min-width:200px;}
+.rent-info h3{margin:0;}
+.price{color:#16a34a;font-size:20px;font-weight:bold;}
+.tags span{background:#e2e8f0;padding:4px 8px;border-radius:6px;font-size:12px;margin-right:5px;}
+.rent-actions{margin-top:10px;}
+.rent-actions button{padding:6px 12px;margin-right:10px;cursor:pointer;}
 </style>
 </head>
 
@@ -38,115 +33,183 @@ body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0}
   <nav id="mainNav"></nav>
 </header>
 
-<!-- FILTER -->
+<!-- FILTER FORM -->
 <div class="filter-box">
-  <h3>Find Rental / Lease Property</h3>
+  <h3>Find Property for Rent</h3>
   <div class="filter-row">
-    <select><option>Property Type</option><option>Flat</option><option>Room</option><option>Shop</option></select>
-    <select><option>Rent Type</option><option>Monthly</option><option>Yearly Lease</option></select>
+    <select>
+      <option>Property Type</option>
+      <option>Flat</option>
+      <option>Home</option>
+      <option>Shop</option>
+      <option>Office</option>
+    </select>
+
+    <input type="text" placeholder="Keyword (optional)">
     <input type="number" placeholder="Min Rent">
     <input type="number" placeholder="Max Rent">
-    <input type="text" placeholder="City / Village">
-    <select><option>Water</option><option>Well</option><option>Canal</option></select>
-    <select><option>Lease Duration</option><option>1 Year</option><option>3 Years</option></select>
+
+    <input type="text" placeholder="City / Locality">
+    <select>
+      <option>Purpose</option>
+      <option>Residential</option>
+      <option>Commercial</option>
+    </select>
+
+    <select>
+      <option>Condition</option>
+      <option>Ready to Move</option>
+      <option>Under Construction</option>
+    </select>
+
+    <select>
+      <option>Furnishing</option>
+      <option>Furnished</option>
+      <option>Semi</option>
+      <option>Unfurnished</option>
+    </select>
   </div>
+
   <button class="filter-btn">Search</button>
 </div>
 
-<!-- RENT LIST -->
-<div class="rent-feed">
-
-  <!-- RENT CARD -->
-  <div class="rent-card">
-    <img src="images/sample.jpg">
-    <div class="rent-info">
-      <h3>2 BHK Flat for Rent</h3>
-      <p><b>Location:</b> Pune – Wakad, 411057 (Near Metro)</p>
-      <div class="rent-price">₹18,000 / month</div>
-
-      <div class="tags">
-        <span>2 BHK</span>
-        <span>Furnished</span>
-        <span>Parking</span>
-        <span>24x7 Water</span>
-      </div>
-
-      <p><b>Description:</b> Well-maintained flat near school & hospital.</p>
-
-      <p><b>Owner:</b> Rajesh Patil | 📞 9876543210</p>
-
-      <div class="rent-actions">
-        <button class="callBtn" data-phone="9876543210">Call Owner</button>
-        <button class="saveBtn">Save</button>
-        <button class="likeBtn">Like</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- LEASE CARD -->
-  <div class="rent-card">
-    <img src="images/sample.jpg">
-    <div class="rent-info">
-      <h3>Agricultural Land on Lease</h3>
-      <p><b>Location:</b> Nashik – Trimbakeshwar</p>
-      <div class="rent-price">₹60,000 / year</div>
-
-      <div class="tags">
-        <span class="lease-badge">Lease</span>
-        <span>3 Acres</span>
-        <span>Canal Water</span>
-        <span>Road Touch</span>
-      </div>
-
-      <p><b>Description:</b> Fertile land for seasonal farming.</p>
-
-      <p><b>Owner:</b> Mahadev Shinde | 📞 9123456789</p>
-
-      <div class="rent-actions">
-        <button class="callBtn" data-phone="9123456789">Call Owner</button>
-        <button class="saveBtn">Save</button>
-        <button class="likeBtn">Like</button>
-      </div>
-    </div>
-  </div>
-
-</div>
+<!-- PROPERTY LIST -->
+<div class="rent-feed" id="propertyFeed"></div>
 
 <script>
-let user = JSON.parse(localStorage.getItem("user"));
-const nav = document.getElementById("mainNav");
+// ================= EXACT SAME AS BUY.HTML =================
+const feed = document.getElementById("propertyFeed");
+const nav  = document.getElementById("mainNav");
 
-if(user){
+const isLoggedIn = localStorage.getItem("isLoggedIn") === "yes";
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
+let properties = JSON.parse(localStorage.getItem("properties")) || [];
+
+// NAVBAR - EXACT COPY
+if(isLoggedIn){
   nav.innerHTML = `
     <a href="index.html">Home</a>
     <a href="buy.html">Buy</a>
     <a href="rent.html">Rent</a>
     <a href="dashboard.html">Dashboard</a>
-    <a href="logout.html">Logout</a>
+    <a href="#" onclick="logout()">Logout</a>
   `;
 }else{
   nav.innerHTML = `
     <a href="index.html">Home</a>
     <a href="buy.html">Buy</a>
     <a href="rent.html">Rent</a>
-    <a href="login.html" class="btn">Register Property</a>
     <a href="login.html">Login</a>
   `;
 }
 
-document.querySelectorAll(".callBtn").forEach(btn=>{
-  btn.onclick = ()=>{
-    if(user){
-      location.href = "tel:"+btn.dataset.phone;
-    }else{
-      location.href="login.html";
-    }
-  }
-});
+// LOAD RENT PROPERTIES - add-property compatible
+const rentProps = properties.filter(p =>
+  p.status === "Available" && 
+  (p.type === "Flat" || p.type === "Home" || p.type === "Shop" || 
+   p.type?.toLowerCase().includes("rent") || p.facilities?.furnish)
+);
 
-document.querySelectorAll(".saveBtn,.likeBtn").forEach(btn=>{
-  btn.onclick = ()=> user ? alert("Action saved") : location.href="login.html";
-});
+if(rentProps.length === 0){
+  feed.innerHTML = `
+    <p style="text-align:center">
+      No properties available for renting.<br><br>
+      <a href="add-property.html" class="btn" style="background:#22c55e;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600">List Your Property for Rent</a>
+    </p>
+  `;
+}else{
+  renderRentProperties(rentProps);
+}
+
+// RENDER - EXACT SAME STRUCTURE AS BUY.HTML
+function renderRentProperties(list){
+  feed.innerHTML = "";
+
+  list.forEach(p=>{
+    const card = document.createElement("div");
+    card.className = "rent-card";
+
+    card.innerHTML = `
+      <img src="${p.images?.[0] || 'https://via.placeholder.com/260x180?text=Rental+Property'}">
+
+      <div class="rent-info">
+        <h3>${p.type}</h3>
+        <p>${p.location?.city}, ${p.location?.district || ""}</p>
+
+        <div class="price">₹ ${p.price}/month</div>
+
+        <p>${p.description || "Great rental opportunity! Contact owner for details."}</p>
+
+        <div>
+          <b>Property Details:</b> ${p.size || ""}<br>
+          <b>Facilities:</b>
+          ${Object.values(p.facilities || {}).filter(v => v).join(", ") || "—"}<br>
+          <b>Contact:</b>
+          ${isLoggedIn ? p.contactPhone || p.ownerEmail : "Login to view"}
+        </div>
+
+        <div class="rent-actions">
+          <button onclick="contactOwner('${p.contactPhone || p.ownerEmail || ''}')">
+            Contact Owner
+          </button>
+          <button onclick="saveProperty(${p.id})">Save</button>
+          <button onclick="scheduleVisit(${p.id})">Visit</button>
+        </div>
+      </div>
+    `;
+    feed.appendChild(card);
+  });
+}
+
+// ACTIONS - EXACT SAME AS BUY.HTML
+function contactOwner(contact){
+  if(!isLoggedIn){
+    alert("Please login to contact owner");
+    location.href = "login.html";
+    return;
+  }
+  if(contact.includes('@')){
+    location.href = `mailto:${contact}`;
+  } else {
+    window.open(`https://wa.me/91${contact.replace(/[^0-9]/g,'')}`, '_blank');
+  }
+}
+
+function saveProperty(id){
+  if(!isLoggedIn){
+    alert("Please login to save property");
+    location.href = "login.html";
+    return;
+  }
+
+  user.saved = user.saved || [];
+  if(!user.saved.includes(id)){
+    user.saved.push(id);
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let index = users.findIndex(u => u.id === user.id);
+    if(index !== -1) users[index] = user;
+    localStorage.setItem("users", JSON.stringify(users));
+    alert("Property saved 💾");
+  }else{
+    alert("Already saved");
+  }
+}
+
+function scheduleVisit(id){
+  if(!isLoggedIn){
+    alert("Please login to schedule visit");
+    location.href = "login.html";
+    return;
+  }
+  alert("Visit scheduled for property ID: " + id);
+}
+
+function logout(){
+  localStorage.removeItem("loggedInUser");
+  localStorage.removeItem("isLoggedIn");
+  location.href = "login.html";
+}
 </script>
 
 </body>

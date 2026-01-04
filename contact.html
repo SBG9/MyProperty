@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Contact Us | MyProperty</title>
+
+<style>
+* {margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#f5f7fb 0%,#e2e8f0 100%);min-height:100vh}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 40px;background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;box-shadow:0 4px 20px rgba(0,0,0,0.1);position:sticky;top:0;z-index:100}
+.navbar .logo{font-size:28px;font-weight:700}
+.navbar nav a{color:#00ffd9;text-decoration:none;margin-left:25px;font-weight:600;font-size:16px;transition:all .3s}
+.navbar nav a:hover{color:#22c55e;transform:translateY(-2px)}
+.container{max-width:1200px;margin:0 auto;padding:40px 20px}
+
+/* HERO SECTION */
+.hero{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;padding:80px 0;border-radius:0 0 30px 30px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#00ffd9,#22c55e,#00ffd9)}
+.hero-content{max-width:800px;margin:0 auto;text-align:center}
+.hero h1{font-size:48px;font-weight:800;margin-bottom:20px;line-height:1.2}
+.hero p{font-size:20px;margin-bottom:30px;opacity:0.95}
+.cta-btn{display:inline-block;padding:18px 40px;background:linear-gradient(45deg,#22c55e,#16a34a);color:#fff;text-decoration:none;border-radius:50px;font-size:18px;font-weight:700;box-shadow:0 10px 30px rgba(34,197,94,0.4);transition:all .3s}
+.cta-btn:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(34,197,94,0.5)}
+
+/* CONTACT CARDS */
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:30px;margin:60px 0}
+.contact-card{padding:40px;background:#fff;border-radius:25px;box-shadow:0 20px 60px rgba(0,0,0,0.1);text-align:center;transition:all .3s;position:relative;overflow:hidden}
+.contact-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#00ffd9,#22c55e)}
+.contact-card:hover{transform:translateY(-10px);box-shadow:0 30px 80px rgba(0,0,0,0.15)}
+.contact-icon{font-size:64px;margin-bottom:20px}
+.contact-card h3{font-size:28px;color:#0f172a;margin-bottom:15px;font-weight:700}
+.contact-card p{font-size:18px;color:#64748b;margin-bottom:25px;line-height:1.6}
+.contact-link{display:inline-block;padding:12px 30px;background:#f8fafc;border:2px solid #e5e7eb;border-radius:50px;font-weight:600;color:#2563eb;transition:all .3s;font-size:16px}
+.contact-link:hover{background:#2563eb;color:#fff;border-color:#2563eb;transform:translateY(-2px)}
+
+/* FORM SECTION */
+.form-section{background:linear-gradient(135deg,#f8fafc,#f1f5f9);padding:80px 0;border-radius:30px;margin:60px 0;overflow:hidden}
+.form-container{max-width:700px;margin:0 auto;background:#fff;padding:50px;border-radius:25px;box-shadow:0 20px 60px rgba(0,0,0,0.1)}
+.form-container h2{font-size:32px;color:#0f172a;margin-bottom:30px;text-align:center}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;margin-bottom:30px}
+.form-group input,.form-group textarea{padding:18px;border:2px solid #e5e7eb;border-radius:15px;font-size:16px;font-family:inherit;transition:all .3s;width:100%}
+.form-group input:focus,.form-group textarea:focus{outline:none;border-color:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,0.1);transform:translateY(-2px)}
+.form-group textarea{min-height:150px;resize:vertical}
+.form-group label{display:block;margin-bottom:8px;font-weight:600;color:#374151;font-size:15px}
+.submit-btn{width:100%;padding:20px;background:linear-gradient(45deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:15px;font-size:20px;font-weight:700;cursor:pointer;transition:all .3s;box-shadow:0 10px 30px rgba(34,197,94,0.4)}
+.submit-btn:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(34,197,94,0.5)}
+.submit-btn:active{transform:translateY(-1px)}
+
+/* MAP SECTION */
+.map-section{padding:80px 0;background:#fff}
+.map-container{height:400px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:25px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:600;margin:40px 0}
+.map-container iframe{width:100%;height:100%;border-radius:25px;border:none}
+
+/* FOOTER */
+.footer{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:40px 0 20px;text-align:center}
+.footer-content{max-width:1200px;margin:0 auto;padding:0 20px}
+.footer-links{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin:20px 0}
+.footer-links a{color:#00ffd9;text-decoration:none;font-weight:600;font-size:16px;transition:all .3s}
+.footer-links a:hover{color:#22c55e}
+.footer p{opacity:0.8;margin-top:10px}
+
+/* RESPONSIVE */
+@media (max-width:768px){
+  .navbar{padding:12px 20px}
+  .navbar .logo{font-size:22px}
+  .hero{padding:60px 20px}
+  .hero h1{font-size:36px}
+  .hero p{font-size:16px}
+  .contact-grid{grid-template-columns:1fr;gap:20px}
+  .form-grid{grid-template-columns:1fr}
+  .footer-links{gap:15px}
+  .footer-links a{font-size:14px}
+}
+
+/* ANIMATIONS */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(50px)}to{opacity:1;transform:translateY(0)}}
+.fade-in-up{animation:fadeInUp 0.8s ease-out forwards}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR - PERFECT MATCH -->
+<header class="navbar">
+  <div class="logo"><b>MyProperty</b></div>
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="buy.html">🏠 Buy</a>
+    <a href="rent.html">🏠 Rent</a>
+    <a href="add-property.html">➕ Add Property</a>
+    <a href="dashboard.html">📊 Dashboard</a>
+    <a href="contact.html">📞 Contact</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero fade-in-up">
+  <div class="hero-content">
+    <h1>📞 Get In Touch</h1>
+    <p>Have questions about properties? Need expert advice? Our team is ready to help you find your dream home or investment.</p>
+    <a href="#contact-form" class="cta-btn">Start Your Journey →</a>
+  </div>
+</section>
+
+<!-- CONTACT INFO -->
+<section class="container">
+  <div class="contact-grid">
+    <div class="contact-card fade-in-up">
+      <div class="contact-icon">📧</div>
+      <h3>Email Support</h3>
+      <p>Reach our property experts anytime for personalized assistance and property recommendations.</p>
+      <a href="mailto:support@myproperty.com" class="contact-link">support@myproperty.com</a>
+    </div>
+    
+    <div class="contact-card fade-in-up">
+      <div class="contact-icon">📱</div>
+      <h3>Phone Support</h3>
+      <p>Call our dedicated helpline for immediate assistance with property search and queries.</p>
+      <a href="tel:+919876543210" class="contact-link">+91 98765 43210</a>
+    </div>
+    
+    <div class="contact-card fade-in-up">
+      <div class="contact-icon">📍</div>
+      <h3>Visit Us</h3>
+      <p>Main Office - Kolhapur, Maharashtra. Serving properties across entire Maharashtra region.</p>
+      <a href="https://maps.google.com" target="_blank" class="contact-link">View on Map</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT FORM -->
+<section class="form-section" id="contact-form">
+  <div class="form-container fade-in-up">
+    <h2>💬 Send Us a Message</h2>
+    <form onsubmit="submitContact(event)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="contactName" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="contactPhone">
+        </div>
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" id="contactEmail" required>
+        </div>
+        <div class="form-group">
+          <label>Property Type</label>
+          <select id="propertyType">
+            <option value="">Select Type</option>
+            <option>Flat/Apartment</option>
+            <option>Independent House</option>
+            <option>Plot/Land</option>
+            <option>Commercial</option>
+            <option>Agricultural</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Your Message *</label>
+        <textarea id="contactMessage" placeholder="Tell us about your property needs, budget, location preference..." required></textarea>
+      </div>
+      
+      <button type="submit" class="submit-btn">🚀 Send Message</button>
+    </form>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="map-section container">
+  <div class="map-container">
+    <p>🗺️ Interactive map coming soon - Serving Kolhapur & Maharashtra</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="buy.html">Buy Properties</a>
+      <a href="rent.html">Rent Properties</a>
+      <a href="add-property.html">List Property</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <p>© 2025 MyProperty - Kolhapur's Premier Property Portal | Serving Maharashtra</p>
+  </div>
+</footer>
+
+<script>
+// ================= ADMIN COMPATIBLE - SAVES TO "contacts" =================
+let contacts = JSON.parse(localStorage.getItem("contacts") || "[]");
+
+function submitContact(e) {
+  e.preventDefault();
+  
+  const contact = {
+    id: Date.now(),
+    name: document.getElementById("contactName").value,
+    phone: document.getElementById("contactPhone").value,
+    email: document.getElementById("contactEmail").value,
+    propertyType: document.getElementById("propertyType").value,
+    message: document.getElementById("contactMessage").value,
+    timestamp: Date.now(),
+    status: "pending"
+  };
+  
+  // SAVE TO ADMIN COMPATIBLE FORMAT
+  contacts.unshift(contact);
+  localStorage.setItem("contacts", JSON.stringify(contacts));
+  
+  // SUCCESS
+  alert("✅ Thank you! Your message has been sent. We'll contact you within 24 hours.");
+  e.target.reset();
+  
+  console.log("Contact saved:", contact);
+}
+
+// ================= SMOOTH SCROLL =================
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    document.querySelector(this.getAttribute('href')).scrollIntoView({
+      behavior: 'smooth'
+    });
+  });
+});
+
+// ================= FORM FOCUS ANIMATIONS =================
+document.querySelectorAll('.form-group input, .form-group textarea, .form-group select').forEach(input => {
+  input.addEventListener('focus', function() {
+    this.parentElement.style.transform = 'scale(1.02)';
+  });
+  input.addEventListener('blur', function() {
+    this.parentElement.style.transform = 'scale(1)';
+  });
+});
+</script>
+
+</body>
+</html>

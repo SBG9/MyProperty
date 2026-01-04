@@ -3,158 +3,437 @@
 <head>
 <meta charset="UTF-8">
 <title>Settings | MyProperty</title>
-
 <style>
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fb}
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 40px;background:#0f172a;color:#fff}
-.navbar a{color:#00ffd9;text-decoration:none;margin-left:18px}
-.container{max-width:1100px;margin:40px auto}
-.card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,.1);margin-bottom:20px}
-.card h3{margin-top:0;color:#2563eb}
-input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:6px;border:1px solid #ccc}
-button{background:#22c55e;border:none;color:#fff;cursor:pointer}
-.toggle-label{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding:10px;background:#f1f5f9;border-radius:8px}
-footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:40px}
-.readonly{background:#e5e7eb}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 40px;background:#0f172a;color:#fff;flex-wrap:wrap}
+.navbar a{color:#00ffd9;text-decoration:none;margin-left:18px;font-weight:600}
+.container{max-width:1200px;margin:40px auto;padding:0 15px}
+
+/* SETTINGS LAYOUT */
+.settings-grid{display:grid;grid-template-columns:1fr 380px;gap:25px;margin-bottom:30px}
+.settings-main{background:#fff;padding:25px;border-radius:12px;box-shadow:0 0 12px rgba(0,0,0,.1)}
+.settings-sidebar{background:#fff;padding:25px;border-radius:12px;box-shadow:0 0 12px rgba(0,0,0,.1)}
+
+/* SECTION HEADERS */
+.section-title{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid #f1f5f9}
+.section-title h3{margin:0;font-size:22px;color:#0f172a}
+.section-icon{font-size:24px}
+
+/* FORM ELEMENTS */
+.form-group{margin-bottom:18px}
+.form-group label{display:block;margin-bottom:6px;color:#374151;font-weight:600;font-size:14px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px;border:2px solid #e5e7eb;border-radius:8px;font-size:15px;box-sizing:border-box;transition:all .2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.1)}
+.form-group textarea{min-height:80px;resize:vertical}
+.readonly{background:#f8fafc;color:#64748b;border-color:#d1d5db}
+
+/* TOGGLES */
+.toggle-row{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#f8fafc;border-radius:8px;margin-bottom:12px}
+.toggle-label{font-weight:600;color:#374151}
+
+/* BUTTONS */
+.btn-primary{background:#22c55e;color:#fff;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-size:15px;font-weight:600;transition:.2s;margin-top:10px}
+.btn-primary:hover{background:#16a34a}
+.btn-danger{background:#ef4444;color:#fff;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-size:15px;font-weight:600;transition:.2s;width:100%;margin-top:15px}
+.btn-danger:hover{background:#dc2626}
+.btn-secondary{background:#6b7280;color:#fff;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-size:14px}
+
+/* SAVED PROPERTIES LIST */
+.saved-properties-list{max-height:400px;overflow-y:auto}
+.saved-item{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#f8fafc;border-radius:8px;margin-bottom:10px;transition:.2s}
+.saved-item:hover{background:#f1f5f9}
+.saved-img{width:60px;height:60px;border-radius:6px;object-fit:cover}
+.saved-info{flex:1;margin-left:12px}
+.saved-title{font-weight:600;color:#0f172a;margin-bottom:4px}
+.saved-price{color:#2563eb;font-weight:600;font-size:16px}
+.saved-remove{color:#ef4444;cursor:pointer;font-size:18px;font-weight:bold}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:15px;margin:20px 0}
+.stat-item{background:#f8fafc;padding:15px;border-radius:10px;text-align:center}
+.stat-number{font-size:20px;font-weight:bold;color:#2563eb;margin-bottom:4px}
+.stat-label{color:#64748b;font-size:12px}
+
+/* QUICK ACTIONS */
+.quick-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.quick-actions a{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:#2563eb;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;transition:.2s}
+.quick-actions a:hover{background:#1d4ed8}
+
+/* FOOTER LINKS */
+.footer-links{display:flex;flex-wrap:wrap;gap:15px;justify-content:center;padding:20px;background:#fff;border-radius:12px;box-shadow:0 0 12px rgba(0,0,0,.1);margin-top:30px}
+.footer-links a{color:#2563eb;text-decoration:none;font-weight:500;padding:8px 16px;border-radius:6px;transition:.2s}
+.footer-links a:hover{background:#f1f5f9}
+
+/* RESPONSIVE */
+@media (max-width:768px){
+  .settings-grid{grid-template-columns:1fr;gap:20px}
+  .toggle-row{flex-direction:column;align-items:flex-start;gap:10px}
+}
 </style>
 </head>
 
 <body>
 
+<!-- NAVBAR -->
 <header class="navbar">
-  <b>MyProperty</b>
+  <div><b>MyProperty</b></div>
   <nav>
+    <a href="index.html">Home</a>
     <a href="dashboard.html">Dashboard</a>
     <a href="profile.html">Profile</a>
     <a href="my-properties.html">My Properties</a>
+    <a href="saved-properties.html">Saved</a>
     <a href="settings.html">Settings</a>
-    <a href="logout.html">Logout</a>
+    <a href="#" onclick="logout()">Logout</a>
   </nav>
 </header>
 
 <div class="container">
 
-<!-- ACCOUNT INFO -->
-<div class="card">
-  <h3>Account Information</h3>
-  <input id="uname" class="readonly" readonly>
-  <input id="uemail" class="readonly" readonly>
-  <input id="umobile" class="readonly" readonly>
+<!-- SETTINGS LAYOUT -->
+<section class="settings-grid">
+
+  <!-- MAIN SETTINGS -->
+  <div class="settings-main">
+    
+    <!-- ACCOUNT INFO -->
+    <div class="section-title">
+      <span class="section-icon">👤</span>
+      <h3>Account Information</h3>
+    </div>
+    <div class="form-group">
+      <label>Full Name</label>
+      <input id="uname" class="readonly" readonly>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input id="uemail" class="readonly" readonly>
+    </div>
+    <div class="form-group">
+      <label>Mobile</label>
+      <input id="umobile" class="readonly" readonly>
+    </div>
+    <div class="form-group">
+      <label>Member Since</label>
+      <input id="createdDate" class="readonly" readonly>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="section-title">
+      <span class="section-icon">🔒</span>
+      <h3>Security</h3>
+    </div>
+    <div class="form-group">
+      <label>Current Password</label>
+      <input type="password" id="oldPass" placeholder="Enter current password">
+    </div>
+    <div class="form-group">
+      <label>New Password</label>
+      <input type="password" id="newPass" placeholder="Minimum 6 characters">
+    </div>
+    <div class="form-group">
+      <label>Confirm Password</label>
+      <input type="password" id="confirmPass" placeholder="Re-enter new password">
+    </div>
+    <button class="btn-primary" onclick="changePassword()">🔐 Update Password</button>
+
+    <!-- SECURITY QUESTION -->
+    <div style="margin-top:25px">
+      <label style="font-weight:600">Security Question</label>
+      <select id="secQ">
+        <option value="">Select security question</option>
+        <option>Your first school?</option>
+        <option>Your pet's name?</option>
+        <option>Your favourite teacher's name?</option>
+        <option>Your birthplace?</option>
+        <option>Your favourite food?</option>
+        <option>Your childhood nickname?</option>
+      </select>
+      <input id="secA" placeholder="Answer to security question">
+      <button class="btn-primary" onclick="saveSecurity()" style="margin-top:10px">🛡️ Save Security</button>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR - NOTIFICATIONS & SAVED PROPERTIES -->
+  <div class="settings-sidebar">
+    
+    <!-- NOTIFICATIONS -->
+    <div class="section-title">
+      <span class="section-icon">🔔</span>
+      <h3>Notifications</h3>
+    </div>
+    <div class="toggle-row">
+      <span class="toggle-label">Email Notifications</span>
+      <input type="checkbox" id="emailNot">
+    </div>
+    <div class="toggle-row">
+      <span class="toggle-label">SMS Notifications</span>
+      <input type="checkbox" id="smsNot">
+    </div>
+    <div class="toggle-row">
+      <span class="toggle-label">App Push Notifications</span>
+      <input type="checkbox" id="pushNot">
+    </div>
+    <button class="btn-primary" onclick="saveNotifications()" style="margin-top:15px">Save Notification Settings</button>
+
+    <!-- LANGUAGE -->
+    <div class="section-title" style="margin-top:25px">
+      <span class="section-icon">🌐</span>
+      <h3>Language & Region</h3>
+    </div>
+    <div class="form-group">
+      <label>Language</label>
+      <select id="lang">
+        <option>English</option>
+        <option>हिंदी</option>
+        <option>मराठी</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Country</label>
+      <select id="country">
+        <option>India (+91)</option>
+      </select>
+    </div>
+    <button class="btn-primary" onclick="saveLanguage()">Save Language</button>
+
+    <!-- SAVED PROPERTIES -->
+    <div class="section-title" style="margin-top:25px">
+      <span class="section-icon">❤️</span>
+      <h3>Saved Properties ({{savedCount}})</h3>
+    </div>
+    <div class="saved-properties-list" id="savedPropertiesList">
+      <!-- Saved properties will load here -->
+    </div>
+    <button class="btn-danger" onclick="clearAllSaved()" id="clearAllBtn" style="display:none">🗑️ Clear All Saved</button>
+
+  </div>
+</section>
+
+<!-- ACCOUNT ACTIONS -->
+<div class="card" style="max-width:600px;margin:0 auto 30px">
+  <div class="section-title" style="justify-content:center">
+    <span class="section-icon">⚠️</span>
+    <h3>Account Actions</h3>
+  </div>
+  <div class="quick-actions">
+    <a href="#" onclick="downloadData()">📥 Download My Data</a>
+    <a href="#" onclick="showDeleteAccount()">🗑️ Delete Account</a>
+    <a href="profile.html">✏️ Edit Profile</a>
+  </div>
 </div>
 
-<!-- CHANGE PASSWORD -->
-<div class="card">
-  <h3>Change Password</h3>
-  <input type="password" id="oldPass" placeholder="Current Password">
-  <input type="password" id="newPass" placeholder="New Password">
-  <input type="password" id="confirmPass" placeholder="Confirm New Password">
-  <button onclick="changePassword()">Update Password</button>
-</div>
-
-<!-- SECURITY QUESTION -->
-<div class="card">
-  <h3>Security Question</h3>
-  <select id="secQ">
-    <option value="">Select question</option>
-    <option>Your first school?</option>
-    <option>Your pet’s name?</option>
-    <option>Your favorite city?</option>
-  </select>
-  <input id="secA" placeholder="Answer">
-  <button onclick="saveSecurity()">Save Security</button>
-</div>
-
-<!-- NOTIFICATIONS -->
-<div class="card">
-  <h3>Notifications</h3>
-  <label class="toggle-label">Email Notifications
-    <input type="checkbox" id="emailNot">
-  </label>
-  <label class="toggle-label">SMS Notifications
-    <input type="checkbox" id="smsNot">
-  </label>
-  <button onclick="saveNotifications()">Save Preferences</button>
-</div>
-
-<!-- LANGUAGE -->
-<div class="card">
-  <h3>Language</h3>
-  <select id="lang">
-    <option>English</option>
-    <option>Marathi</option>
-  </select>
-  <button onclick="saveLang()">Save Language</button>
+<!-- QUICK LINKS FOOTER -->
+<div class="footer-links">
+  <a href="dashboard.html">📊 Dashboard</a>
+  <a href="profile.html">👤 Profile</a>
+  <a href="my-properties.html">🏠 My Properties</a>
+  <a href="add-property.html">➕ Add Property</a>
+  <a href="saved-properties.html">❤️ Saved Properties</a>
+  <a href="enquiries.html">💬 Enquiries</a>
 </div>
 
 </div>
 
-<footer>
-© 2025 MyProperty
+<!-- DELETE CONFIRMATION MODAL -->
+<div id="deleteModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000">
+  <div style="background:#fff;margin:100px auto;width:90%;max-width:500px;border-radius:12px;overflow:hidden">
+    <div style="padding:25px">
+      <h3 style="color:#ef4444;margin-top:0">Delete Account</h3>
+      <p>This will permanently delete your account and all data.</p>
+      <div style="display:flex;gap:15px;margin-top:25px">
+        <button class="btn-danger" onclick="deleteAccount()" style="flex:1">Yes, Delete</button>
+        <button class="btn-primary" onclick="hideDeleteModal()" style="flex:1">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer style="text-align:center;padding:20px;background:#0f172a;color:#fff;margin-top:40px">
+Contact Support: <a href="mailto:support@myproperty.com" style="color:#00ffd9">support@myproperty.com</a> | +91 98765 43210<br>
+© 2025 MyProperty - Advanced Settings
 </footer>
 
 <script>
-/* LOGIN CHECK */
-let user = JSON.parse(localStorage.getItem('user'));
-if(!user){
-  location.href = "login.html";
+// ========== LOGIN CHECK - SAME AS YOUR SYSTEM ==========
+const isLoggedIn = localStorage.getItem("isLoggedIn") === "yes";
+let user = JSON.parse(localStorage.getItem("loggedInUser"));
+let users = JSON.parse(localStorage.getItem("users")) || [];
+
+if(!isLoggedIn || !user){
+  window.location.replace("login.html");
 }
 
-/* LOAD USER DATA */
-uname.value  = user.name || "";
-uemail.value = user.email || "";
-umobile.value = user.mobile || "";
+// ========== LOAD DATA ==========
+function loadSettingsData(){
+  // Account info
+  document.getElementById('uname').value = user.name || '';
+  document.getElementById('uemail').value = user.email || '';
+  document.getElementById('umobile').value = user.mobile || '';
+  document.getElementById('createdDate').value = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A';
+  
+  // Security
+  document.getElementById('secQ').value = user.security?.question || '';
+  document.getElementById('secA').value = user.security?.answer || '';
+  
+  // Notifications
+  document.getElementById('emailNot').checked = user.notifications?.email !== false;
+  document.getElementById('smsNot').checked = user.notifications?.sms !== false;
+  document.getElementById('pushNot').checked = user.notifications?.push !== false;
+  
+  // Language
+  document.getElementById('lang').value = user.language || 'English';
+  
+  // Load saved properties
+  loadSavedProperties();
+}
+loadSettingsData();
 
-secQ.value = user.secQ || "";
-secA.value = user.secA || "";
-emailNot.checked = user.emailNot || false;
-smsNot.checked = user.smsNot || false;
-lang.value = user.lang || "English";
+// ========== UPDATE USER FUNCTION ==========
+function updateUser(updatedUser){
+  localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+  let index = users.findIndex(u => u.id === updatedUser.id);
+  if(index !== -1){
+    users[index] = updatedUser;
+    localStorage.setItem("users", JSON.stringify(users));
+  }
+}
 
-/* CHANGE PASSWORD */
+// ========== PASSWORD CHANGE ==========
 function changePassword(){
   if(oldPass.value !== user.password){
-    alert("Current password incorrect");
+    alert("❌ Current password is incorrect!");
     return;
   }
   if(newPass.value.length < 6){
-    alert("Password must be at least 6 characters");
+    alert("❌ Password must be at least 6 characters!");
     return;
   }
   if(newPass.value !== confirmPass.value){
-    alert("Passwords do not match");
+    alert("❌ Passwords do not match!");
     return;
   }
+  
   user.password = newPass.value;
-  localStorage.setItem("user", JSON.stringify(user));
-  alert("Password updated successfully");
+  updateUser(user);
+  alert("✅ Password updated successfully!");
   oldPass.value = newPass.value = confirmPass.value = "";
 }
 
-/* SECURITY */
+// ========== SECURITY QUESTION ==========
 function saveSecurity(){
   if(!secQ.value || !secA.value){
-    alert("Please select question and answer");
+    alert("❌ Please select a question and enter answer!");
     return;
   }
-  user.secQ = secQ.value;
-  user.secA = secA.value;
-  localStorage.setItem("user", JSON.stringify(user));
-  alert("Security settings saved");
+  user.security = { question: secQ.value, answer: secA.value };
+  updateUser(user);
+  alert("✅ Security settings saved!");
 }
 
-/* NOTIFICATIONS */
+// ========== NOTIFICATIONS ==========
 function saveNotifications(){
-  user.emailNot = emailNot.checked;
-  user.smsNot = smsNot.checked;
-  localStorage.setItem("user", JSON.stringify(user));
-  alert("Notification preferences saved");
+  user.notifications = {
+    email: emailNot.checked,
+    sms: smsNot.checked,
+    push: pushNot.checked
+  };
+  updateUser(user);
+  alert("✅ Notification preferences saved!");
 }
 
-/* LANGUAGE */
-function saveLang(){
-  user.lang = lang.value;
-  localStorage.setItem("user", JSON.stringify(user));
-  alert("Language updated");
+// ========== LANGUAGE ==========
+function saveLanguage(){
+  user.language = lang.value;
+  updateUser(user);
+  alert("✅ Language settings updated!");
+}
+
+// ========== SAVED PROPERTIES ==========
+function loadSavedProperties(){
+  const savedProperties = user.savedProperties || [];
+  const list = document.getElementById('savedPropertiesList');
+  const clearBtn = document.getElementById('clearAllBtn');
+  
+  if(savedProperties.length === 0){
+    list.innerHTML = '<p style="text-align:center;color:#64748b;padding:40px 20px">No saved properties found.<br><a href="dashboard.html" style="color:#2563eb">Browse properties →</a></p>';
+    clearBtn.style.display = 'none';
+    return;
+  }
+  
+  clearBtn.style.display = 'block';
+  list.innerHTML = savedProperties.map((property, index) => `
+    <div class="saved-item">
+      <img src="${property.images?.[0] || 'https://via.placeholder.com/60'}" class="saved-img" alt="${property.title}">
+      <div class="saved-info">
+        <div class="saved-title">${property.title || property.type}</div>
+        <div class="saved-price">₹${property.price || 'N/A'}</div>
+        <div style="font-size:12px;color:#64748b">${property.location || 'N/A'}</div>
+      </div>
+      <span class="saved-remove" onclick="removeSavedProperty(${index})" title="Remove">×</span>
+    </div>
+  `).join('');
+}
+
+// ========== REMOVE SAVED PROPERTY ==========
+function removeSavedProperty(index){
+  if(user.savedProperties && user.savedProperties[index]){
+    user.savedProperties.splice(index, 1);
+    updateUser(user);
+    loadSavedProperties();
+    alert("✅ Property removed from saved list!");
+  }
+}
+
+// ========== CLEAR ALL SAVED ==========
+function clearAllSaved(){
+  if(confirm("Are you sure you want to remove ALL saved properties?")){
+    user.savedProperties = [];
+    updateUser(user);
+    loadSavedProperties();
+    alert("🗑️ All saved properties cleared!");
+  }
+}
+
+// ========== ACCOUNT ACTIONS ==========
+function downloadData(){
+  const dataStr = JSON.stringify(user, null, 2);
+  const dataBlob = new Blob([dataStr], {type: 'application/json'});
+  const url = URL.createObjectURL(dataBlob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `myproperty-data-${user.mobile}.json`;
+  link.click();
+  alert("📥 Your account data has been downloaded!");
+}
+
+function showDeleteAccount(){
+  document.getElementById('deleteModal').style.display = 'block';
+}
+
+function hideDeleteModal(){
+  document.getElementById('deleteModal').style.display = 'none';
+}
+
+function deleteAccount(){
+  if(confirm("This action cannot be undone! Delete account?")){
+    users = users.filter(u => u.id !== user.id);
+    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("isLoggedIn");
+    alert("👋 Account deleted. Redirecting to homepage...");
+    window.location.replace("index.html");
+  }
+}
+
+// ========== LOGOUT ==========
+function logout(){
+  localStorage.removeItem("loggedInUser");
+  localStorage.removeItem("isLoggedIn");
+  sessionStorage.clear();
+  window.location.replace("login.html");
 }
 </script>
 

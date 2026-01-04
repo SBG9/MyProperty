@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Property Request | MyProperty</title>
+
+<style>
+body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0}
+.navbar{display:flex;justify-content:space-between;align-items:center;
+padding:15px 20px;background:#0f172a}
+.navbar a{color:#00ffd9;text-decoration:none;margin-left:15px;font-weight:600}
+
+.container{max-width:1200px;margin:30px auto;padding:15px}
+
+.card{
+background:#fff;padding:22px;border-radius:14px;
+box-shadow:0 0 12px rgba(0,0,0,.1);
+margin-bottom:20px
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:14px
+}
+
+input,select,textarea,button{
+padding:10px;border-radius:6px;border:1px solid #ccc;width:100%;
+box-sizing:border-box
+}
+
+button{background:#22c55e;color:#fff;border:none;cursor:pointer}
+button.secondary{background:#2563eb}
+button.gray{background:#64748b}
+
+.req-title{font-size:18px;font-weight:bold;color:#0f172a}
+.req-meta{color:#555;font-size:14px;margin:4px 0}
+.req-actions{margin-top:12px}
+
+.hidden{display:none}
+.mask{letter-spacing:2px}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+<b style="color:white">MyProperty</b>
+<nav>
+<a href="index.html">Home</a>
+<a href="buy.html">Buy</a>
+<a href="rent.html">Rent</a>
+<a href="add-property.html">Add Property</a>
+<a href="contact.html">Contact</a>
+
+
+</nav>
+</header>
+
+<div class="container">
+
+<!-- NO RESULT -->
+<div class="card">
+<h2>No Results Found</h2>
+<p>Didn’t find what you’re looking for? Give us your requirement and we’ll notify you.</p>
+<button onclick="toggleForm()">👉 Post Your Requirement</button>
+</div>
+
+<!-- FORM -->
+<div class="card hidden" id="reqForm">
+<h3>Post Your Property Requirement</h3>
+
+<div class="form-grid">
+<input id="fullName" placeholder="Full Name *">
+<input id="location" placeholder="Location *">
+
+<select id="type">
+<option value="">Property Type *</option>
+<option>Flat</option>
+<option>House</option>
+<option>Shop</option>
+<option>Office</option>
+<option>Agricultural Land</option>
+<option>Other</option>
+</select>
+
+<select id="purpose">
+<option value="">Purpose *</option>
+<option>Buy</option>
+<option>Rent</option>
+<option>Lease</option>
+<option>Other</option>
+</select>
+
+<input id="budget" placeholder="Budget (₹ / $)">
+<input id="size" placeholder="Size (BHK / Sq ft)">
+<input id="moveDate" type="date">
+</div>
+
+<br>
+<textarea id="details" rows="3"
+placeholder="Additional details (Near metro, parking, family only...)"></textarea>
+
+<br><br>
+<b>Contact (any one required)</b><br>
+<label><input type="checkbox" id="call"> Call</label>
+<label><input type="checkbox" id="whatsapp"> WhatsApp</label>
+<label><input type="checkbox" id="email"> Email</label>
+
+<br><br>
+<input id="callNumber" class="hidden" placeholder="Phone with country code">
+<input id="whatsappNumber" class="hidden" placeholder="WhatsApp number">
+<input id="emailId" class="hidden" placeholder="Email address">
+
+<br><br>
+<button onclick="postRequirement()">Submit Requirement</button>
+</div>
+
+<h2>Property Demand / Buyer Requests</h2>
+<div id="reqList"></div>
+
+</div>
+
+<script>
+/* ===== LOGIN CHECK ===== */
+const loggedIn = localStorage.getItem("loggedIn")==="yes";
+
+/* ===== DOM ===== */
+const reqList=document.getElementById("reqList");
+const reqForm=document.getElementById("reqForm");
+
+const fullName=document.getElementById("fullName");
+const locationField=document.getElementById("location");
+const type=document.getElementById("type");
+const purpose=document.getElementById("purpose");
+const budget=document.getElementById("budget");
+const size=document.getElementById("size");
+const moveDate=document.getElementById("moveDate");
+const details=document.getElementById("details");
+
+const call=document.getElementById("call");
+const whatsapp=document.getElementById("whatsapp");
+const email=document.getElementById("email");
+
+const callNumber=document.getElementById("callNumber");
+const whatsappNumber=document.getElementById("whatsappNumber");
+const emailId=document.getElementById("emailId");
+
+/* ===== CONTACT TOGGLE ===== */
+[call,whatsapp,email].forEach(c=>{
+c.onchange=()=>{
+callNumber.classList.toggle("hidden",!call.checked);
+whatsappNumber.classList.toggle("hidden",!whatsapp.checked);
+emailId.classList.toggle("hidden",!email.checked);
+};
+});
+
+/* ===== DATA ===== */
+let requirements=JSON.parse(localStorage.getItem("requirements"))||[];
+
+/* ===== FORM TOGGLE ===== */
+function toggleForm(){
+reqForm.classList.toggle("hidden");
+}
+
+/* ===== POST ===== */
+function postRequirement(){
+if(!fullName.value||!locationField.value||!type.value||!purpose.value){
+alert("Fill all required fields");
+return;
+}
+
+if(!call.checked&&!whatsapp.checked&&!email.checked){
+alert("Provide at least one contact");
+return;
+}
+
+const req={
+id:Date.now(),
+name:fullName.value,
+location:locationField.value,
+type:type.value,
+purpose:purpose.value,
+budget:budget.value,
+size:size.value,
+moveDate:moveDate.value,
+details:details.value,
+contact:{
+phone:call.checked?callNumber.value:"",
+whatsapp:whatsapp.checked?whatsappNumber.value:"",
+email:email.checked?emailId.value:""
+},
+postedAt:Date.now()
+};
+
+requirements.unshift(req);
+localStorage.setItem("requirements",JSON.stringify(requirements));
+
+reqForm.querySelectorAll("input,textarea,select").forEach(e=>e.value="");
+call.checked=whatsapp.checked=email.checked=false;
+callNumber.classList.add("hidden");
+whatsappNumber.classList.add("hidden");
+emailId.classList.add("hidden");
+
+reqForm.classList.add("hidden");
+render();
+}
+
+/* ===== RENDER ===== */
+function render(){
+reqList.innerHTML="";
+requirements.forEach(r=>{
+const phone=r.contact.phone?(loggedIn?r.contact.phone:"+91 xxxxxxxx"):"";
+const email=r.contact.email?(loggedIn?r.contact.email:"xxxx@xxxx"):"";
+const whatsapp=r.contact.whatsapp?(loggedIn?r.contact.whatsapp:"xxxxxxxx"):"";
+
+const div=document.createElement("div");
+div.className="card";
+div.innerHTML=`
+<div class="req-title">🔍 Looking for ${r.size||""} ${r.type} (${r.purpose})</div>
+<div class="req-meta">📍 ${r.location}</div>
+<div class="req-meta">💰 ${r.budget||"Flexible"}</div>
+<div class="req-meta">📅 ${r.moveDate||"Flexible"}</div>
+<div class="req-meta">🔔 ${timeAgo(r.postedAt)}</div>
+<div class="req-meta">
+📞 ${phone}<br>
+💬 ${whatsapp}<br>
+✉ ${email}
+</div>
+<div class="req-actions">
+<button class="gray viewBtn">View Contact</button>
+<button class="secondary" onclick="haveProperty(${r.id})">I Have This Property</button>
+</div>
+`;
+reqList.appendChild(div);
+});
+
+document.querySelectorAll(".viewBtn").forEach(b=>{
+b.onclick=()=>{
+if(!loggedIn) location.href="login.html";
+};
+});
+}
+
+/* ===== SELLER ===== */
+function haveProperty(id){
+localStorage.setItem("activeRequirement",id);
+location.href="add-property.html";
+}
+
+/* ===== TIME ===== */
+function timeAgo(ts){
+const d=Math.floor((Date.now()-ts)/86400000);
+return d===0?"Today":d+" days ago";
+}
+
+render();
+</script>
+
+</body>
+</html>
