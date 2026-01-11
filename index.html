@@ -85,16 +85,7 @@ footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:2
         <button class="search-btn" id="searchBtn">Search</button>
       </div>
 
-      <!-- <div class="live-req-long" onclick="location.href='userrequirement.html'">
-  <div class="live-req-left">
-    🔥 Live Requirements
-  </div>
-
-  <div class="live-req-right">
-    <span id="reqCount">0</span>
-    <small>users waiting</small>
-  </div>
-</div> -->
+      
 <div class="live-mini-card" onclick="location.href='userrequirement.html'">
   <div class="mini-title">🔥 Live Requirements</div>
   <div class="mini-count" id="reqCount">0</div>
@@ -166,8 +157,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
   const listBtn = document.getElementById("listPropertyBtn");
   const feed = document.getElementById("propertyFeed");
 
-  // const isLoggedIn = localStorage.getItem("loggedIn") === "yes";------------
-  // const user = JSON.parse(localStorage.getItem("user"));
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "yes";
   const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
@@ -178,10 +167,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
       <a href="index.html">Home</a>
       <a href="buy.html">Buy</a>
       <a href="rent.html">Rent</a>
-      <a href="login.html" class="btn">Register Property</a>
-      <a href="login.html">Login</a>
+      <a href="auth.html" class="btn">Register Property</a>
+      <a href="auth.html">Login</a> 
     `;
-    listBtn.onclick = ()=>location.href="login.html";
+    listBtn.onclick = ()=>location.href="auth.html"; //11 jan //11jan up
   }else{
     nav.innerHTML = `
       <a href="index.html">Home</a>
@@ -219,7 +208,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
         <div class="actions">
           <button onclick="viewContact('${p.contactPhone || ''}')">📞 View Contact</button>
           <button onclick="likeProperty()">❤️ Like</button>
-          <button onclick="saveProperty()">💾 Save</button>
+          
+          <button onclick="saveProperty(${p.id})">💾 Save</button>
+
         </div>
       </div>
     `;
@@ -295,7 +286,6 @@ if(reqCountEl){
 
 
 });
-//-----------------------------------------------------------------
 
 /* ---------- ACTIONS ---------- */
 function likeProperty(){
@@ -303,22 +293,41 @@ function likeProperty(){
   if(localStorage.getItem("isLoggedIn") !== "yes")
 {
     alert("Please login first");
-    location.href="login.html";
+    location.href="auth.html"; //11jan
     return;
   }
   alert("❤️ Property liked");
 }
 
-function saveProperty(){
-  // if(localStorage.getItem("loggedIn") !== "yes")----------
-  if(localStorage.getItem("isLoggedIn") !== "yes")
-{
+function saveProperty(id){   //9j newlly added code.
+  if(localStorage.getItem("isLoggedIn") !== "yes"){
     alert("Please login first");
-    location.href="login.html";
+    location.href="auth.html"; //11 jan
     return;
   }
-  alert("💾 Property saved");
+
+  // get logged-in user
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+  if(!user.savedProperties) user.savedProperties = [];
+
+  if(!user.savedProperties.includes(id)){
+    user.savedProperties.push(id);
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+    // update global users array
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    const index = users.findIndex(u => u.id === user.id);
+    if(index !== -1){
+      users[index] = user;
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+
+    alert("💾 Property saved to your list!");
+  } else {
+    alert("💾 Property already saved!");
+  }
 }
+
 
 function viewContact(phone){
   if(!phone){
@@ -328,15 +337,11 @@ function viewContact(phone){
   alert("Contact: " + phone);
 }
 
-// function logout(){---------------
-//   localStorage.removeItem("user");
-//   localStorage.removeItem("loggedIn");
-//   location.href="login.html";
-// }
+// function logout
 function logout(){
   localStorage.removeItem("loggedInUser");
   localStorage.removeItem("isLoggedIn");
-  location.href="login.html";
+  location.href="logout.html";
 }
 
 </script>
@@ -344,3 +349,6 @@ function logout(){
 
 </body>
 </html>
+
+
+<!-- <button onclick="saveProperty()">💾 Save</button> //9j -->

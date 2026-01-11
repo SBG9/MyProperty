@@ -46,7 +46,7 @@ footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:4
   const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
   if(!isLoggedIn || !user){
-    window.location.replace("login.html");
+    window.location.replace("auth.html"); // 11 jan 
   }
 
   // ================= INIT =================
@@ -103,7 +103,7 @@ footer{text-align:center;padding:15px;background:#0f172a;color:#fff;margin-top:4
   function logout(){
     localStorage.removeItem("loggedInUser");
     localStorage.removeItem("isLoggedIn");
-    window.location.replace("login.html");
+    window.location.replace("auth.html");  //11 jan
   }
 </script>
 

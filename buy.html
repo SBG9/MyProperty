@@ -105,14 +105,20 @@ if(isLoggedIn){
     <a href="index.html">Home</a>
     <a href="buy.html">Buy</a>
     <a href="rent.html">Rent</a>
-    <a href="login.html">Login</a>
+    <a href="auth.html">Login</a>
   `;
 }
+//    <a href="auth.html">Login</a> // 10 jan login to auth 
 
 // ================= LOAD BUY PROPERTIES =================
+// const buyProps = properties.filter(p =>         // 9j modify
+//   p.status === "Available" && p.purpose === "Buy"
+// );
+
 const buyProps = properties.filter(p =>
-  p.status === "Available" && p.purpose === "Buy"
+  p.status === "Available" && p.listingType === "Buy"
 );
+
 
 if(buyProps.length === 0){
   feed.innerHTML = `
@@ -170,7 +176,7 @@ function renderBuyProperties(list){
 function contactSeller(phone){
   if(!isLoggedIn){
     alert("Please login to contact seller");
-    location.href = "login.html";
+    location.href = "auth.html";   // 10 jan
     return;
   }
   alert("Seller Contact: " + phone);
@@ -179,24 +185,35 @@ function contactSeller(phone){
 function saveProperty(id){
   if(!isLoggedIn){
     alert("Please login to save property");
-    location.href = "login.html";
+    location.href = "auth.html"; //10 jan
     return;
   }
 
-  user.saved = user.saved || [];
-  if(!user.saved.includes(id)){
-    user.saved.push(id);
+  user.savedProperties = user.savedProperties || [];
+
+  if(!user.savedProperties.includes(id)){
+    user.savedProperties.push(id);
     localStorage.setItem("loggedInUser", JSON.stringify(user));
-    alert("Property saved 💾");
-  }else{
-    alert("Already saved");
+
+    // Update global users array
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    const index = users.findIndex(u => u.id === user.id);
+    if(index !== -1){
+      users[index] = user;
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+
+    alert("💾 Property saved to your list!");
+  } else {
+    alert("💾 Property already saved!");
   }
 }
+
 
 function likeProperty(id){
   if(!isLoggedIn){
     alert("Please login to like property");
-    location.href = "login.html";
+    location.href = "auth.html"; //10 jan 
     return;
   }
   alert("Property liked ❤️");
@@ -205,7 +222,7 @@ function likeProperty(id){
 function logout(){
   localStorage.removeItem("loggedInUser");
   localStorage.removeItem("isLoggedIn");
-  window.location.replace("login.html");
+  window.location.replace("auth.html");//10 jan 
 }
 
 </script>

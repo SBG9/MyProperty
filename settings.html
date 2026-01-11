@@ -263,7 +263,7 @@ let user = JSON.parse(localStorage.getItem("loggedInUser"));
 let users = JSON.parse(localStorage.getItem("users")) || [];
 
 if(!isLoggedIn || !user){
-  window.location.replace("login.html");
+  window.location.replace("auth.html"); // 11 jan
 }
 
 // ========== LOAD DATA ==========
@@ -433,7 +433,7 @@ function logout(){
   localStorage.removeItem("loggedInUser");
   localStorage.removeItem("isLoggedIn");
   sessionStorage.clear();
-  window.location.replace("login.html");
+  window.location.replace("auth.html");  // 11 jan
 }
 </script>
 

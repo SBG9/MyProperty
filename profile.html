@@ -99,7 +99,9 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fb}
       <input type="file" id="avatarInput" accept="image/*" style="display:none">
       <button class="btn-edit" onclick="document.getElementById('avatarInput').click()">📸 Change Photo</button>
       <h1 class="profile-h1" id="profileName">User Name</h1>
-      <p class="profile-subtitle" id="profileType">Property Agent</p>
+      <!-- <p class="profile-subtitle" id="profileType">Property Agent</p> // it is non dinamic (static) //11 jan --> 
+      <p class="profile-subtitle" id="profileType"></p>
+
     </div>
 
     <!-- BASIC INFO -->
@@ -269,11 +271,14 @@ Contact Support: [support@myproperty.com](mailto:support@myproperty.com) | +91 9
 // LOGIN CHECK - SAME AS YOUR SYSTEM
 const user = JSON.parse(localStorage.getItem('loggedInUser'));
 if(!user || localStorage.getItem('isLoggedIn') !== 'yes'){
-  window.location.replace('login.html');
+  window.location.replace('auth.html'); //11 jan
 }
 
 // LOAD PROFILE DATA
 function loadProfileData(){
+
+  document.getElementById('profileType').textContent = user.role || 'Property Owner';  // this is for property type // 11 jan
+
   document.getElementById('profileName').textContent = user.name || 'User';
   document.getElementById('fullName').value = user.name || '';
   document.getElementById('businessName').value = user.businessName || '';
@@ -300,6 +305,8 @@ document.getElementById('avatarInput').addEventListener('change', function(e){
   reader.onload = function(){
     document.getElementById('avatarPreview').src = reader.result;
     user.avatar = reader.result;
+    updateUserData();  // 11 jan for auto update
+
   }
   reader.readAsDataURL(e.target.files[0]);
 });
@@ -331,7 +338,11 @@ function toggleDrawer(){
 
 // SECURITY SETTINGS
 function saveSecurity(){
-  user.password = document.getElementById('newPassword').value;
+  // user.password = document.getElementById('newPassword').value;
+  const newPass = document.getElementById('newPassword').value; // 11 jan for stop empty password
+    if(newPass){
+    user.password = newPass;
+  }
   user.security = {
     question: document.getElementById('securityQuestion').value,
     answer: document.getElementById('securityAnswer').value
@@ -373,7 +384,7 @@ function logout(){
   localStorage.removeItem('loggedInUser');
   localStorage.removeItem('isLoggedIn');
   sessionStorage.clear();
-  window.location.replace('login.html');
+  window.location.replace('auth.html'); //11jan
 }
 </script>
 

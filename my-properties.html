@@ -133,7 +133,7 @@ let users = JSON.parse(localStorage.getItem("users")) || [];
 let properties = JSON.parse(localStorage.getItem("properties")) || [];
 
 if(!isLoggedIn || !user){
-  window.location.replace("login.html");
+  window.location.replace("auth.html");
 }
 
 // user related properties only
@@ -240,8 +240,12 @@ function updateDashboardStats(){
 function logout(){
   localStorage.removeItem("loggedInUser");
   localStorage.removeItem("isLoggedIn");
-  window.location.replace("login.html");
+  window.location.replace("auth.html");  //11 jan
 }
+
+
+//p.status === "Available" ? "Sold" : "Available"  // this line for currect sold propertis auto upadate in home page
+
 </script>
 
 </body>

@@ -77,24 +77,7 @@ textarea{grid-column:span 2;resize:vertical}
   let user = JSON.parse(localStorage.getItem('user'));
   if(!user) location.href='login.html';
 </script> -->
-<!-- <script> //// last modification 3rd modify
-let user = JSON.parse(localStorage.getItem('user'));
-if(!user){
-  window.location.replace("login.html");
-}
-</script> -->
 
-<!-- <script>-------------------------------------------
-let users = JSON.parse(localStorage.getItem("users")) || [];
-let currentUserEmail = localStorage.getItem("currentUser");
-let isLoggedIn = localStorage.getItem("loggedIn") === "yes";
-
-let user = users.find(u => u.email === currentUserEmail);
-
-if(!isLoggedIn || !user){
-  window.location.replace("login.html");
-}
-</script> -->
 <script>
 // ================= LOGIN CHECK =================
 
@@ -103,7 +86,9 @@ let user = JSON.parse(localStorage.getItem("loggedInUser"));
 let users = JSON.parse(localStorage.getItem("users")) || [];
 
 if(!isLoggedIn || !user){
-  window.location.replace("login.html");
+  // window.location.replace("login.html");// 10 jan
+  window.location.replace("auth.html");
+
 }
 
 // ensure properties array exists
@@ -135,6 +120,15 @@ user.properties = user.properties || [];
 <!-- BASIC DETAILS -->
 <h2>Property Details</h2>
 <div class="form-group">
+
+  <select id="listingType" required>   <!--9j modify  -->
+  <option value="">Listing Type</option>
+  <option value="Buy">For Sale</option>
+  <option value="Rent">For Rent</option>
+  <option value="Lease">For Lease</option>
+  </select>
+
+
   <select id="type" required>
     <option value="">Property Type</option>
     <option>Home</option>
@@ -196,20 +190,12 @@ user.properties = user.properties || [];
   </select>
 </div>
 
-<!-- <h2>Facilities</h2>
-<div class="form-group">
-  <select id="parking"><option>Parking</option><option>Available</option><option>No</option></select>
-  <select id="furnish"><option>Furnishing</option><option>Furnished</option><option>Semi</option><option>Unfurnished</option></select>
-  <select id="water"><option>Water</option><option>24x7</option><option>Limited</option></select>
-  <select id="electricity"><option>Electricity</option><option>Available</option><option>No</option></select>
-</div> -->
-
 <!-- MEDIA -->
 <h2>Upload Media</h2>
 <div class="form-group">
   <input type="file" id="images" accept="image/*" multiple placeholder="imeages or photos">
   <input type="file" id="video" accept="video/*" placeholder="video">
-  <input type="file" id="audio" accept="audio/*" placeholder="audio">
+  <!-- <input type="file" id="audio" accept="audio/*" placeholder="audio">   // cometed for remove //9j -->
 </div>
 
 <!-- DESCRIPTION -->
@@ -240,21 +226,39 @@ function fileToBase64(file){
 }
 
 async function saveProperty(e){
+
+  const imagesInput = document.getElementById("images");  // 9j  2 lines for img and aud add
+  const videoInput  = document.getElementById("video");
+
   e.preventDefault();
 
-  let imagesArr = [];
-  for(let f of images.files){
-    imagesArr.push(await fileToBase64(f));
-  }
 
-  let vid = video.files[0] ? await fileToBase64(video.files[0]) : "";
-  let aud = audio.files[0] ? await fileToBase64(audio.files[0]) : "";
+  let imagesArr = [];
+for(let f of imagesInput.files){
+  imagesArr.push(await fileToBase64(f));
+}
+
+let vid = videoInput.files.length > 0
+  ? await fileToBase64(videoInput.files[0])
+  : "";
+
+
+  // let imagesArr = [];   // 9 jan replacement for up side .
+  // for(let f of images.files){
+  //   imagesArr.push(await fileToBase64(f));
+  // }
+
+  // let vid = video.files[0] ? await fileToBase64(video.files[0]) : "";
+  // let aud = audio.files[0] ? await fileToBase64(audio.files[0]) : "";   // 9j for remove audio option
 
   let property = {
     id: Date.now(),
     ownerId: user.id,
     ownerEmail: user.email,
     ownerName: user.name,
+
+    listingType: listingType.value,   // 9j modify
+
 
     type: type.value,
     condition: condition.value,
@@ -279,7 +283,7 @@ async function saveProperty(e){
 
     images: imagesArr,
     video: vid,
-    audio: aud,
+    // audio: aud,   // 9j for remove aud option
 
     description: desc.value,
     contactName: contactName.value,
@@ -318,7 +322,7 @@ async function saveProperty(e){
 function logout(){
   localStorage.removeItem("loggedInUser");
   localStorage.removeItem("isLoggedIn");
-  window.location.replace("login.html");
+  window.location.replace("auth.html");   //10 jan
 }
 </script>
 

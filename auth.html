@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login / Register - MyProperty</title>
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+body{background:#f5f7fb;font-family:Arial,Helvetica,sans-serif}
+.container{max-width:460px;margin:60px auto;padding:20px}
+.card{background:#fff;padding:25px;border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,.1)}
+input,select,button{
+  width:100%;padding:10px;margin-top:10px;
+  border-radius:6px;border:1px solid #ccc;box-sizing:border-box
+}
+button{background:#22c55e;color:#fff;border:none;cursor:pointer}
+button.secondary{background:#2563eb}
+.toggle{text-align:center;margin-bottom:15px}
+.toggle span{cursor:pointer;color:#2563eb;font-weight:bold}
+.hidden{display:none}
+p.forgot{cursor:pointer;color:#2563eb;text-align:center;margin-top:10px}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <div class="logo"><b>MyProperty</b></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="auth.html">Login / Register</a>
+  </nav>
+</header>
+
+<div class="container">
+
+<!-- ================= LOGIN ================= -->
+<div class="card" id="loginCard">
+  <div class="toggle">
+    Login | <span onclick="showRegister()">Register</span>
+  </div>
+
+  <input id="l_email" placeholder="Email / Username (optional)">
+  <input id="l_mobile" placeholder="Mobile Number (required)">
+  <input id="l_password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+
+  <p class="forgot" onclick="showForgot()">Forgot Password?</p>
+</div>
+
+<!-- ================= REGISTER ================= -->
+<div class="card hidden" id="registerCard">
+  <div class="toggle">
+    <span onclick="showLogin()">Login</span> | Register
+  </div>
+
+  <input id="r_name" placeholder="Name">
+  <input id="r_email" placeholder="Email">
+  <input id="r_mobile" placeholder="Mobile Number">
+  <input id="r_pass" type="password" placeholder="Password">
+  <input id="r_cpass" type="password" placeholder="Confirm Password">
+
+  <select id="r_q">
+    <option value="">Select security question</option>
+    <option>Your first school?</option>
+    <option>Your pet’s name?</option>
+    <option>Your favourite food?</option>
+    <option>Your birthplace?</option>
+  </select>
+
+  <input id="r_a" placeholder="Answer">
+  <button onclick="register()">Register</button>
+</div>
+
+<!-- ================= FORGOT PASSWORD ================= -->
+<div class="card hidden" id="forgotCard">
+  <h3>Forgot Password</h3>
+  <input id="fp_val" placeholder="Registered Email or Mobile">
+  <button onclick="verifyUser()">Next</button>
+
+  <div id="fp_step2" class="hidden">
+    <p id="fp_q"></p>
+    <input id="fp_a" placeholder="Answer">
+    <input id="fp_new" type="password" placeholder="New Password">
+    <button onclick="resetPassword()">Reset Password</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+/* ================= UI SWITCH ================= */
+function showRegister(){
+  resetForgotState();
+  loginCard.classList.add('hidden');
+  registerCard.classList.remove('hidden');
+}
+function showLogin(){
+  resetForgotState();
+  registerCard.classList.add('hidden');
+  forgotCard.classList.add('hidden');
+  loginCard.classList.remove('hidden');
+}
+function showForgot(){
+  resetForgotState();
+  loginCard.classList.add('hidden');
+  forgotCard.classList.remove('hidden');
+}
+
+/* ================= LOGIN ================= */
+function login(){
+  let users = JSON.parse(localStorage.getItem('users')) || [];
+
+  let email = l_email.value.trim();
+  let mobile = l_mobile.value.trim();
+  let pass = l_password.value;
+
+  if(!/^[6-9]\d{9}$/.test(mobile)) return alert("Invalid mobile number");
+  if(!pass) return alert("Password required");
+
+  let user = users.find(u =>
+    u.mobile === mobile &&
+    u.password === pass &&
+    (email==="" || u.email===email || u.name===email)
+  );
+
+  if(!user) return alert("Wrong credentials");
+
+  localStorage.setItem("isLoggedIn","yes");
+  localStorage.setItem("loggedInUser",JSON.stringify(user));
+  location.href="dashboard.html";
+}
+
+/* ================= REGISTER ================= */
+function register(){
+  let users = JSON.parse(localStorage.getItem('users')) || [];
+
+  let name=r_name.value.trim(),
+      email=r_email.value.trim(),
+      mobile=r_mobile.value.trim(),
+      pass=r_pass.value,
+      cpass=r_cpass.value,
+      q=r_q.value,
+      a=r_a.value.trim();
+
+  if(!name||!email||!mobile||!a) return alert("All fields required");
+  if(!/^\S+@\S+\.\S+$/.test(email)) return alert("Invalid email");
+  if(!/^[6-9]\d{9}$/.test(mobile)) return alert("Invalid mobile");
+  if(pass.length<6 || !/\d/.test(pass)) return alert("Weak password");
+  if(pass!==cpass) return alert("Password mismatch");
+  if(!q) return alert("Security question required");
+
+  if(users.find(u=>u.email===email||u.mobile===mobile))
+    return alert("User already exists");
+
+  users.push({
+    id:Date.now(),
+    name,email,mobile,password:pass,
+    sq:q,
+    sa:a,
+    createdAt:new Date().toISOString()
+  });
+
+  localStorage.setItem("users",JSON.stringify(users));
+  alert("Registration successful");
+  showLogin();
+}
+
+/* ================= FORGOT PASSWORD ================= */
+let fpUser = null;
+
+function resetForgotState(){
+  fpUser = null;
+  if(fp_step2) fp_step2.classList.add('hidden');
+  if(fp_val) fp_val.value="";
+  if(fp_a) fp_a.value="";
+  if(fp_new) fp_new.value="";
+}
+
+function verifyUser(){
+  let users = JSON.parse(localStorage.getItem('users')) || [];
+  let val = fp_val.value.trim();
+
+  if(!val) return alert("Enter email or mobile");
+
+  fpUser = users.find(u => u.email === val || u.mobile === val);
+
+  if(!fpUser) return alert("User not found");
+
+  /* 🔐 Backward compatibility (old users support) */
+  let question = fpUser.sq || (fpUser.security && fpUser.security.question);
+  let answer   = fpUser.sa || (fpUser.security && fpUser.security.answer);
+
+  if(!question || !answer){
+    alert("Security question not set. Contact support.");
+    resetForgotState();
+    return;
+  }
+
+  fpUser._fpAnswer = answer; // temp safe reference
+
+  fp_q.innerText = "Security Question: " + question;
+  fp_step2.classList.remove('hidden');
+}
+
+function resetPassword(){
+  if(!fpUser) return alert("Session expired. Try again.");
+
+  let ans = fp_a.value.trim().toLowerCase();
+  let np  = fp_new.value;
+
+  if(ans !== fpUser._fpAnswer.toLowerCase())
+    return alert("Wrong security answer");
+
+  if(np.length < 6) return alert("Password must be 6+ chars");
+
+  let users = JSON.parse(localStorage.getItem('users'));
+  let i = users.findIndex(u => u.id === fpUser.id);
+
+  if(i === -1) return alert("User not found");
+
+  users[i].password = np;
+  localStorage.setItem("users", JSON.stringify(users));
+
+  alert("Password reset successful");
+  showLogin();
+}
+</script>
+
+
+</body>
+</html>
