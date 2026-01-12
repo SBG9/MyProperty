@@ -242,7 +242,7 @@ const isLoggedIn = localStorage.getItem("isLoggedIn") === "yes";
 const u = JSON.parse(localStorage.getItem("loggedInUser"));
 
 if(!isLoggedIn || !u){
-  window.location.replace("login.html");
+  window.location.replace("auth.html");
 }
 
 const allProperties = JSON.parse(localStorage.getItem("properties")) || [];
@@ -351,7 +351,7 @@ function logout(){
   localStorage.removeItem("loggedInUser");
   localStorage.removeItem("isLoggedIn");
   sessionStorage.clear();
-  window.location.replace("login.html");
+  window.location.replace("auth.html");
 }
 
 

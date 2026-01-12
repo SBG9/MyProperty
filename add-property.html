@@ -5,78 +5,157 @@
 <title>Register Property | MyProperty</title>
 
 <style>
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fb}
 
-/* NAVBAR */
-.navbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:15px 40px;
-  background:#0f172a;
-  color:#fff
-}
-.navbar a{
-  color:#00ffd9;
-  text-decoration:none;
-  margin-left:18px;
-  font-weight:600
+/* ===== BODY & GLOBAL ===== */
+body {
+  margin: 0;
+  font-family: 'Arial', Helvetica, sans-serif;
+  background: #f5f7fb;
+  color: #111;
 }
 
-/* FORM */
-.form-box{
-  max-width:900px;
-  margin:40px auto;
-  background:#fff;
-  padding:30px;
-  border-radius:14px;
-  box-shadow:0 0 20px rgba(0,0,0,0.1)
+h1, h2 {
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
 }
-.form-box h1{margin-top:0}
-.form-box h2{
-  margin:25px 0 15px;
-  border-bottom:2px solid #22c55e;
-  padding-bottom:6px
+
+/* ===== NAVBAR ===== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 40px;
+  background: #0f172a;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
-.form-group{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
-  margin-bottom:15px
+
+.navbar a {
+  color: #00ffd9;
+  text-decoration: none;
+  margin-left: 18px;
+  font-weight: 600;
+  transition: color 0.2s;
 }
-.form-group input,
-.form-group select,
-.form-group textarea{
-  padding:10px;
-  width:100%;
-  border-radius:6px;
-  border:1px solid #ccc
+
+.navbar a:hover {
+  color: #22c55e;
 }
-textarea{grid-column:span 2;resize:vertical}
-.submit-btn{
-  width:100%;
-  padding:14px;
-  background:#22c55e;
-  color:#fff;
-  border:none;
-  font-size:18px;
-  cursor:pointer;
-  border-radius:8px;
-  margin-top:20px
+
+/* ===== FORM BOX ===== */
+.form-box {
+  max-width: 920px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 30px 36px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
 }
-.submit-btn:hover{opacity:.9}
-.preview img,video,audio{
-  width:100%;
-  margin-top:8px;
-  border-radius:8px
+
+.form-box h1 {
+  margin-bottom: 24px;
+  font-size: 28px;
 }
+
+.form-box h2 {
+  margin: 28px 0 16px;
+  border-bottom: 2px solid #22c55e;
+  padding-bottom: 6px;
+  font-size: 20px;
+}
+
+/* ===== FORM GROUPS ===== */
+.form-group, .location-group, .facilities-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.location-group, .facilities-group {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+/* ===== INPUT, SELECT, TEXTAREA ===== */
+input, select, textarea {
+  padding: 10px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 4px rgba(34, 197, 94, 0.3);
+  outline: none;
+}
+
+/* ===== TEXTAREA SPANS ===== */
+textarea {
+  grid-column: span 2;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* ===== SPAN CLASSES ===== */
+.span-1 { grid-column: span 1; }
+.span-2 { grid-column: span 2; }
+.span-4 { grid-column: span 4; }
+
+/* ===== FACILITIES NOTE ===== */
+.facility-note {
+  grid-column: span 2;
+  min-height: 56px;
+}
+
+/* ===== BUTTON ===== */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  background: #22c55e;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+  margin-top: 20px;
+}
+
+.submit-btn:hover {
+  opacity: 0.9;
+  background: #1eaa4f;
+}
+
+/* ===== MEDIA PREVIEW ===== */
+.preview img,
+.preview video,
+.preview audio {
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 8px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .form-group, .location-group, .facilities-group {
+    grid-template-columns: 1fr;
+  }
+
+  textarea, .facility-note {
+    grid-column: span 1;
+  }
+}
+
+
 </style>
 
-<!-- he 2 script lines privatization sathi add kelele aahe -->
-<!-- <script>
-  let user = JSON.parse(localStorage.getItem('user'));
-  if(!user) location.href='login.html';
-</script> -->
 
 <script>
 // ================= LOGIN CHECK =================
@@ -121,6 +200,12 @@ user.properties = user.properties || [];
 <h2>Property Details</h2>
 <div class="form-group">
 
+  <input
+  id="title"
+  placeholder="Property Title (e.g. 2 BHK Flat in Pune)"
+  required
+ > <!-- 12 jan title added -->
+
   <select id="listingType" required>   <!--9j modify  -->
   <option value="">Listing Type</option>
   <option value="Buy">For Sale</option>
@@ -152,43 +237,105 @@ user.properties = user.properties || [];
 
 <!-- LOCATION -->
 <h2>Location Details</h2>
-<div class="form-group">
-  <input id="country" placeholder="Country">
-  <input id="state" placeholder="State">
-  <input id="district" placeholder="District">
-  <input id="city" placeholder="City / Village" required>
-  <input id="pincode" placeholder="Pin Code">
-  <input id="landmark" placeholder="Nearby Landmark">
+
+<div class="location-group">
+
+  <input id="state" class="span-1" placeholder="State" required>
+
+  <input id="district" class="span-1" placeholder="District" required>
+
+  <input id="taluka" class="span-1" placeholder="Taluka">
+
+  <input id="pincode" class="span-1" type="number" placeholder="Pin">
+
+  <input id="city" class="span-2" placeholder="City / Town">
+
+  <input id="village" class="span-2" placeholder="Village / Gaav">
+
+  <input id="landmark" class="span-2" placeholder="Landmark">
+
+  <input id="surveyNo" class="span-2" placeholder="Survey / Gat No">
+
 </div>
 
-<!-- FACILITIES -->
-<h2>Facilities</h2>
 <div class="form-group">
+  <textarea
+    id="locationNote"
+    rows="3"
+    placeholder="Exact location details (House name, road, plot description, directions etc.)"
+  ></textarea>
+</div>
+
+
+<!-- FACILITIES -->
+<!-- 12 jan newlly added faclities code -->
+<h2>Facilities</h2>
+
+<div class="facilities-group">
+
   <select id="parking">
-    <option value="">Parking</option> <!-- placeholder -->
+    <option value="">Parking</option>
     <option value="Available">Available</option>
     <option value="No">No</option>
   </select>
 
   <select id="furnish">
-    <option value="">Furnishing</option> <!-- placeholder -->
+    <option value="">Furnishing</option>
     <option value="Furnished">Furnished</option>
     <option value="Semi">Semi</option>
     <option value="Unfurnished">Unfurnished</option>
   </select>
 
   <select id="water">
-    <option value="">Water</option> <!-- placeholder -->
+    <option value="">Water</option>
     <option value="24x7">24x7</option>
     <option value="Limited">Limited</option>
   </select>
 
   <select id="electricity">
-    <option value="">Electricity</option> <!-- placeholder -->
+    <option value="">Electricity</option>
     <option value="Available">Available</option>
     <option value="No">No</option>
   </select>
+
 </div>
+
+<div class="form-group">
+  <textarea
+    id="facilityNote"
+    class="facility-note"
+    placeholder="Other facilities (lift, security, borewell, garden, road access, irrigation etc.)"
+  ></textarea>
+</div>
+
+
+<!-- <h2>Facilities</h2>
+<div class="form-group">
+  <select id="parking">
+    <option value="">Parking</option> 
+    <option value="Available">Available</option>
+    <option value="No">No</option>
+  </select>
+
+  <select id="furnish">
+    <option value="">Furnishing</option> 
+    <option value="Furnished">Furnished</option>
+    <option value="Semi">Semi</option>
+    <option value="Unfurnished">Unfurnished</option>
+  </select>
+
+  <select id="water">
+    <option value="">Water</option> 
+    <option value="24x7">24x7</option>
+    <option value="Limited">Limited</option>
+  </select>
+
+  <select id="electricity">
+    <option value="">Electricity</option> 
+    <option value="Available">Available</option>
+    <option value="No">No</option>
+  </select>
+</div> -->
 
 <!-- MEDIA -->
 <h2>Upload Media</h2>
@@ -205,11 +352,20 @@ user.properties = user.properties || [];
 </div>
 
 <!-- CONTACT -->
-<h2>Contact Details</h2>
+
+<!-- <h2>Contact Details</h2>
 <div class="form-group">
   <input id="contactName" placeholder="Contact Person Name">
   <input id="contactPhone" placeholder="Phone Number">
+</div> -->
+
+<h2>Contact Details</h2>
+<div class="form-group">
+  <input id="contactName" placeholder="Contact Person Name" type="text">
+  <input id="contactPhone" placeholder="Phone Number" type="tel">
+  <input id="contactEmail" placeholder="Email (optional)" type="email">
 </div>
+
 
 <button class="submit-btn">Register Property</button>
 </form>
@@ -265,21 +421,43 @@ let vid = videoInput.files.length > 0
     size: size.value,
     price: Number(price.value),
 
-    location: {
-      country: country.value,
-      state: state.value,
-      district: district.value,
-      city: city.value,
-      pincode: pincode.value,
-      landmark: landmark.value
-    },
+    // location: { // comented 12 jan
+    //   country: country.value,
+    //   state: state.value,
+    //   district: district.value,
+    //   city: city.value,
+    //   pincode: pincode.value,
+    //   landmark: landmark.value
+    // },
+
+    location:{    // newlly added code 12 jan
+  state: state.value,
+  district: district.value,
+  taluka: taluka.value,
+  city: city.value,
+  village: village.value,
+  pincode: pincode.value,
+  landmark: landmark.value,
+  surveyNo: surveyNo.value,
+  note: locationNote.value
+},
+
+
+    // facilities:{
+    //   parking: parking.value,
+    //   furnish: furnish.value,
+    //   water: water.value,
+    //   electricity: electricity.value
+    // },
 
     facilities:{
-      parking: parking.value,
-      furnish: furnish.value,
-      water: water.value,
-      electricity: electricity.value
-    },
+  parking: parking.value,
+  furnish: furnish.value,
+  water: water.value,
+  electricity: electricity.value,
+  note: facilityNote.value
+},
+
 
     images: imagesArr,
     video: vid,
