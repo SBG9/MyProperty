@@ -14,15 +14,77 @@ body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0}
 .filter-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
 .filter-row input,.filter-row select{padding:8px;}
 .filter-btn{margin-top:12px;width:100%;padding:10px;background:#22c55e;border:none;color:white;font-size:16px;cursor:pointer;}
-.buy-feed{max-width:1100px;margin:30px auto;}
-.buy-card{display:flex;flex-wrap:wrap;gap:15px;padding:15px;border-radius:12px;border:1px solid #ddd;margin-bottom:20px;background:#fff;box-shadow:0 0 10px rgba(0,0,0,0.08);}
-.buy-card img{width:260px;border-radius:10px;min-width:200px;object-fit:cover;}
-.buy-info{flex:1;min-width:200px;}
-.buy-info h3{margin:0;}
-.price{color:#16a34a;font-size:20px;font-weight:bold;}
-.tags span{background:#e2e8f0;padding:4px 8px;border-radius:6px;font-size:12px;margin-right:5px;}
-.buy-actions{margin-top:10px;}
-.buy-actions button{padding:6px 12px;margin-right:10px;cursor:pointer;}
+
+.buy-feed{
+  max-width:1200px;
+  margin:30px auto;
+}
+
+
+.property-card{
+  display:flex;
+  gap:15px;
+  padding:15px;
+  border-radius:12px;
+  background:#fff;
+  border:1px solid #ddd;
+  margin-bottom:20px;
+}
+
+.property-card img{
+  width:260px;
+  height:180px;
+  object-fit:cover;
+  border-radius:10px;
+}
+
+.card-content{
+  flex:1;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+}
+
+
+.status-badge{
+  position:absolute;
+  top:0;
+  right:0;
+  background:#22c55e;
+  color:#fff;
+  padding:4px 10px;
+  font-size:12px;
+  border-radius:6px;
+}
+
+.card-actions button{
+  margin-right:8px;
+  padding:6px 12px;
+  cursor:pointer;
+}
+
+.card-actions{
+  margin-top:auto;
+}
+
+
+.card-content h3{
+  margin:0 0 6px;
+}
+
+.card-content p{
+  margin:4px 0;
+  color:#334155;
+}
+.property-card img{
+  flex-shrink:0;
+}
+.status-badge{
+  top:6px;
+  right:6px;
+}
+
+
 </style>
 </head>
 
@@ -135,41 +197,41 @@ if(buyProps.length === 0){
 function renderBuyProperties(list){
   feed.innerHTML = "";
 
-  list.forEach(p=>{
+  list.forEach(p => {
     const card = document.createElement("div");
-    card.className = "buy-card";
+    card.className = "property-card";
 
     card.innerHTML = `
-      <img src="${p.images?.[0] || 'images/sample.jpg'}">
+      <img src="${p.images?.[0] || ''}"
+           onerror="this.src='https://via.placeholder.com/260x180'">
 
-      <div class="buy-info">
-        <h3>${p.type}</h3>
-        <p>${p.location.city}, ${p.location.district || ""}</p>
+      <div class="card-content">
+        <div class="status-badge">${p.status}</div>
 
-        <div class="price">₹ ${p.price}</div>
+        <h3>${p.title || p.size + " " + p.type}</h3>
+        <p><b>For:</b> ${p.listingType}</p>
+        <p><b>Location:</b> ${p.location.city}, ${p.location.district || ""}</p>
+        <p><b>Size:</b> ${p.size || "-"}</p>
+        <p class="price"><b>Price:</b> ₹ ${p.price}</p>
 
-        <p>${p.description || ""}</p>
-
-        <div>
-          <b>Property Details:</b> ${p.size || ""}<br>
-          <b>Facilities:</b>
-          ${Object.values(p.facilities || {}).join(", ") || "—"}<br>
-          <b>Contact:</b>
-          ${isLoggedIn ? p.contactPhone : "Login to view"}
-        </div>
-
-        <div class="buy-actions">
+        <div class="card-actions">
+          ${
+            isLoggedIn
+            ? `<button onclick="saveProperty(${p.id})">❤️ Save</button>`
+            : ``
+          }
           <button onclick="contactSeller('${p.contactPhone || ""}')">
-            Contact Seller
+            📞 Contact
           </button>
-          <button onclick="saveProperty(${p.id})">Save</button>
-          <button onclick="likeProperty(${p.id})">Like</button>
+          <button onclick="viewDetails(${p.id})">🔍 View Details</button>
+          <button onclick="shareProperty(${p.id})">🔗 Share</button>
         </div>
       </div>
     `;
     feed.appendChild(card);
   });
 }
+
 
 // ================= ACTIONS =================
 
@@ -210,14 +272,19 @@ function saveProperty(id){
 }
 
 
-function likeProperty(id){
-  if(!isLoggedIn){
-    alert("Please login to like property");
-    location.href = "auth.html"; //10 jan 
-    return;
-  }
-  alert("Property liked ❤️");
+// function viewDetails(id){  // 19 jan
+//   localStorage.setItem("selectedPropertyId", id);
+//   location.href = "property-details.html";
+// }
+function viewDetails(id){ //19 jan 
+  location.href = "property-details.html?id=" + id;
 }
+
+
+function shareProperty(id){
+  alert("Share link copied (demo)");
+}
+
 
 function logout(){
   localStorage.removeItem("loggedInUser");

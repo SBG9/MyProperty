@@ -14,15 +14,74 @@ body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0}
 .filter-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
 .filter-row input,.filter-row select{padding:8px;}
 .filter-btn{margin-top:12px;width:100%;padding:10px;background:#22c55e;border:none;color:white;font-size:16px;cursor:pointer;}
-.rent-feed{max-width:1100px;margin:30px auto;}
-.rent-card{display:flex;flex-wrap:wrap;gap:15px;padding:15px;border-radius:12px;border:1px solid #ddd;margin-bottom:20px;background:#fff;box-shadow:0 0 10px rgba(0,0,0,0.08);}
-.rent-card img{width:260px;border-radius:10px;min-width:200px;object-fit:cover;}
-.rent-info{flex:1;min-width:200px;}
-.rent-info h3{margin:0;}
-.price{color:#16a34a;font-size:20px;font-weight:bold;}
+
 .tags span{background:#e2e8f0;padding:4px 8px;border-radius:6px;font-size:12px;margin-right:5px;}
-.rent-actions{margin-top:10px;}
-.rent-actions button{padding:6px 12px;margin-right:10px;cursor:pointer;}
+
+
+.rent-feed{
+  max-width:1200px;
+  margin:30px auto;
+}
+
+.property-card{
+  display:flex;
+  gap:15px;
+  padding:15px;
+  border-radius:12px;
+  background:#fff;
+  border:1px solid #ddd;
+  margin-bottom:20px;
+}
+
+.property-card img{
+  width:260px;
+  height:180px;
+  object-fit:cover;
+  border-radius:10px;
+  flex-shrink:0;
+}
+
+.card-content{
+  flex:1;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+}
+
+
+.card-content h3{
+  margin:0 0 6px;
+}
+
+.card-content p{
+  margin:4px 0;
+  color:#334155;
+}
+
+.status-badge{
+  position:absolute;
+  top:6px;
+  right:6px;
+  background:#3b82f6;
+  color:#fff;
+  padding:4px 10px;
+  font-size:12px;
+  border-radius:6px;
+}
+
+.card-actions{
+  margin-top:auto;   /* 🔑 THIS IS THE KEY */
+}
+
+
+.card-actions button{
+  margin-right:8px;
+  padding:6px 12px;
+  cursor:pointer;
+}
+
+
+
 </style>
 </head>
 
@@ -128,44 +187,53 @@ if(rentProps.length === 0){
 }
 
 // RENDER - EXACT SAME STRUCTURE AS BUY.HTML
-function renderRentProperties(list){
+function renderRentProperties(list){ //19 jan modify
   feed.innerHTML = "";
 
-  list.forEach(p=>{
+  list.forEach(p => {
     const card = document.createElement("div");
-    card.className = "rent-card";
+    card.className = "property-card";
 
     card.innerHTML = `
-      <img src="${p.images?.[0] || 'https://via.placeholder.com/260x180?text=Rental+Property'}">
+      <img src="${p.images?.[0] || ''}"
+           onerror="this.src='https://via.placeholder.com/260x180?text=Rental+Property'">
 
-      <div class="rent-info">
-        <h3>${p.type}</h3>
-        <p>${p.location?.city}, ${p.location?.district || ""}</p>
+      <div class="card-content">
+        <div class="status-badge">For Rent</div>
 
-        <div class="price">₹ ${p.price}/month</div>
+        <h3>${p.title || p.size + " " + p.type}</h3>
+        <p><b>Location:</b> ${p.location?.city}, ${p.location?.district || ""}</p>
+        <p><b>Size:</b> ${p.size || "-"}</p>
+        <p><b>Rent:</b> ₹ ${p.price} / month</p>
 
-        <p>${p.description || "Great rental opportunity! Contact owner for details."}</p>
+        <div class="card-actions">
+  ${
+    isLoggedIn
+      ? `<button onclick="saveProperty(${p.id})">❤️ Save</button>`
+      : ``
+  }
+  <button onclick="contactOwner('${p.contactPhone || p.ownerEmail || ""}')">
+    📞 Contact
+  </button>
 
-        <div>
-          <b>Property Details:</b> ${p.size || ""}<br>
-          <b>Facilities:</b>
-          ${Object.values(p.facilities || {}).filter(v => v).join(", ") || "—"}<br>
-          <b>Contact:</b>
-          ${isLoggedIn ? p.contactPhone || p.ownerEmail : "Login to view"}
-        </div>
+  <button onclick="location.href='property-details.html?id=${p.id}'">
+    🔍 View Details
+  </button>
 
-        <div class="rent-actions">
-          <button onclick="contactOwner('${p.contactPhone || p.ownerEmail || ''}')">
-            Contact Owner
-          </button>
-          <button onclick="saveProperty(${p.id})">Save</button>
-          <button onclick="scheduleVisit(${p.id})">Visit</button>
-        </div>
+  <button onclick="scheduleVisit(${p.id})">📅 Visit</button>
+
+  <button onclick="alert('Share feature coming soon')">
+    🔗 Share
+  </button>
+</div>
+
       </div>
     `;
+
     feed.appendChild(card);
   });
 }
+
 
 // ACTIONS - EXACT SAME AS BUY.HTML
 function contactOwner(contact){

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel | MyProperty</title>
+
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Arial,sans-serif;background:#f5f7fb;color:#111;line-height:1.5;}
+
+.navbar {
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 40px;background:#0f172a;color:#fff;box-shadow:0 2px 10px rgba(0,0,0,0.2);
+}
+.navbar a{color:#00ffd9;text-decoration:none;font-weight:600;transition:color 0.3s;}
+.navbar a:hover{color:#22c55e;}
+
+.container{max-width:1400px;margin:30px auto;background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.1);overflow:hidden;}
+.header{padding:30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;text-align:center;}
+.header h1{font-size:32px;margin-bottom:10px;}
+.header p{font-size:18px;opacity:0.9;}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding:30px;}
+.stat-card{padding:20px;background:#f8fafc;border-radius:10px;text-align:center;border-left:5px solid #22c55e;}
+.stat-number{font-size:36px;font-weight:bold;color:#22c55e;margin-bottom:5px;}
+
+.controls{padding:20px;background:#f8fafc;border-bottom:2px solid #e2e8f0;}
+.control-btn{
+  padding:10px 20px;margin:0 10px;border:none;border-radius:6px;cursor:pointer;
+  font-weight:600;transition:all 0.3s;font-size:14px;
+}
+.btn-primary{background:#22c55e;color:#fff;}
+.btn-secondary{background:#3b82f6;color:#fff;}
+.btn-danger{background:#ef4444;color:#fff;}
+.btn-warning{background:#f59e0b;color:#fff;}
+.btn-success{background:#10b981;color:#fff;}
+.control-btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,0.2);}
+
+.content{padding:30px;}
+.table-container{max-height:600px;overflow:auto;border:1px solid #e2e8f0;border-radius:8px;}
+table{width:100%;border-collapse:collapse;background:#fff;}
+th,td{padding:12px;text-align:left;border-bottom:1px solid #f1f5f9;}
+th{background:#f8fafc;font-weight:600;color:#374151;position:sticky;top:0;z-index:10;}
+td{vertical-align:middle;}
+
+.status-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;text-transform:uppercase;}
+.status-available{background:#dcfce7;color:#166534;}
+.status-sold{background:#fee2e2;color:#dc2626;}
+.status-pending{background:#fef3c7;color:#92400e;}
+
+.action-btn{
+  padding:6px 12px;margin:0 2px;border:none;border-radius:4px;cursor:pointer;
+  font-size:12px;font-weight:600;transition:all 0.2s;
+}
+.edit-btn{background:#3b82f6;color:#fff;}
+.delete-btn{background:#ef4444;color:#fff;}
+.view-btn{background:#10b981;color:#fff;}
+
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:none;z-index:1000;}
+.modal-content{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  background:#fff;padding:30px;border-radius:12px;max-width:600px;width:90%;max-height:80vh;overflow:auto;
+}
+.close{position:absolute;right:15px;top:15px;font-size:24px;cursor:pointer;color:#999;}
+.close:hover{color:#000;}
+
+.search-box{padding:15px;margin-bottom:20px;background:#f8fafc;border-radius:8px;}
+.search-box input{padding:10px 15px;border:1px solid #d1d5db;border-radius:6px;width:300px;font-size:14px;}
+.search-box select{padding:10px;border:1px solid #d1d5db;border-radius:6px;margin-left:10px;}
+
+@media(max-width:768px){
+  .navbar{padding:12px 20px;}
+  .container{margin:15px;}
+  .stats{grid-template-columns:1fr;}
+  .control-btn{margin:5px;font-size:12px;}
+  .search-box input{width:100%;margin-bottom:10px;}
+  table{font-size:12px;}
+  th,td{padding:8px;}
+}
+
+.property-img{max-width:60px;height:40px;object-fit:cover;border-radius:4px;}
+.price-badge{background:#22c55e;color:#fff;padding:4px 8px;border-radius:4px;font-size:12px;font-weight:600;}
+</style>
+</head>
+
+<body>
+<!-- LOGIN CHECK -->
+<script>
+const isLoggedIn = localStorage.getItem("isLoggedIn") === "yes";
+let user = JSON.parse(localStorage.getItem("loggedInUser"));
+let users = JSON.parse(localStorage.getItem("users")) || [];
+let properties = JSON.parse(localStorage.getItem("properties")) || [];
+
+if(!isLoggedIn || !user){
+  window.location.replace("auth.html");
+}
+
+// Check if admin
+const isAdmin = user.email === "admin@myproperty.com" || user.role === "admin";
+if(!isAdmin){
+  alert("Access Denied! Admin only.");
+  window.location.replace("dashboard.html");
+}
+</script>
+
+<header class="navbar">
+  <div><b>🔐 MyProperty Admin Panel</b></div>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="my-properties.html">My Properties</a>
+    <a href="profile.html">Profile</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="header">
+    <h1>🏠 Admin Control Panel</h1>
+    <p>Complete control over all properties and users</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-number" id="totalProps">0</div>
+      <div>Total Properties</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="totalUsers">0</div>
+      <div>Total Users</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="availableProps">0</div>
+      <div>Available</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="totalRevenue">₹0</div>
+      <div>Est. Revenue</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="control-btn btn-primary" onclick="loadProperties()">🔄 Refresh</button>
+    <button class="control-btn btn-success" onclick="exportData()">💾 Export Data</button>
+    <button class="control-btn btn-secondary" onclick="showAddPropertyModal()">➕ Add Property</button>
+    <button class="control-btn btn-warning" onclick="showBulkActions()">⚡ Bulk Actions</button>
+    <button class="control-btn btn-danger" onclick="showUserManagement()">👥 Manage Users</button>
+  </div>
+
+  <div class="content">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="🔍 Search by title, owner, location..." onkeyup="filterTable()">
+      <select id="statusFilter" onchange="filterTable()">
+        <option value="">All Status</option>
+        <option value="Available">Available</option>
+        <option value="Sold">Sold</option>
+        <option value="Pending">Pending</option>
+      </select>
+      <select id="typeFilter" onchange="filterTable()">
+        <option value="">All Types</option>
+        <option value="Flat">Flat</option>
+        <option value="Home">Home</option>
+        <option value="Plot">Plot</option>
+        <option value="Bungalow">Bungalow</option>
+      </select>
+    </div>
+
+    <div class="table-container">
+      <table id="propertiesTable">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Price</th>
+            <th>Location</th>
+            <th>Owner</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="propertiesBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2 id="modalTitle">Edit Property</h2>
+    <form id="editForm">
+      <input type="hidden" id="editId">
+      
+      <div style="display:grid;gap:15px;">
+        <input id="editTitle" placeholder="Property Title" required>
+        <input id="editPrice" type="number" placeholder="Price (₹)" required>
+        <select id="editStatus" required>
+          <option value="Available">Available</option>
+          <option value="Pending">Pending</option>
+          <option value="Sold">Sold</option>
+        </select>
+        <select id="editType">
+          <option value="Home">Home</option>
+          <option value="Flat">Flat</option>
+          <option value="Plot">Plot</option>
+          <option value="Bungalow">Bungalow</option>
+          <option value="Commercial">Commercial</option>
+        </select>
+        <textarea id="editDesc" rows="3" placeholder="Description"></textarea>
+        <div>
+          <button type="submit" class="control-btn btn-primary">💾 Save Changes</button>
+          <button type="button" class="control-btn btn-danger" onclick="deleteProperty()">🗑️ Delete</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+// ================= GLOBAL VARIABLES =================
+let allProperties = [];
+let filteredProperties = [];
+let selectedProperties = [];
+
+// ================= INIT =================
+function init(){
+  loadProperties();
+  updateStats();
+}
+window.onload = init;
+
+// ================= LOAD & DISPLAY =================
+function loadProperties(){
+  properties = JSON.parse(localStorage.getItem("properties")) || [];
+  allProperties = [...properties];
+  filteredProperties = [...properties];
+  renderTable();
+  updateStats();
+}
+
+function renderTable(){
+  const tbody = document.getElementById('propertiesBody');
+  tbody.innerHTML = '';
+  
+  filteredProperties.forEach((prop, index) => {
+    const owner = users.find(u => u.id == prop.ownerId) || {name: 'Unknown'};
+    const row = `
+      <tr>
+        <td><input type="checkbox" value="${prop.id}" onchange="toggleSelection(${prop.id})"></td>
+        <td>${prop.images && prop.images[0] ? `<img src="${prop.images[0]}" class="property-img">` : '📷'}</td>
+        <td>${prop.title || 'N/A'}</td>
+        <td>${prop.type || 'N/A'}</td>
+        <td><span class="price-badge">₹${prop.price?.toLocaleString() || 0}</span></td>
+        <td>${prop.location?.city || prop.location?.district || 'N/A'}</td>
+        <td>${owner.name}</td>
+        <td><span class="status-badge status-${prop.status?.toLowerCase()}">${prop.status || 'Available'}</span></td>
+        <td>${new Date(prop.createdAt).toLocaleDateString()}</td>
+        <td>
+          <button class="action-btn view-btn" onclick="viewProperty(${prop.id})">👁️</button>
+          <button class="action-btn edit-btn" onclick="editProperty(${prop.id})">✏️</button>
+          <button class="action-btn delete-btn" onclick="quickDelete(${prop.id})">🗑️</button>
+        </td>
+      </tr>
+    `;
+    tbody.innerHTML += row;
+  });
+}
+
+// ================= FILTER & SEARCH =================
+function filterTable(){
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const statusFilter = document.getElementById('statusFilter').value;
+  const typeFilter = document.getElementById('typeFilter').value;
+  
+  filteredProperties = allProperties.filter(prop => {
+    const matchesSearch = !search || 
+      prop.title?.toLowerCase().includes(search) ||
+      prop.location?.city?.toLowerCase().includes(search) ||
+      users.find(u => u.id == prop.ownerId)?.name?.toLowerCase().includes(search);
+    
+    const matchesStatus = !statusFilter || prop.status === statusFilter;
+    const matchesType = !typeFilter || prop.type === typeFilter;
+    
+    return matchesSearch && matchesStatus && matchesType;
+  });
+  
+  renderTable();
+}
+
+// ================= SELECTION =================
+function toggleSelectAll(){
+  const checkboxes = document.querySelectorAll('#propertiesBody input[type="checkbox"]');
+  const selectAll = document.getElementById('selectAll');
+  
+  checkboxes.forEach(cb => {
+    cb.checked = selectAll.checked;
+    toggleSelection(cb.value);
+  });
+}
+
+function toggleSelection(id){
+  if(selectedProperties.includes(id)){
+    selectedProperties = selectedProperties.filter(p => p != id);
+  } else {
+    selectedProperties.push(id);
+  }
+}
+
+// ================= MODALS =================
+function editProperty(id){
+  const prop = properties.find(p => p.id == id);
+  if(!prop) return;
+  
+  document.getElementById('editId').value = id;
+  document.getElementById('editTitle').value = prop.title || '';
+  document.getElementById('editPrice').value = prop.price || '';
+  document.getElementById('editStatus').value = prop.status || 'Available';
+  document.getElementById('editType').value = prop.type || '';
+  document.getElementById('editDesc').value = prop.description || '';
+  
+  document.getElementById('modalTitle').textContent = 'Edit Property';
+  document.getElementById('editModal').style.display = 'block';
+}
+
+function closeModal(){
+  document.getElementById('editModal').style.display = 'none';
+}
+
+function deleteProperty(){
+  const id = document.getElementById('editId').value;
+  if(confirm('Delete this property permanently?')){
+    quickDelete(id);
+    closeModal();
+  }
+}
+
+function quickDelete(id){
+  if(confirm('Delete this property?')){
+    properties = properties.filter(p => p.id != id);
+    localStorage.setItem("properties", JSON.stringify(properties));
+    
+    // Update user properties count
+    users.forEach(u => {
+      if(u.properties) u.properties = u.properties.filter(p => p != id);
+    });
+    localStorage.setItem("users", JSON.stringify(users));
+    
+    loadProperties();
+    alert('Property deleted successfully!');
+  }
+}
+
+// ================= FORM HANDLERS =================
+document.getElementById('editForm').onsubmit = function(e){
+  e.preventDefault();
+  const id = document.getElementById('editId').value;
+  const propIndex = properties.findIndex(p => p.id == id);
+  
+  if(propIndex === -1) return alert('Property not found!');
+  
+  properties[propIndex] = {
+    ...properties[propIndex],
+    title: document.getElementById('editTitle').value,
+    price: Number(document.getElementById('editPrice').value),
+    status: document.getElementById('editStatus').value,
+    type: document.getElementById('editType').value,
+    description: document.getElementById('editDesc').value,
+    updatedAt: new Date().toISOString()
+  };
+  
+  localStorage.setItem("properties", JSON.stringify(properties));
+  loadProperties();
+  closeModal();
+  alert('Property updated successfully!');
+};
+
+// ================= STATS =================
+function updateStats(){
+  document.getElementById('totalProps').textContent = properties.length;
+  document.getElementById('totalUsers').textContent = users.length;
+  
+  const available = properties.filter(p => p.status === 'Available').length;
+  document.getElementById('availableProps').textContent = available;
+  
+  const revenue = properties.reduce((sum, p) => sum + (p.price || 0), 0);
+  document.getElementById('totalRevenue').textContent = '₹' + revenue.toLocaleString();
+}
+
+// ================= UTILITY FUNCTIONS =================
+function exportData(){
+  const data = {
+    properties: properties,
+    users: users.map(u => ({id: u.id, name: u.name, email: u.email, totalProperties: u.properties?.length || 0}))
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `myproperty-backup-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+}
+
+function logout(){
+  localStorage.removeItem("loggedInUser");
+  localStorage.removeItem("isLoggedIn");
+  window.location.replace("auth.html");
+}
+
+function showAddPropertyModal(){ alert('Add Property - Coming Soon! 🚀'); }
+function showBulkActions(){ alert('Bulk Actions - Select properties first!'); }
+function showUserManagement(){ alert('User Management - Coming Soon! 👥'); }
+function viewProperty(id){ alert(`View Property ${id} - Full details view coming soon!`); }
+</script>
+
+</body>
+</html>
