@@ -426,13 +426,25 @@ function renderPropertyCard(p){
           🔗 Share
         </button>
 
+        <button onclick="askOwner('${encodeURIComponent(String(p.id))}')">
+        💬 Ask Owner
+        </button>
+
       </div>
     </div>
   `;
   return card;
 }
+// 💬 Ask Owner this button is is updated in 17 oct 2026 for new btn
+function askOwner(encodedPropertyId) {  //this function is updated in 17 oct 2026 for new btn
+  if (localStorage.getItem("isLoggedIn") !== "yes") {
+    alert("Please login first to enquire about this property.");
+    location.href = "auth.html";
+    return;
+  }
 
-
+  location.href = "enquiry.html?propertyId=" + encodedPropertyId;
+}
 /* ---------- ACTIONS ---------- */
 // function likeProperty(){
 //   // if(localStorage.getItem("loggedIn") !== "yes")--------

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enquiry Inbox - MyProperty</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;color:#1f2937}
+.navbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding:15px 20px;background:#0f172a}
+.brand{font-size:23px;font-weight:bold;color:#fd9839}
+.nav-links{display:flex;flex-wrap:wrap;gap:16px}
+.nav-links a{color:#00ffd9;text-decoration:none;font-weight:600;font-size:14px}
+.page{max-width:1100px;margin:25px auto;padding:0 14px}
+.page-heading{margin-bottom:18px}
+.page-heading h1{margin:0 0 7px;font-size:27px;color:#0f172a}
+.page-heading p{margin:0;color:#64748b;line-height:1.5}
+.notice{padding:12px 14px;background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;color:#9a3412;font-size:13px;line-height:1.5;margin:16px 0}
+.layout{display:grid;grid-template-columns:350px minmax(0,1fr);gap:16px;align-items:start}
+.panel{background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;min-width:0}
+.panel-head{padding:15px 16px;border-bottom:1px solid #e2e8f0}
+.panel-head h2{font-size:17px;margin:0 0 10px;color:#0f172a}
+.tabs{display:flex;gap:7px;flex-wrap:wrap}
+.tab{border:1px solid #cbd5e1;background:#fff;border-radius:7px;padding:8px 10px;cursor:pointer;font-size:13px;color:#334155}
+.tab.active{background:#0f172a;color:#fff;border-color:#0f172a}
+.thread-list{max-height:600px;overflow-y:auto}
+.thread-item{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #edf2f7;background:#fff;padding:13px 15px;cursor:pointer;color:#1f2937}
+.thread-item:hover{background:#f8fafc}
+.thread-item.active{background:#eff6ff;border-left:4px solid #2563eb;padding-left:11px}
+.thread-title{font-weight:700;font-size:14px;margin-bottom:5px;overflow-wrap:anywhere}
+.thread-meta{font-size:12px;color:#64748b;line-height:1.45}
+.thread-preview{font-size:13px;color:#475569;margin-top:6px;overflow-wrap:anywhere}
+.empty-list{padding:22px 16px;color:#64748b;font-size:14px;line-height:1.5}
+.chat-panel{display:flex;flex-direction:column;min-height:540px}
+.chat-head{padding:16px;border-bottom:1px solid #e2e8f0}
+.chat-head h2{font-size:18px;margin:0 0 7px;overflow-wrap:anywhere}
+.chat-subtitle{font-size:13px;color:#64748b;line-height:1.5}
+.chat-messages{padding:16px;display:flex;flex-direction:column;gap:12px;min-height:260px;max-height:460px;overflow-y:auto;background:#f8fafc}
+.message{max-width:85%;padding:10px 12px;border-radius:11px;background:#fff;border:1px solid #e2e8f0;align-self:flex-start;overflow-wrap:anywhere;white-space:pre-wrap;line-height:1.45;font-size:14px}
+.message.mine{align-self:flex-end;background:#dcfce7;border-color:#bbf7d0}
+.message-author{font-size:11px;font-weight:700;color:#475569;margin-bottom:4px}
+.message-time{font-size:10px;color:#64748b;margin-top:6px;text-align:right}
+.chat-compose{padding:14px;border-top:1px solid #e2e8f0;background:#fff}
+.compose-label{font-size:13px;font-weight:700;display:block;margin-bottom:7px}
+textarea,select,input{width:100%;font:inherit;border:1px solid #cbd5e1;border-radius:7px;padding:10px;background:#fff;color:#1f2937}
+textarea{resize:vertical;min-height:85px}
+.compose-row{display:flex;gap:9px;align-items:center;margin-top:9px}
+.primary-btn,.secondary-btn{border:0;border-radius:7px;padding:10px 14px;cursor:pointer;font-weight:700;font-size:14px}
+.primary-btn{background:#2563eb;color:#fff}
+.secondary-btn{background:#e2e8f0;color:#1e293b}
+.primary-btn:disabled{opacity:.5;cursor:not-allowed}
+.form-area{padding:16px;border-top:1px solid #e2e8f0;display:grid;gap:12px}
+.form-area label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+.form-area .primary-btn{width:100%}
+.small-note{font-size:12px;color:#64748b;line-height:1.5;margin:0}
+.hidden{display:none!important}
+.status{font-size:13px;margin-top:8px;line-height:1.45}
+footer{text-align:center;padding:16px;background:#0f172a;color:#fff;margin-top:28px;font-size:13px}
+@media(max-width:760px){
+ .navbar{padding:13px 14px}
+ .layout{grid-template-columns:minmax(0,1fr)}
+ .thread-list{max-height:280px}
+ .chat-panel{min-height:420px}
+ .chat-messages{max-height:360px;min-height:220px;padding:12px}
+ .page{margin:18px auto}
+ .page-heading h1{font-size:23px}
+ .message{max-width:94%}
+}
+</style>
+</head>
+<body>
+<header class="navbar">
+  <div class="brand">MyProperty</div>
+  <nav class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="buy.html">Buy</a>
+    <a href="rent.html">Rent</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="auth.html">Login / Register</a>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="page-heading">
+    <h1>Enquiry Inbox</h1>
+    <p>Ask about a property, read replies from the owner, and keep the conversation together.</p>
+  </div>
+
+  <div class="notice">
+    <strong>Demo limitation:</strong> Messages are saved in this browser's localStorage only.
+    They do not reach another person's phone or computer. This demo is for testing the flow.
+  </div>
+
+  <section class="panel" style="margin-bottom:16px">
+    <div class="panel-head">
+      <h2>Your current account</h2>
+      <div id="accountInfo" class="chat-subtitle">Checking login...</div>
+    </div>
+  </section>
+
+  <div class="layout">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Conversations</h2>
+        <div class="tabs">
+          <button type="button" class="tab active" id="myTab">My Enquiries</button>
+          <button type="button" class="tab" id="ownerTab">Owner Inbox</button>
+        </div>
+      </div>
+      <div id="threadList" class="thread-list">
+        <div class="empty-list">Loading conversations...</div>
+      </div>
+    </section>
+
+    <section class="panel chat-panel">
+      <div id="chatHead" class="chat-head">
+        <h2>Select a conversation</h2>
+        <div class="chat-subtitle">Choose a conversation from the list or start a new property enquiry.</div>
+      </div>
+      <div id="chatMessages" class="chat-messages">
+        <div class="empty-list">Your messages will appear here.</div>
+      </div>
+      <form id="replyForm" class="chat-compose hidden">
+        <label class="compose-label" for="replyText">Your message / reply</label>
+        <textarea id="replyText" maxlength="2000" placeholder="Write your question or reply..." required></textarea>
+        <div class="compose-row">
+          <button class="primary-btn" type="submit">Send Message</button>
+          <span class="small-note">Up to 2000 characters</span>
+        </div>
+        <div id="replyStatus" class="status" aria-live="polite"></div>
+      </form>
+
+      <form id="newEnquiryForm" class="form-area">
+        <h2 style="font-size:17px;margin:0">Ask about a property</h2>
+        <div>
+          <label for="propertySelect">Choose property *</label>
+          <select id="propertySelect" required>
+            <option value="">Loading properties...</option>
+          </select>
+        </div>
+        <div>
+          <label for="firstMessage">Your question *</label>
+          <textarea id="firstMessage" maxlength="2000" required placeholder="Example: Is this property still available? Can I visit it this weekend?"></textarea>
+        </div>
+        <button class="primary-btn" type="submit">Start Enquiry</button>
+        <p class="small-note">You must be logged in. The owner is identified from the saved property details where possible.</p>
+        <div id="newStatus" class="status" aria-live="polite"></div>
+      </form>
+    </section>
+  </div>
+</main>
+
+<footer>MyProperty | Property Enquiries</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  const THREADS_KEY = "propertyEnquiries";
+  const $ = (id) => document.getElementById(id);
+
+  let currentUser = null;
+  let currentView = "mine";
+  let selectedThreadId = null;
+
+  function readArray(key) {
+    try {
+      const value = JSON.parse(localStorage.getItem(key) || "[]");
+      return Array.isArray(value) ? value : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function readUser() {
+    try {
+      return JSON.parse(localStorage.getItem("loggedInUser") || "null");
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function userId(user) {
+    return user && (user.id != null ? String(user.id) : (user.email || user.phone || user.mobile || user.name || ""));
+  }
+
+  function userName(user) {
+    return user ? (user.name || user.fullName || user.email || "User") : "Unknown user";
+  }
+
+  function userEmail(user) {
+    return user && user.email ? String(user.email).trim().toLowerCase() : "";
+  }
+
+  // Show the sender's own email beside their name in every chat message.
+  // For older messages without senderEmail, fall back to the thread participant details.
+  function messageSenderEmail(message, thread) {
+    if (message && message.senderEmail) return String(message.senderEmail).trim().toLowerCase();
+    if (thread && message && message.senderId === thread.enquirerId) return thread.enquirerEmail || "";
+    if (thread && message && message.senderId === thread.ownerId) return thread.ownerEmail || "";
+    return "";
+  }
+
+  function propertyOwnerId(property) {
+    if (!property) return "";
+    if (property.ownerId != null && String(property.ownerId) !== "") return String(property.ownerId);
+    if (property.ownerEmail) return String(property.ownerEmail).trim().toLowerCase();
+    if (property.email) return String(property.email).trim().toLowerCase();
+    return "";
+  }
+
+  function isOwner(thread) {
+    const meId = userId(currentUser);
+    const meEmail = userEmail(currentUser);
+    return (!!thread.ownerId && thread.ownerId === meId) ||
+      (!!thread.ownerEmail && thread.ownerEmail === meEmail && !!meEmail);
+  }
+
+  function isEnquirer(thread) {
+    return !!thread && thread.enquirerId === userId(currentUser);
+  }
+
+  function getThreads() {
+    return readArray(THREADS_KEY);
+  }
+
+  function saveThreads(threads) {
+    localStorage.setItem(THREADS_KEY, JSON.stringify(threads));
+  }
+
+  function getProperties() {
+    return readArray("properties");
+  }
+
+  function propertyLabel(p) {
+    const title = p.title || [p.size, p.type].filter(Boolean).join(" ") || "Property";
+    const loc = p.location;
+    let location = "";
+    if (loc && typeof loc === "object") {
+      location = [loc.village, loc.city, loc.taluka, loc.district, loc.state].filter(Boolean).join(", ");
+    } else if (typeof loc === "string") {
+      location = loc;
+    }
+    return title + (location ? " — " + location : "");
+  }
+
+  function safeText(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, function (c) {
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  function dateLabel(value) {
+    if (!value) return "";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+    return date.toLocaleString();
+  }
+
+  function ensureAccount() {
+    currentUser = readUser();
+    const logged = localStorage.getItem("isLoggedIn") === "yes" && currentUser;
+    if (!logged) {
+      $("accountInfo").textContent = "You are not logged in. Log in through auth.html to send or reply to enquiries.";
+      $("newEnquiryForm").classList.add("hidden");
+      $("replyForm").classList.add("hidden");
+      return false;
+    }
+    $("accountInfo").textContent = "Signed in as " + userName(currentUser) + (currentUser.email ? " (" + currentUser.email + ")" : "");
+    $("newEnquiryForm").classList.remove("hidden");
+    return true;
+  }
+
+  function populateProperties() {
+    const select = $("propertySelect");
+    const properties = getProperties();
+    const requestedId = new URLSearchParams(window.location.search).get("propertyId");
+    select.innerHTML = '<option value="">Choose a property</option>';
+    if (!properties.length) {
+      select.innerHTML = '<option value="">No saved properties found</option>';
+      return;
+    }
+    properties.forEach(function (p) {
+      const option = document.createElement("option");
+      option.value = String(p.id);
+      option.textContent = propertyLabel(p);
+      if (requestedId !== null && String(p.id) === String(requestedId)) option.selected = true;
+      select.appendChild(option);
+    });
+    if (requestedId && !properties.some(function (p) { return String(p.id) === String(requestedId); })) {
+      $("newStatus").textContent = "The selected property could not be found in this browser. Please choose a property manually.";
+    }
+  }
+
+  function visibleThreads() {
+    if (!currentUser) return [];
+    const threads = getThreads();
+    return threads.filter(function (thread) {
+      return currentView === "mine" ? isEnquirer(thread) : isOwner(thread);
+    }).sort(function (a, b) {
+      return new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0);
+    });
+  }
+
+  function renderThreadList() {
+    const list = $("threadList");
+    const threads = visibleThreads();
+    list.innerHTML = "";
+    if (!threads.length) {
+      const empty = document.createElement("div");
+      empty.className = "empty-list";
+      empty.textContent = currentView === "mine"
+        ? "No enquiries yet. Use “Ask about a property” to start one."
+        : "No enquiries for properties owned by this account were found.";
+      list.appendChild(empty);
+      return;
+    }
+
+    threads.forEach(function (thread) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "thread-item" + (thread.id === selectedThreadId ? " active" : "");
+      const messages = Array.isArray(thread.messages) ? thread.messages : [];
+      const last = messages[messages.length - 1];
+      const otherName = currentView === "mine" ? (thread.ownerName || "Property owner") : (thread.enquirerName || "Enquirer");
+      button.innerHTML =
+        '<div class="thread-title">' + safeText(thread.propertyTitle || "Property enquiry") + '</div>' +
+        '<div class="thread-meta">' + safeText(otherName) + ' · ' + safeText(dateLabel(thread.updatedAt || thread.createdAt)) + '</div>' +
+        '<div class="thread-preview">' + safeText(last ? last.text : "No messages") + '</div>';
+      button.addEventListener("click", function () {
+        selectedThreadId = thread.id;
+        renderThreadList();
+        renderChat();
+      });
+      list.appendChild(button);
+    });
+  }
+
+  function selectedThread() {
+    return getThreads().find(function (thread) {
+      return thread.id === selectedThreadId;
+    }) || null;
+  }
+
+  function renderChat() {
+    const thread = selectedThread();
+    const head = $("chatHead");
+    const messagesBox = $("chatMessages");
+    const replyForm = $("replyForm");
+
+    if (!thread || !(isOwner(thread) || isEnquirer(thread))) {
+      head.innerHTML = '<h2>Select a conversation</h2><div class="chat-subtitle">Choose a conversation from the list.</div>';
+      messagesBox.innerHTML = '<div class="empty-list">Your messages will appear here.</div>';
+      replyForm.classList.add("hidden");
+      return;
+    }
+
+    const otherName = isOwner(thread) ? (thread.enquirerName || "Enquirer") : (thread.ownerName || "Property owner");
+    head.innerHTML =
+      '<h2>' + safeText(thread.propertyTitle || "Property enquiry") + '</h2>' +
+      '<div class="chat-subtitle">Conversation with ' + safeText(otherName) + '<br>' +
+      'Created: ' + safeText(dateLabel(thread.createdAt)) + '</div>';
+
+    messagesBox.innerHTML = "";
+    const messages = Array.isArray(thread.messages) ? thread.messages : [];
+    if (!messages.length) {
+      messagesBox.innerHTML = '<div class="empty-list">No messages in this conversation yet.</div>';
+    } else {
+      messages.forEach(function (message) {
+        const mine = message.senderId === userId(currentUser);
+        const bubble = document.createElement("div");
+        bubble.className = "message" + (mine ? " mine" : "");
+        const senderEmail = messageSenderEmail(message, thread);
+        const senderRole = message.role === "owner" ? "Owner" : (message.role === "user" ? "Enquirer" : "Participant");
+        bubble.innerHTML =
+          '<div class="message-author">' + safeText(message.senderName || "User") +
+          ' <span style="font-weight:400;color:#64748b">(' + safeText(senderRole) + ')</span>' +
+          (senderEmail ? '<div style="font-weight:400;color:#64748b;margin-top:2px">' + safeText(senderEmail) + '</div>' : '') +
+          '</div>' +
+          '<div>' + safeText(message.text) + '</div>' +
+          '<div class="message-time">' + safeText(dateLabel(message.createdAt)) + '</div>';
+        messagesBox.appendChild(bubble);
+      });
+    }
+    messagesBox.scrollTop = messagesBox.scrollHeight;
+    replyForm.classList.remove("hidden");
+    $("replyText").value = "";
+    $("replyStatus").textContent = "";
+  }
+
+  function switchView(view) {
+    currentView = view;
+    selectedThreadId = null;
+    $("myTab").classList.toggle("active", view === "mine");
+    $("ownerTab").classList.toggle("active", view === "owner");
+    renderThreadList();
+    renderChat();
+  }
+
+  $("myTab").addEventListener("click", function () { switchView("mine"); });
+  $("ownerTab").addEventListener("click", function () { switchView("owner"); });
+
+  $("newEnquiryForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    $("newStatus").textContent = "";
+
+    if (!ensureAccount()) {
+      $("newStatus").textContent = "Please log in first.";
+      return;
+    }
+
+    const propertyId = $("propertySelect").value;
+    const messageText = $("firstMessage").value.trim();
+    const property = getProperties().find(function (p) {
+      return String(p.id) === String(propertyId);
+    });
+
+    if (!property) {
+      $("newStatus").textContent = "Choose a property from the list first.";
+      return;
+    }
+    if (!messageText) {
+      $("newStatus").textContent = "Write your question first.";
+      return;
+    }
+
+    const ownerId = propertyOwnerId(property);
+    const meId = userId(currentUser);
+    const propertyOwnerEmail = String(property.ownerEmail || property.email || "").trim().toLowerCase();
+    const myEmail = userEmail(currentUser);
+    if ((ownerId && ownerId === meId) || (propertyOwnerEmail && myEmail && propertyOwnerEmail === myEmail)) {
+      $("newStatus").textContent = "You appear to be the owner of this property. Switch to Owner Inbox to check incoming enquiries.";
+      return;
+    }
+
+    const threads = getThreads();
+    const thread = {
+      id: "enq_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8),
+      propertyId: property.id,
+      propertyTitle: propertyLabel(property),
+      ownerId: ownerId,
+      ownerEmail: String(property.ownerEmail || property.email || "").trim().toLowerCase(),
+      ownerName: property.ownerName || property.contactName || property.name || "Property owner",
+      enquirerId: meId,
+      enquirerEmail: userEmail(currentUser),
+      enquirerName: userName(currentUser),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      messages: [{
+        senderId: meId,
+        senderName: userName(currentUser),
+        senderEmail: userEmail(currentUser),
+        role: "user",
+        text: messageText,
+        createdAt: new Date().toISOString()
+      }]
+    };
+
+    try {
+      threads.push(thread);
+      saveThreads(threads);
+      $("firstMessage").value = "";
+      $("newStatus").textContent = "Enquiry saved in this browser.";
+      currentView = "mine";
+      $("myTab").classList.add("active");
+      $("ownerTab").classList.remove("active");
+      selectedThreadId = thread.id;
+      renderThreadList();
+      renderChat();
+    } catch (error) {
+      $("newStatus").textContent = "Could not save the enquiry. Browser storage may be unavailable.";
+    }
+  });
+
+  $("replyForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    const text = $("replyText").value.trim();
+    if (!text) return;
+
+    const threads = getThreads();
+    const index = threads.findIndex(function (thread) {
+      return thread.id === selectedThreadId;
+    });
+    if (index < 0) return;
+
+    const thread = threads[index];
+    if (!(isOwner(thread) || isEnquirer(thread))) {
+      $("replyStatus").textContent = "You are not a participant in this conversation.";
+      return;
+    }
+
+    thread.messages = Array.isArray(thread.messages) ? thread.messages : [];
+    thread.messages.push({
+      senderId: userId(currentUser),
+      senderName: userName(currentUser),
+      senderEmail: userEmail(currentUser),
+      role: isOwner(thread) ? "owner" : "user",
+      text: text,
+      createdAt: new Date().toISOString()
+    });
+    thread.updatedAt = new Date().toISOString();
+
+    try {
+      saveThreads(threads);
+      $("replyText").value = "";
+      $("replyStatus").textContent = "Message saved in this browser.";
+      renderThreadList();
+      renderChat();
+    } catch (error) {
+      $("replyStatus").textContent = "Could not save message.";
+    }
+  });
+
+  ensureAccount();
+  populateProperties();
+  renderThreadList();
+  renderChat();
+})();
+</script>
+</body>
+</html>
